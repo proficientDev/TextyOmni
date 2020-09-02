@@ -44,6 +44,7 @@ Rails.application.routes.draw do
           resources :canned_responses, except: [:show, :edit, :new]
           namespace :channels do
             resource :twilio_channel, only: [:create]
+            resource :signalwire_channel, only: [:create]
           end
           resources :conversations, only: [:index, :create, :show] do
             get 'meta', on: :collection
@@ -147,6 +148,10 @@ Rails.application.routes.draw do
   end
 
   namespace :twilio do
+    resources :callback, only: [:create]
+  end
+
+  namespace :signalwire do
     resources :callback, only: [:create]
   end
 

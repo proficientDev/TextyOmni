@@ -73,6 +73,8 @@ gem 'twitty'
 gem 'koala'
 # slack client
 gem 'slack-ruby-client'
+# signal wire client
+gem 'signalwire'
 
 ##--- gems for debugging and error reporting ---##
 # static analysis
