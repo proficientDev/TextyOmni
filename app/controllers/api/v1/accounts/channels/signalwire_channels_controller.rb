@@ -1,4 +1,5 @@
 class Api::V1::Accounts::Channels::SignalwireChannelsController < Api::V1::Accounts::BaseController
+  protect_from_forgery except: :create
   before_action :authorize_request
 
   def create
@@ -6,7 +7,8 @@ class Api::V1::Accounts::Channels::SignalwireChannelsController < Api::V1::Accou
       authenticate_signal_wire
       build_inbox
       setup_webhooks if @signal_wire_channel.sms?
-    rescue Signalwire::REST::SignalwireError => e
+      render json: @inbox
+    rescue ::Twilio::REST::SignalwireError => e
       render_could_not_create_error(e.message)
     rescue StandardError => e
       render_could_not_create_error(e.message)
@@ -21,9 +23,9 @@ class Api::V1::Accounts::Channels::SignalwireChannelsController < Api::V1::Accou
 
   def authenticate_signal_wire
     client = Signalwire::REST::Client.new(
-      permitted_params[:account_sid] || 'ce607000-9d51-4699-85d3-f628a36da245',
-      permitted_params[:auth_token] || 'PT672ccf03259864f6910563ec9da1cbea282ce0e8a7bfed55',
-      signalwire_space_url: permitted_params[:space_url] || 'chatwoot-integration.signalwire.com'
+      permitted_params[:account_sid],
+      permitted_params[:auth_token],
+      signalwire_space_url: permitted_params[:space_url]
     )
     client.messages.list(limit: 1)
   end
@@ -51,7 +53,7 @@ class Api::V1::Accounts::Channels::SignalwireChannelsController < Api::V1::Accou
   end
 
   def permitted_params
-    params.require(:signal_wire_channel).permit(
+    params.require(:signalwire_channel).permit(
       :account_id, :phone_number, :account_sid, :space_url, :phone_number, :auth_token, :name, :medium
     )
   end

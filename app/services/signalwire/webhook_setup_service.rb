@@ -9,9 +9,9 @@ class Signalwire::WebhookSetupService
     else
       signalwire_client
         .incoming_phone_numbers(phonenumber_sid)
-        .update(sms_method: 'POST', sms_url: signalwire_callback_index_url)
+        .update(sms_method: 'POST', sms_url: signalwire_callback_index_path)
     end
-  rescue Signalwire::REST::SignalwireError => e
+  rescue ::Twilio::REST::SignalwireError => e
     Rails.logger.info "SIGNALWIRE_FAILURE: #{e.message}"
   end
 

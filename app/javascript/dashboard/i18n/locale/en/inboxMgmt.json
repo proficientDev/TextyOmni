@@ -115,6 +115,47 @@
           "ERROR_MESSAGE": "We were not able to authenticate Twilio credentials, please try again"
         }
       },
+      "SIGNALWIRE": {
+        "TITLE": "Signalwire SMS Channel",
+        "DESC": "Integrate Signalwire and start supporting your customers via SMS or Whatsapp.",
+        "ACCOUNT_SID": {
+          "LABEL": "Account SID",
+          "PLACEHOLDER": "Please enter your Signalwire Account SID",
+          "ERROR": "This field is required"
+        },
+        "CHANNEL_TYPE": {
+          "LABEL": "Channel Type",
+          "ERROR": "Please select your Channel Type"
+        },
+        "AUTH_TOKEN": {
+          "LABEL": "Auth Token",
+          "PLACEHOLDER": "Please enter your Signalwire Auth Token",
+          "ERROR": "This field is required"
+        },
+        "CHANNEL_NAME": {
+          "LABEL": "Channel Name",
+          "PLACEHOLDER": "Please enter a channel name",
+          "ERROR": "This field is required"
+        },
+        "PHONE_NUMBER": {
+          "LABEL": "Phone number",
+          "PLACEHOLDER": "Please enter the phone number from which message will be sent.",
+          "ERROR": "Please enter a valid value. Phone number should start with `+` sign."
+        },
+        "SPACE_URL": {
+          "LABEL": "Signalwire Space URL",
+          "PLACEHOLDER": "Please enter your Signalwire Space URL",
+          "ERROR": "This field is required"
+        },
+        "API_CALLBACK": {
+          "TITLE": "Callback URL",
+          "SUBTITLE": "You have to configure the message callback URL in Twilio with the URL mentioned here."
+        },
+        "SUBMIT_BUTTON": "Create Signalwire Channel",
+        "API": {
+          "ERROR_MESSAGE": "We were not able to authenticate Signalwire credentials, please try again"
+        }
+      },
       "API_CHANNEL": {
         "TITLE": "API Channel",
         "DESC": "Integrate with API channel and start supporting your customers.",
