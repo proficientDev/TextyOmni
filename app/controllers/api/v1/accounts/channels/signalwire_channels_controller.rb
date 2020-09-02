@@ -1,11 +1,6 @@
 class Api::V1::Accounts::Channels::SignalwireChannelsController < Api::V1::Accounts::BaseController
   before_action :authorize_request
 
-  module Twilio::REST
-    class SignalwireError < ::Twilio::REST::TwilioError
-    end
-  end
-
   def create
     ActiveRecord::Base.transaction do
       authenticate_signal_wire
