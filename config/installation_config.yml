@@ -15,9 +15,9 @@
 - name: DISPLAY_MANIFEST
   value: true
 - name: MAILER_INBOUND_EMAIL_DOMAIN
-  value: 'textyomni.com'
+  value:textyomni.com
 - name: MAILER_SUPPORT_EMAIL
-  value: 'support@textyomni.com'
+  value:support@textyomni.com
 - name: CREATE_NEW_ACCOUNT_FROM_DASHBOARD
   value: true
 - name: BRAND_NAME
