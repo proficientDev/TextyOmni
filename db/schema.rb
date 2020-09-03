@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_19_190629) do
+ActiveRecord::Schema.define(version: 2020_09_01_193206) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -146,6 +145,19 @@ ActiveRecord::Schema.define(version: 2020_08_19_190629) do
     t.datetime "updated_at", null: false
     t.index ["page_id", "account_id"], name: "index_channel_facebook_pages_on_page_id_and_account_id", unique: true
     t.index ["page_id"], name: "index_channel_facebook_pages_on_page_id"
+  end
+
+  create_table "channel_signalwire_sms", force: :cascade do |t|
+    t.string "phone_number", null: false
+    t.string "auth_token", null: false
+    t.string "account_sid", null: false
+    t.string "space_url", null: false
+    t.integer "account_id", null: false
+    t.integer "medium", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id", "phone_number"], name: "index_channel_signalwire_sms_on_account_id_and_phone_number", unique: true
+    t.index ["medium"], name: "index_channel_signalwire_sms_on_medium"
   end
 
   create_table "channel_twilio_sms", force: :cascade do |t|
@@ -328,6 +340,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_190629) do
     t.json "content_attributes", default: {}
     t.string "sender_type"
     t.bigint "sender_id"
+    t.jsonb "external_source_ids", default: {}
     t.index ["account_id"], name: "index_messages_on_account_id"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["inbox_id"], name: "index_messages_on_inbox_id"
@@ -401,9 +414,11 @@ ActiveRecord::Schema.define(version: 2020_08_19_190629) do
     t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
     t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
     t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
     t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
     t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
     t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+    t.index ["tagger_type", "tagger_id"], name: "index_taggings_on_tagger_type_and_tagger_id"
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|
