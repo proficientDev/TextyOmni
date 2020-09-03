@@ -1,0 +1,115 @@
+# Used to verify the integrity of signed cookies. so ensure a secure value is set
+SECRET_KEY_BASE=30qE5OWUlCcCEjV0TJMByWY6hECxq2cbmPcRxQIEILzU4NqQUF4TIOTn4TzkzMj
+
+# Replace with the URL you are planning to use for your app
+FRONTEND_URL=http://chat.textyomni.com
+
+# Force all access to the app over SSL, default is set to false
+FORCE_SSL=false
+
+# This lets you control new sign ups on your chatwoot installation
+# true : default option, allows sign ups
+# false : disables all the end points related to sign ups
+# api_only: disables the UI for signup, but you can create sign ups via the account apis
+ENABLE_ACCOUNT_SIGNUP=true
+
+# Redis config
+REDIS_URL=redis://localhost:6379
+# If you are using docker-compose, set this variable's value to be any string,
+# which will be the password for the redis service running inside the docker-compose
+# to make it secure
+REDIS_PASSWORD=
+
+# Postgres Database config variables
+POSTGRES_HOST=localhost
+POSTGRES_USERNAME=chatwoot
+POSTGRES_PASSWORD=m5Say5OZAjVU6Oi
+RAILS_ENV=production
+RAILS_MAX_THREADS=5
+
+# Mail outgoing
+MAILER_SENDER_EMAIL=support@textyomni.com
+#SMTP_PORT=1025
+SMTP_PORT=587
+SMTP_DOMAIN=textyomni.com
+# if you are running docker-compose, set SMTP_ADDRESS value as "mailhog",
+# else set the value as "localhost"
+SMTP_ADDRESS=smtp.sendgrid.net
+SMTP_USERNAME=apikey
+SMTP_PASSWORD=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
+SMTP_AUTHENTICATION=plain
+SMTP_ENABLE_STARTTLS_AUTO=true
+
+# Mail Incoming
+# This is the domain set for the reply emails when conversation continuity is enabled
+MAILER_INBOUND_EMAIL_DOMAIN=usg.mail.textyomni.com
+# Set this to appropriate ingress channel with regards to incoming emails
+# Possible values are :
+# :relay for Exim, Postfix, Qmail
+# :mailgun for Mailgun
+# :mandrill for Mandrill
+# :postmark for Postmark
+# :sendgrid for Sendgrid
+RAILS_INBOUND_EMAIL_SERVICE=:sendgrid
+# Use one of the following based on the email ingress service
+# Ref: https://edgeguides.rubyonrails.org/action_mailbox_basics.html
+RAILS_INBOUND_EMAIL_PASSWORD=x3fGwQ95vStP
+MAILGUN_INGRESS_SIGNING_KEY=
+MANDRILL_INGRESS_API_KEY=
+
+# Storage
+ACTIVE_STORAGE_SERVICE=local
+
+# Amazon S3
+# documentation: https://www.chatwoot.com/docs/configuring-s3-bucket-as-cloud-storage
+S3_BUCKET_NAME=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_REGION=
+
+# Sentry
+SENTRY_DSN=
+
+# Log settings
+# Disable if you want to write logs to a file
+RAILS_LOG_TO_STDOUT=true
+LOG_LEVEL=info
+LOG_SIZE=500
+
+### This environment variables are only required if you are setting up social media channels
+
+# Facebook
+# documentation: https://www.chatwoot.com/docs/facebook-setup
+FB_VERIFY_TOKEN=
+FB_APP_SECRET=
+FB_APP_ID=
+
+# Twitter
+# documentation: https://www.chatwoot.com/docs/twitter-app-setup
+TWITTER_APP_ID=
+TWITTER_CONSUMER_KEY=
+TWITTER_CONSUMER_SECRET=
+TWITTER_ENVIRONMENT=
+
+#slack integration
+SLACK_CLIENT_ID=
+SLACK_CLIENT_SECRET=
+
+### Change this env variable only if you are using a custom build mobile app
+## Mobile app env variables
+IOS_APP_ID=6C953F3RX2.com.chatwoot.app
+
+## Push Notification
+## generate a new key value here : https://d3v.one/vapid-key-generator/
+VAPID_PUBLIC_KEY=BH5x28p4-mDyIEsHKvIC648hqM4kWuTxlxxIhXSUMt-ZK73JUDXDV1jKPSif4PlTEWRC7sXGRnzYFZJqFpaafRU
+VAPID_PRIVATE_KEY=NGcV6dhwjhnNZLFsHIf73qk3fxnZZ_LwDO4ZtjWifiY
+#
+# for mobile apps 
+# FCM_SERVER_KEY=
+
+## Bot Customizations
+USE_INBOX_AVATAR_FOR_BOT=true
+
+## Development Only Config
+# if you want to use letter_opener for local emails
+# LETTER_OPENER=true
