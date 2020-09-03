@@ -8,6 +8,9 @@ class AgentBotListener < BaseListener
     agent_bot = inbox.agent_bot_inbox.agent_bot
 
     payload = conversation.webhook_data.merge(event: __method__.to_s)
+    
+    logger.debug "payload : #{payload}"
+
     AgentBotJob.perform_later(agent_bot.outgoing_url, payload)
   end
 

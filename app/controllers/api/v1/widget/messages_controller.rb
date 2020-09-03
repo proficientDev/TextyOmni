@@ -35,6 +35,7 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
       )
       attachment.file.attach(uploaded_attachment)
     end
+    Rails.logger.debug "MESSAGE WILL BE SAVED WITH #{@message}"
     @message.save!
   end
 
