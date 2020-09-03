@@ -16,8 +16,6 @@
 class Account < ApplicationRecord
   # used for single column multi flags
   include FlagShihTzu
-
-  include Events::Types
   include Reportable
   include Featurable
 
@@ -41,6 +39,7 @@ class Account < ApplicationRecord
   has_many :facebook_pages, dependent: :destroy, class_name: '::Channel::FacebookPage'
   has_many :telegram_bots, dependent: :destroy
   has_many :twilio_sms, dependent: :destroy, class_name: '::Channel::TwilioSms'
+  has_many :signalwire_sms, dependent: :destroy, class_name: '::Channel::SignalwireSms'
   has_many :twitter_profiles, dependent: :destroy, class_name: '::Channel::TwitterProfile'
   has_many :web_widgets, dependent: :destroy, class_name: '::Channel::WebWidget'
   has_many :email_channels, dependent: :destroy, class_name: '::Channel::Email'
@@ -54,7 +53,7 @@ class Account < ApplicationRecord
 
   enum locale: LANGUAGES_CONFIG.map { |key, val| [val[:iso_639_1_code], key] }.to_h
 
-  after_create :notify_creation
+  after_create_commit :notify_creation
   after_destroy :notify_deletion
 
   def agents
