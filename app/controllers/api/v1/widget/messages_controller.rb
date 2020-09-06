@@ -16,7 +16,10 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
     if @message.content_type == 'input_email'
       @message.update!(submitted_email: contact_email)
       update_contact(contact_email)
-    else
+    elsif @message.content_type == 'form'
+      @message.update!(message_update_params[:message])
+      update_contact(nil, contact_name_original, contact_phone_number)
+    else 
       @message.update!(message_update_params[:message])
     end
   rescue StandardError => e
@@ -88,18 +91,28 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
     @message_finder ||= MessageFinder.new(conversation, message_finder_params)
   end
 
-  def update_contact(email)
-    contact_with_email = @account.contacts.find_by(email: email)
-    if contact_with_email
-      @contact = ::ContactMergeAction.new(
-        account: @account,
-        base_contact: contact_with_email,
-        mergee_contact: @contact
-      ).perform
-    else
+  def update_contact(email=nil, name=nil, phone_number=nil)
+    if email
+      contact_with_email = @account.contacts.find_by(email: email)
+      
+      if contact_with_email
+        @contact = ::ContactMergeAction.new(
+          account: @account,
+          base_contact: contact_with_email,
+          mergee_contact: @contact
+        ).perform
+      else
+        @contact.update!(
+          email: email,
+          name: contact_name
+        )
+      end
+    end
+    
+    if name
       @contact.update!(
-        email: email,
-        name: contact_name
+        name: name,
+        phone_number: phone_number
       )
     end
   end
@@ -107,9 +120,19 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
   def contact_email
     permitted_params[:contact][:email].downcase
   end
+  
+  def contact_name_original
+    permitted = params.permit(message: [{submitted_values: :value}])
+    permitted[:message][:submitted_values][0][:value]
+  end
 
   def contact_name
     contact_email.split('@')[0]
+  end
+  
+  def contact_phone_number 
+    permitted = params.permit(message: [{submitted_values: :value}])
+    permitted[:message][:submitted_values][1][:value]
   end
 
   def message_update_params
