@@ -5,7 +5,12 @@ class MessageTemplates::Template::EmailCollect
     ActiveRecord::Base.transaction do
       conversation.messages.create!(ways_to_reach_you_message_params)
       conversation.messages.create!(email_input_box_template_message_params)
+<<<<<<< HEAD
     end
+=======
+      # conversation.messages.create!(phone_number_input_box_template_message_params)
+  end
+>>>>>>> 27387460... Upgrade bot enable to collect contact info at start widget
   rescue StandardError => e
     Raven.capture_exception(e)
     true

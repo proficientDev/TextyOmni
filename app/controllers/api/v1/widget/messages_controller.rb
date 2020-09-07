@@ -16,7 +16,14 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
     if @message.content_type == 'input_email'
       @message.update!(submitted_email: contact_email)
       update_contact(contact_email)
+<<<<<<< HEAD
     else
+=======
+    elsif @message.content_type == 'form'
+      @message.update!(message_update_params[:message])
+      update_contact(contact_email_original, contact_name_original, contact_phone_number)
+    else 
+>>>>>>> 27387460... Upgrade bot enable to collect contact info at start widget
       @message.update!(message_update_params[:message])
     end
   rescue StandardError => e
@@ -87,6 +94,7 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
     @message_finder ||= MessageFinder.new(conversation, message_finder_params)
   end
 
+<<<<<<< HEAD
   def update_contact(email)
     contact_with_email = @account.contacts.find_by(email: email)
     if contact_with_email
@@ -96,6 +104,32 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
         mergee_contact: @contact
       ).perform
     else
+=======
+  def update_contact(email=nil, name=nil, phone_number=nil)
+    if email
+      contact_with_email = @account.contacts.find_by(email: email)
+      
+      if contact_with_email
+        @contact = ::ContactMergeAction.new(
+          account: @account,
+          base_contact: contact_with_email,
+          mergee_contact: @contact
+        ).perform
+      elsif name
+        @contact.update!(
+          email: email,
+          name: name
+        )
+      else
+        @contact.update!(
+          email: email,
+          name: contact_name
+        )
+      end
+    end
+    
+    if name
+>>>>>>> 27387460... Upgrade bot enable to collect contact info at start widget
       @contact.update!(
         email: email,
         name: contact_name
@@ -106,6 +140,19 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
   def contact_email
     permitted_params[:contact][:email].downcase
   end
+<<<<<<< HEAD
+=======
+  
+  def contact_email_original
+    permitted = params.permit(message: [{submitted_values: :value}])
+    permitted[:message][:submitted_values][2][:value]
+  end
+  
+  def contact_name_original
+    permitted = params.permit(message: [{submitted_values: :value}])
+    permitted[:message][:submitted_values][0][:value]
+  end
+>>>>>>> 27387460... Upgrade bot enable to collect contact info at start widget
 
   def contact_name
     contact_email.split('@')[0]
