@@ -11,6 +11,7 @@
 #  private             :boolean          default(FALSE)
 #  sender_type         :string
 #  status              :integer          default("sent")
+#  translations        :json             not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  account_id          :integer          not null

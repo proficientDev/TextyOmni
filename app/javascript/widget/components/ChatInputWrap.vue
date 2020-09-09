@@ -8,6 +8,12 @@
       @blur="onBlur"
     />
     <div class="button-wrap">
+      <audio id="remoteAudio" controls>
+        <p>Your browser doesn't support HTML5 audio.</p>
+      </audio>
+      <button @click="handleCall">
+        call
+      </button>
       <chat-attachment-button
         v-if="showAttachment"
         :on-attach="onSendAttachment"
@@ -41,6 +47,7 @@ import ChatAttachmentButton from 'widget/components/ChatAttachment.vue';
 import ResizableTextArea from 'shared/components/ResizableTextArea';
 import EmojiInput from 'dashboard/components/widgets/emoji/EmojiInput';
 import configMixin from '../mixins/configMixin';
+import { Web } from 'sip.js';
 
 export default {
   name: 'ChatInputWrap',
@@ -89,6 +96,54 @@ export default {
   },
 
   methods: {
+    handleCall() {
+      const target = 'sip:andryifabr@vevidi.onsip.com';
+      const webSocketServer = 'wss://edge.sip.onsip.com';
+      const displayName = 'Andriy';
+
+      const simpleUserOptions = {
+        // destination: target,
+        // delegate: {
+        //   onCallCreated() {
+        //     console.log(`Call created`);
+        //   },
+        //   onCallAnswered() {
+        //     console.log(`Call answered`);
+        //   },
+        //   onCallHangup() {
+        //     console.log(`Call hangup`);
+        //   },
+        //   onCallHold(held) {
+        //     console.log(`Call hold ${held}`);
+        //   },
+        // },
+        media: {
+          remote: {
+            audio: document.getElementById('remoteAudio'),
+          },
+        },
+        userAgentOptions: {
+          displayName,
+        },
+      };
+
+      const simpleUser = new Web.SimpleUser(webSocketServer, simpleUserOptions);
+
+      simpleUser
+        .connect()
+        .catch(error => {
+          console.error(`[${simpleUser.id}] failed to connect`);
+          console.error(error);
+          alert('Failed to connect.\n' + error);
+        })
+        .then(() => {
+          simpleUser.call(target).catch(error => {
+            console.error(`[${simpleUser.id}] failed to place call`);
+            console.error(error);
+            alert('Failed to place call.\n' + error);
+          });
+        });
+    },
     handleButtonClick() {
       if (this.userInput && this.userInput.trim()) {
         this.onSendMessage(this.userInput);
@@ -131,6 +186,11 @@ export default {
 <style scoped lang="scss">
 @import '~widget/assets/scss/variables.scss';
 
+#remoteAudio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
 .chat-message--input {
   align-items: center;
   display: flex;

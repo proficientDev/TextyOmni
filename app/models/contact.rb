@@ -7,6 +7,7 @@
 #  custom_attributes     :jsonb
 #  email                 :string
 #  identifier            :string
+#  locale                :string
 #  name                  :string
 #  phone_number          :string
 #  pubsub_token          :string

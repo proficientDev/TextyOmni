@@ -30,6 +30,7 @@
     "lodash.groupby": "^4.6.0",
     "moment": "~2.19.3",
     "query-string": "5",
+    "sip.js": "^0.17.1",
     "spinkit": "~1.2.5",
     "tween.js": "~16.6.0",
     "url-loader": "^2.0.0",
