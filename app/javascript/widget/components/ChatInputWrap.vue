@@ -102,21 +102,21 @@ export default {
       const displayName = 'Andriy';
 
       const simpleUserOptions = {
-        // destination: target,
-        // delegate: {
-        //   onCallCreated() {
-        //     console.log(`Call created`);
-        //   },
-        //   onCallAnswered() {
-        //     console.log(`Call answered`);
-        //   },
-        //   onCallHangup() {
-        //     console.log(`Call hangup`);
-        //   },
-        //   onCallHold(held) {
-        //     console.log(`Call hold ${held}`);
-        //   },
-        // },
+        destination: target,
+        delegate: {
+          onCallCreated() {
+            console.log(`Call created`);
+          },
+          onCallAnswered() {
+            console.log(`Call answered`);
+          },
+          onCallHangup() {
+            console.log(`Call hangup`);
+          },
+          onCallHold(held) {
+            console.log(`Call hold ${held}`);
+          },
+        },
         media: {
           remote: {
             audio: document.getElementById('remoteAudio'),
