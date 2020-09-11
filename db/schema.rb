@@ -147,6 +147,19 @@ ActiveRecord::Schema.define(version: 2020_09_07_094912) do
     t.index ["page_id"], name: "index_channel_facebook_pages_on_page_id"
   end
 
+  create_table "channel_signalwire_sms", force: :cascade do |t|
+    t.string "phone_number", null: false
+    t.string "auth_token", null: false
+    t.string "account_sid", null: false
+    t.string "space_url", null: false
+    t.integer "account_id", null: false
+    t.integer "medium", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id", "phone_number"], name: "index_channel_signalwire_sms_on_account_id_and_phone_number", unique: true
+    t.index ["medium"], name: "index_channel_signalwire_sms_on_medium"
+  end
+
   create_table "channel_twilio_sms", force: :cascade do |t|
     t.string "phone_number", null: false
     t.string "auth_token", null: false

@@ -36,6 +36,10 @@
       v-if="channel.key === 'twilio'"
       src="~dashboard/assets/images/channels/twilio.png"
     />
+    <img
+      v-if="channel.key === 'signalwire'"
+      src="~dashboard/assets/images/channels/signalwire.png"
+    />
     <h3 class="channel__title">
       {{ channel.name }}
     </h3>
@@ -68,7 +72,7 @@ export default {
       if (key === 'email') {
         return this.enabledFeatures.channel_email;
       }
-      return ['website', 'twilio', 'api'].includes(key);
+      return ['website', 'twilio', 'api', 'signalwire'].includes(key);
     },
   },
   methods: {

@@ -44,6 +44,7 @@ Rails.application.routes.draw do
           resources :canned_responses, except: [:show, :edit, :new]
           namespace :channels do
             resource :twilio_channel, only: [:create]
+            resource :signalwire_channel, only: [:create]
           end
           resources :conversations, only: [:index, :create, :show] do
             get 'meta', on: :collection
@@ -150,6 +151,10 @@ Rails.application.routes.draw do
     resources :callback, only: [:create]
   end
 
+  namespace :signalwire do
+    resources :callback, only: [:create]
+  end
+
   # ----------------------------------------------------------------------
   # Used in mailer templates
   resource :app, only: [:index] do
@@ -166,8 +171,8 @@ Rails.application.routes.draw do
 
   # ----------------------------------------------------------------------
   # Routes for testing
-  resources :widget_tests, only: [:index] unless Rails.env.production?
-
+  resources :widget_tests, only: [:index] unless Rails.env.development?
+  
   # ----------------------------------------------------------------------
   # Routes for external service verifications
   get 'apple-app-site-association' => 'apple_app#site_association'
