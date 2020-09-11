@@ -11,7 +11,7 @@
       <audio id="remoteAudio" controls>
         <p>Your browser doesn't support HTML5 audio.</p>
       </audio>
-      <button @click="handleCall">
+      <button @click="handleCallButton">
         call
       </button>
       <chat-attachment-button
@@ -96,27 +96,17 @@ export default {
   },
 
   methods: {
+    handleCallButton() {
+      this.handleCall();
+    },
     handleCall() {
+      const self = this;
       const target = 'sip:andryifabr@vevidi.onsip.com';
       const webSocketServer = 'wss://edge.sip.onsip.com';
       const displayName = 'Andriy';
 
       const simpleUserOptions = {
         destination: target,
-        delegate: {
-          onCallCreated() {
-            console.log(`Call created`);
-          },
-          onCallAnswered() {
-            console.log(`Call answered`);
-          },
-          onCallHangup() {
-            console.log(`Call hangup`);
-          },
-          onCallHold(held) {
-            console.log(`Call hold ${held}`);
-          },
-        },
         media: {
           remote: {
             audio: document.getElementById('remoteAudio'),
@@ -128,6 +118,28 @@ export default {
       };
 
       const simpleUser = new Web.SimpleUser(webSocketServer, simpleUserOptions);
+
+      const delegate = {
+        onCallCreated() {
+          console.log(`Call created`);
+          const callId = simpleUser.session.id.substr(
+            0,
+            simpleUser.session.id.indexOf(simpleUser.session.fromTag)
+          );
+          self.onSendMessage(callId);
+        },
+        onCallAnswered() {
+          console.log(`Call answered`);
+        },
+        onCallHangup() {
+          console.log(`Call hangup`);
+        },
+        onCallHold(held) {
+          console.log(`Call hold ${held}`);
+        },
+      };
+
+      simpleUser.delegate = delegate;
 
       simpleUser
         .connect()

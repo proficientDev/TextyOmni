@@ -5,8 +5,6 @@
         <woot-sidemenu-icon />
         {{ pageTitle }}
       </h1>
-      <button id="accept-call" @click="handleCall"></button>
-      <button id="decline-call" @click="handleHangUp"></button>
 
       <chat-filter @statusFilterChange="updateStatusType" />
     </div>
@@ -32,6 +30,9 @@
         :key="chat.id"
         :active-label="label"
         :chat="chat"
+        :call-btn.sync="chat.callBtn"
+        :handle-call="handleCall"
+        :handle-hang-up="handleHangUp"
       />
 
       <div v-if="chatListLoading" class="text-center">
@@ -96,6 +97,7 @@ export default {
       activeAssigneeTab: wootConstants.ASSIGNEE_TYPE.ME,
       activeStatus: wootConstants.STATUS_TYPE.OPEN,
       simpleUser: null,
+      calls: {},
     };
   },
   computed: {
@@ -161,15 +163,17 @@ export default {
       }
 
       if (!this.label) {
-        return conversationList;
+        return conversationList.map(c => ({ ...c, callBtn: this.calls[c.id] }));
       }
 
-      return conversationList.filter(conversation => {
-        const labels = this.$store.getters[
-          'conversationLabels/getConversationLabels'
-        ](conversation.id);
-        return labels.includes(this.label);
-      });
+      return conversationList
+        .filter(conversation => {
+          const labels = this.$store.getters[
+            'conversationLabels/getConversationLabels'
+          ](conversation.id);
+          return labels.includes(this.label);
+        })
+        .map(c => ({ ...c, callBtn: this.calls[c.id] }));
     },
   },
   watch: {
@@ -188,6 +192,7 @@ export default {
       this.$store.dispatch('conversationStats/get', this.conversationFilters);
     });
 
+    const self = this;
     const target = 'sip:andryifabr@vevidi.onsip.com';
     const webSocketServer = 'wss://edge.sip.onsip.com';
     const displayName = 'Andriy';
@@ -231,7 +236,14 @@ export default {
         this.simpleUser.register().then(() => {
           this.simpleUser.delegate = {
             onCallReceived() {
-              document.getElementById('accept-call').classList.add('blink');
+              const callId = self.simpleUser.session.id;
+              self.allChatList.forEach(c => {
+                c.messages.forEach(m => {
+                  if (callId.indexOf(m.content) !== -1) {
+                    self.calls[c.id] = true;
+                  }
+                });
+              });
             },
           };
         });
@@ -239,11 +251,13 @@ export default {
   },
   methods: {
     handleCall() {
-      document.getElementById('accept-call').classList.remove('blink');
       this.simpleUser.answer();
     },
-    handleHangUp() {
-      document.getElementById('accept-call').classList.remove('blink');
+    handleHangUp(id) {
+      this.calls[id] = false;
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
       this.simpleUser.hangup();
     },
     resetAndFetchData() {
