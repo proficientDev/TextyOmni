@@ -1,4 +1,6 @@
 class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
+  protect_from_forgery with: :null_session
+  
   before_action :set_conversation, only: [:create]
   before_action :set_message, only: [:update]
 

@@ -1,8 +1,11 @@
 # Used to verify the integrity of signed cookies. so ensure a secure value is set
-SECRET_KEY_BASE=30qE5OWUlCcCEjV0TJMByWY6hECxq2cbmPcRxQIEILzU4NqQUF4TIOTn4TzkzMj
+SECRET_KEY_BASE=7AvuVrqhOH0fcyDm73W1HmNLUGIUDX4lXNwT5vtOj5wh93hz0Fgx5ZQAfTzQZIj
 
 # Replace with the URL you are planning to use for your app
-FRONTEND_URL=http://chat.textyomni.com
+FRONTEND_URL=http://chat.textymedia.com
+
+# If you plan to use CDN for your assets, set Asset CDN Host
+ASSET_CDN_HOST=
 
 # Force all access to the app over SSL, default is set to false
 FORCE_SSL=false
@@ -23,7 +26,7 @@ REDIS_PASSWORD=
 # Postgres Database config variables
 POSTGRES_HOST=localhost
 POSTGRES_USERNAME=chatwoot
-POSTGRES_PASSWORD=m5Say5OZAjVU6Oi
+POSTGRES_PASSWORD=NUsD1ntZhTlubgM
 RAILS_ENV=production
 RAILS_MAX_THREADS=5
 

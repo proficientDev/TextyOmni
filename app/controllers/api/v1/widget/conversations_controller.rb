@@ -1,6 +1,8 @@
 class Api::V1::Widget::ConversationsController < Api::V1::Widget::BaseController
   include Events::Types
 
+  protect_from_forgery with: :null_session
+  
   def index
     @conversation = conversation
   end
