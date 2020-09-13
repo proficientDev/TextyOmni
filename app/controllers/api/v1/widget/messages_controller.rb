@@ -130,7 +130,7 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
 
   def contact_email_original
     permitted = params.permit(message: [{submitted_values: :value}])
-    permitted[:message][:submitted_values][2][:value]
+    permitted[:message][:submitted_values][1][:value]
   end
 
   def contact_name_original
@@ -144,7 +144,7 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
   
   def contact_phone_number 
     permitted = params.permit(message: [{submitted_values: :value}])
-    permitted[:message][:submitted_values][1][:value]
+    permitted[:message][:submitted_values][2][:value]
   end
 
   def message_update_params
