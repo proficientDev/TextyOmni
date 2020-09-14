@@ -251,9 +251,20 @@ export default {
   },
   methods: {
     handleCall() {
+      const callButtons = document.getElementsByClassName('call-buttons');
+      for (let i = 0; i < callButtons.length; i += 1) {
+        callButtons[i].style.visibility = 'visible';
+        // callButtons[i].style.height = 'auto';
+      }
+
       this.simpleUser.answer();
     },
     handleHangUp(id) {
+      const callButtons = document.getElementsByClassName('call-buttons');
+      for (let i = 0; i < callButtons.length; i += 1) {
+        callButtons[i].style.visibility = 'hidden';
+        // callButtons[i].style.height = 0;
+      }
       this.calls[id] = false;
       this.$nextTick(() => {
         this.$forceUpdate();

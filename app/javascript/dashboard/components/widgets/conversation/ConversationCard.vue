@@ -41,7 +41,7 @@
         </span>
         <span class="unread">{{ getUnreadCount }}</span>
       </div>
-      <div v-if="callBtn">
+      <div v-if="callBtn" class="call-buttons">
         <button class="accept-call" @click="handleCall(chat.id)"></button>
         <button class="decline-call" @click="handleHangUp(chat.id)"></button>
       </div>
