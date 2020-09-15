@@ -5,8 +5,13 @@
         <woot-sidemenu-icon />
         {{ pageTitle }}
       </h1>
+
       <chat-filter @statusFilterChange="updateStatusType" />
     </div>
+
+    <audio id="remoteAudio" controls>
+      <p>Your browser doesn't support HTML5 audio.</p>
+    </audio>
 
     <chat-type-tabs
       :items="assigneeTabItems"
@@ -25,6 +30,9 @@
         :key="chat.id"
         :active-label="label"
         :chat="chat"
+        :call-btn.sync="chat.callBtn"
+        :handle-call="handleCall"
+        :handle-hang-up="handleHangUp"
       />
 
       <div v-if="chatListLoading" class="text-center">
@@ -56,7 +64,7 @@
 <script>
 /* eslint-env browser */
 /* eslint no-console: 0 */
-/* global bus */
+
 import { mapGetters } from 'vuex';
 
 import ChatFilter from './widgets/conversation/ChatFilter';
@@ -65,6 +73,7 @@ import ConversationCard from './widgets/conversation/ConversationCard';
 import timeMixin from '../mixins/time';
 import conversationMixin from '../mixins/conversations';
 import wootConstants from '../constants';
+import { Web } from 'sip.js';
 
 export default {
   components: {
@@ -87,6 +96,8 @@ export default {
     return {
       activeAssigneeTab: wootConstants.ASSIGNEE_TYPE.ME,
       activeStatus: wootConstants.STATUS_TYPE.OPEN,
+      simpleUser: null,
+      calls: {},
     };
   },
   computed: {
@@ -152,15 +163,17 @@ export default {
       }
 
       if (!this.label) {
-        return conversationList;
+        return conversationList.map(c => ({ ...c, callBtn: this.calls[c.id] }));
       }
 
-      return conversationList.filter(conversation => {
-        const labels = this.$store.getters[
-          'conversationLabels/getConversationLabels'
-        ](conversation.id);
-        return labels.includes(this.label);
-      });
+      return conversationList
+        .filter(conversation => {
+          const labels = this.$store.getters[
+            'conversationLabels/getConversationLabels'
+          ](conversation.id);
+          return labels.includes(this.label);
+        })
+        .map(c => ({ ...c, callBtn: this.calls[c.id] }));
     },
   },
   watch: {
@@ -178,8 +191,75 @@ export default {
     bus.$on('fetch_conversation_stats', () => {
       this.$store.dispatch('conversationStats/get', this.conversationFilters);
     });
+
+    const self = this;
+    const target = 'sip:andryifabr@vevidi.onsip.com';
+    const webSocketServer = 'wss://edge.sip.onsip.com';
+    const displayName = 'Andriy';
+
+    const simpleUserOptions = {
+      aor: target,
+      delegate: {
+        onCallCreated() {
+          console.log(`Call created`);
+        },
+        onCallAnswered() {
+          console.log(`Call answered`);
+        },
+        onCallHangup() {
+          console.log(`Call hangup`);
+        },
+        onCallHold(held) {
+          console.log(`Call hold ${held}`);
+        },
+      },
+      media: {
+        remote: {
+          audio: document.getElementById('remoteAudio'),
+        },
+      },
+      userAgentOptions: {
+        displayName,
+      },
+    };
+
+    this.simpleUser = new Web.SimpleUser(webSocketServer, simpleUserOptions);
+
+    this.simpleUser
+      .connect()
+      .catch(error => {
+        console.error(`[${this.simpleUser.id}] failed to connect`);
+        console.error(error);
+        alert('Failed to connect.\n' + error);
+      })
+      .then(() => {
+        this.simpleUser.register().then(() => {
+          this.simpleUser.delegate = {
+            onCallReceived() {
+              const callId = self.simpleUser.session.id;
+              self.allChatList.forEach(c => {
+                c.messages.forEach(m => {
+                  if (callId.indexOf(m.content) !== -1) {
+                    self.calls[c.id] = true;
+                  }
+                });
+              });
+            },
+          };
+        });
+      });
   },
   methods: {
+    handleCall() {
+      this.simpleUser.answer();
+    },
+    handleHangUp(id) {
+      this.calls[id] = false;
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
+      this.simpleUser.hangup();
+    },
     resetAndFetchData() {
       this.$store.dispatch('conversationPage/reset');
       this.$store.dispatch('emptyAllConversations');
@@ -211,5 +291,45 @@ export default {
 .spinner {
   margin-top: $space-normal;
   margin-bottom: $space-normal;
+}
+#remoteAudio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+button {
+  width: 32px;
+  height: 32px;
+}
+#accept-call {
+  background: url('../../../javascript/shared/assets/images/accept-call.png');
+  width: 32px;
+  height: 32px;
+  border: 1px solid green;
+  border-radius: 16px;
+}
+#decline-call {
+  background: url('../../../javascript/shared/assets/images/decline-call.png');
+  width: 32px;
+  height: 32px;
+  border: 1px solid red;
+  border-radius: 16px;
+}
+
+@-webkit-keyframes blinker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.blink {
+  text-decoration: blink;
+  -webkit-animation-name: blinker;
+  -webkit-animation-duration: 0.6s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-in-out;
+  -webkit-animation-direction: alternate;
 }
 </style>

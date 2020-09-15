@@ -41,6 +41,10 @@
         </span>
         <span class="unread">{{ getUnreadCount }}</span>
       </div>
+      <div v-if="callBtn">
+        <button class="accept-call" @click="handleCall(chat.id)"></button>
+        <button class="decline-call" @click="handleHangUp(chat.id)"></button>
+      </div>
     </div>
   </div>
 </template>
@@ -69,6 +73,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    callBtn: {
+      type: Boolean,
+      default: false,
+    },
     hideInboxName: {
       type: Boolean,
       default: false,
@@ -76,6 +84,14 @@ export default {
     hideThumbnail: {
       type: Boolean,
       default: false,
+    },
+    handleCall: {
+      type: Function,
+      default: () => {},
+    },
+    handleHangUp: {
+      type: Function,
+      default: () => {},
     },
   },
 
@@ -130,7 +146,6 @@ export default {
       return messageType === MESSAGE_TYPE.OUTGOING;
     },
   },
-
   methods: {
     cardClick(chat) {
       const { activeInbox } = this;
@@ -149,3 +164,20 @@ export default {
   },
 };
 </script>
+
+<style>
+.accept-call {
+  background: url('../../../../../javascript/shared/assets/images/accept-call.png');
+  width: 32px;
+  height: 32px;
+  border: 1px solid green;
+  border-radius: 16px;
+}
+.decline-call {
+  background: url('../../../../../javascript/shared/assets/images/decline-call.png');
+  width: 32px;
+  height: 32px;
+  border: 1px solid red;
+  border-radius: 16px;
+}
+</style>

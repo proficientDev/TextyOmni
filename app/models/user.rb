@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                     :integer          not null, primary key
+#  audio_call             :boolean          default(FALSE)
 #  availability           :integer          default("online")
 #  confirmation_sent_at   :datetime
 #  confirmation_token     :string
@@ -12,6 +13,7 @@
 #  display_name           :string
 #  email                  :string
 #  encrypted_password     :string           default(""), not null
+#  language               :string
 #  last_sign_in_at        :datetime
 #  last_sign_in_ip        :string
 #  name                   :string           not null
@@ -24,6 +26,7 @@
 #  tokens                 :json
 #  uid                    :string           default(""), not null
 #  unconfirmed_email      :string
+#  video_call             :boolean          default(FALSE)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
