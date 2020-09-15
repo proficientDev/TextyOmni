@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2020_09_01_193206) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -216,6 +217,7 @@ ActiveRecord::Schema.define(version: 2020_09_01_193206) do
     t.string "pubsub_token"
     t.jsonb "additional_attributes"
     t.string "identifier"
+    t.string "locale"
     t.jsonb "custom_attributes", default: {}
     t.index ["account_id"], name: "index_contacts_on_account_id"
     t.index ["email", "account_id"], name: "uniq_email_per_account_contact", unique: true
@@ -338,6 +340,7 @@ ActiveRecord::Schema.define(version: 2020_09_01_193206) do
     t.string "source_id"
     t.integer "content_type", default: 0
     t.json "content_attributes", default: {}
+    t.json "translations", default: {}, null: false
     t.string "sender_type"
     t.bigint "sender_id"
     t.jsonb "external_source_ids", default: {}
@@ -414,11 +417,9 @@ ActiveRecord::Schema.define(version: 2020_09_01_193206) do
     t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
     t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
     t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
-    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
     t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
     t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
     t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
-    t.index ["tagger_type", "tagger_id"], name: "index_taggings_on_tagger_type_and_tagger_id"
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|
@@ -458,6 +459,9 @@ ActiveRecord::Schema.define(version: 2020_09_01_193206) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "pubsub_token"
+    t.string "language"
+    t.boolean "video_call", default: false
+    t.boolean "audio_call", default: false
     t.integer "availability", default: 0
     t.index ["email"], name: "index_users_on_email"
     t.index ["pubsub_token"], name: "index_users_on_pubsub_token", unique: true
