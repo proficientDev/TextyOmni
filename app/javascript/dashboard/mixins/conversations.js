@@ -5,7 +5,7 @@
 export default {
   methods: {
     lastMessage(m) {
-      return m.messages.last();
+      return m.messages.filter(x => x.content_type !== 'call_id').last();
     },
     unreadMessagesCount(m) {
       return m.messages.filter(
