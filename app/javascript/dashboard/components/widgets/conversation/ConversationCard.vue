@@ -41,9 +41,9 @@
         </span>
         <span class="unread">{{ getUnreadCount }}</span>
       </div>
-      <div v-if="callBtn" class="call-buttons">
-        <button class="accept-call" @click="handleCall(chat.id)"></button>
-        <button class="decline-call" @click="handleHangUp(chat.id)"></button>
+      <div v-if="callBtn">
+        <button v-if="call" class="accept-call" @click="acceptCall"></button>
+        <button class="decline-call" @click="declineCall"></button>
       </div>
     </div>
   </div>
@@ -62,7 +62,6 @@ export default {
   components: {
     Thumbnail,
   },
-
   mixins: [timeMixin, conversationMixin],
   props: {
     activeLabel: {
@@ -93,6 +92,12 @@ export default {
       type: Function,
       default: () => {},
     },
+  },
+  data() {
+    return {
+      call: true,
+      callBtnToggle: false,
+    };
   },
 
   computed: {
@@ -146,7 +151,26 @@ export default {
       return messageType === MESSAGE_TYPE.OUTGOING;
     },
   },
+  watch: {
+    $props: {
+      intermediate: true,
+      deep: true,
+      handler(newVal) {
+        this.$nextTick(() => {
+          this.callBtnToggle = newVal.callBtn;
+        });
+      },
+    },
+  },
   methods: {
+    acceptCall() {
+      this.handleCall(this.chat.id);
+      this.call = false;
+    },
+    declineCall() {
+      this.handleHangUp(this.chat.id);
+      this.callBtnToggle = false;
+    },
     cardClick(chat) {
       const { activeInbox } = this;
       const path = conversationUrl({

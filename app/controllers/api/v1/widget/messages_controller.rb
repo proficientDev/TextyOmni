@@ -48,7 +48,8 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
       sender: @contact,
       content: permitted_params[:message][:content],
       inbox_id: conversation.inbox_id,
-      message_type: :incoming
+      message_type: :incoming,
+      content_type: permitted_params[:message][:content_type]
     }
   end
 
@@ -116,7 +117,7 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
   end
 
   def permitted_params
-    params.permit(:id, :before, :website_token, contact: [:email], message: [:content, :referer_url, :timestamp])
+    params.permit(:id, :before, :website_token, contact: [:email], message: [:content, :content_type, :referer_url, :timestamp])
   end
 
   def set_message

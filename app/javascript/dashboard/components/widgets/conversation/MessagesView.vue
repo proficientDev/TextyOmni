@@ -152,7 +152,11 @@ export default {
       const [chat] = this.allConversations.filter(
         c => c.id === this.currentChat.id
       );
-      return chat;
+      const messages = chat.messages.filter(x => x.content_type !== 'call_id');
+      return {
+        ...chat,
+        messages,
+      };
     },
     getReadMessages() {
       const chat = this.getMessages;

@@ -257,6 +257,7 @@ export default {
           const messagePayload = {
             conversationId: this.currentChat.id,
             message: newMessage,
+            contentType: 9,
             private: this.isPrivate,
           };
           if (this.inReplyTo) {
