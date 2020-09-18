@@ -102,6 +102,52 @@
           </label>
         </div>
       </div>
+      <div class="profile--settings--row row">
+        <div class="columns small-3 ">
+          <h4 class="block-title">
+            {{ $t('PROFILE_SETTINGS.FORM.SIP_SECTION.TITLE') }}
+          </h4>
+          <p>
+            {{ $t('PROFILE_SETTINGS.FORM.SIP_SECTION.NOTE') }}
+          </p>
+        </div>
+        <div class="columns small-9 medium-5">
+          <div>
+            <label>
+              {{ $t('PROFILE_SETTINGS.FORM.TARGET.LABEL') }}
+              <input
+                v-model="sipTarget"
+                type="text"
+                :placeholder="$t('PROFILE_SETTINGS.FORM.TARGET.PLACEHOLDER')"
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              {{ $t('PROFILE_SETTINGS.FORM.WEBSOCKET_SERVER.LABEL') }}
+              <input
+                v-model="sipServer"
+                type="text"
+                :placeholder="
+                  $t('PROFILE_SETTINGS.FORM.WEBSOCKET_SERVER.PLACEHOLDER')
+                "
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              {{ $t('PROFILE_SETTINGS.FORM.SIP_DISPLAY_NAME.LABEL') }}
+              <input
+                v-model="sipDisplayName"
+                type="text"
+                :placeholder="
+                  $t('PROFILE_SETTINGS.FORM.SIP_DISPLAY_NAME.PLACEHOLDER')
+                "
+              />
+            </label>
+          </div>
+        </div>
+      </div>
       <notification-settings />
       <div class="profile--settings--row row">
         <div class="columns small-3 ">
@@ -145,6 +191,9 @@ export default {
       email: '',
       password: '',
       passwordConfirmation: '',
+      sipTarget: '',
+      sipServer: '',
+      sipDisplayName: '',
       availability: 'online',
       isUpdating: false,
     };
@@ -220,6 +269,9 @@ export default {
           displayName: this.displayName,
           availability: this.availability,
           password_confirmation: this.passwordConfirmation,
+          sip_target: this.sipTarget,
+          sip_server: this.sipServer,
+          sip_display_name: this.sipDisplayName,
         });
         this.isUpdating = false;
         if (hasEmailChanged) {

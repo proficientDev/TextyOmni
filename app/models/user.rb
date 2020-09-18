@@ -23,6 +23,9 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  sign_in_count          :integer          default(0), not null
+#  sip_display_name       :string           default("")
+#  sip_server             :string           default("")
+#  sip_target             :string           default("")
 #  tokens                 :json
 #  uid                    :string           default(""), not null
 #  unconfirmed_email      :string

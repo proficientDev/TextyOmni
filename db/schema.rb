@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_01_193206) do
+ActiveRecord::Schema.define(version: 2020_09_18_164420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -463,6 +463,9 @@ ActiveRecord::Schema.define(version: 2020_09_01_193206) do
     t.boolean "video_call", default: false
     t.boolean "audio_call", default: false
     t.integer "availability", default: 0
+    t.string "sip_target", default: ""
+    t.string "sip_server", default: ""
+    t.string "sip_display_name", default: ""
     t.index ["email"], name: "index_users_on_email"
     t.index ["pubsub_token"], name: "index_users_on_pubsub_token", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
