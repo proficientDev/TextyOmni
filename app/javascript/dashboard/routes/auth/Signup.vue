@@ -118,9 +118,9 @@ export default {
     }),
     termsLink() {
       return this.$t('REGISTER.TERMS_ACCEPT')
-        .replace('https://www.chatwoot.com/terms', this.globalConfig.termsURL)
+        .replace('https://www.textyomni.com/terms', this.globalConfig.termsURL)
         .replace(
-          'https://www.chatwoot.com/privacy-policy',
+          'https://www.textyomni.com/privacy-policy',
           this.globalConfig.privacyURL
         );
     },

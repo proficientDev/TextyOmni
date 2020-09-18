@@ -3,7 +3,7 @@
     "HEADER": "Agenti",
     "HEADER_BTN_TXT": "Přidat agenta",
     "LOADING": "Načítání seznamu agentů",
-    "SIDEBAR_TXT": "<p><b>Agents</b></p> <p> An <b>Agent</b> is a member of your Customer Support team. </p><p> Agents will be able to view and reply to messages from your users. The list shows all agents currently in your account. </p><p> Click on <b>Add Agent</b> to add a new agent. Agent you add will receive an email with a confirmation link to activate their account, after which they can access Chatwoot and respond to messages. </p><p> Access to Chatwoot's features are based on following roles. </p><p> <b>Agent</b> - Agents with this role can only access inboxes, reports and conversations. They can assign conversations to other agents or themselves and resolve conversations.</p><p> <b>Administrator</b> - Administrator will have access to all Chatwoot features enabled for your account, including settings, along with all of a normal agents' privileges.</p>",
+    "SIDEBAR_TXT": "<p><b>Agents</b></p> <p> An <b>Agent</b> is a member of your Customer Support team. </p><p> Agents will be able to view and reply to messages from your users. The list shows all agents currently in your account. </p><p> Click on <b>Add Agent</b> to add a new agent. Agent you add will receive an email with a confirmation link to activate their account, after which they can access TextyOmni and respond to messages. </p><p> Access to TextyOmni's features are based on following roles. </p><p> <b>Agent</b> - Agents with this role can only access inboxes, reports and conversations. They can assign conversations to other agents or themselves and resolve conversations.</p><p> <b>Administrator</b> - Administrator will have access to all TextyOmni features enabled for your account, including settings, along with all of a normal agents' privileges.</p>",
     "AGENT_TYPES": [
       {
         "name": "administrator",
@@ -48,14 +48,14 @@
       "API": {
         "SUCCESS_MESSAGE": "Agent byl úspěšně přidán",
         "EXIST_MESSAGE": "E-mail agenta je již používán, zkuste prosím jinou e-mailovou adresu",
-        "ERROR_MESSAGE": "Nelze se připojit k Woot serveru, opakujte akci později"
+        "ERROR_MESSAGE": "Nelze se připojit k TextyOmni serveru, opakujte akci později"
       }
     },
     "DELETE": {
       "BUTTON_TEXT": "Vymazat",
       "API": {
         "SUCCESS_MESSAGE": "Agent byl úspěšně odstraněn",
-        "ERROR_MESSAGE": "Nelze se připojit k Woot serveru, opakujte akci později"
+        "ERROR_MESSAGE": "Nelze se připojit k TextyOmni serveru, opakujte akci později"
       },
       "CONFIRM": {
         "TITLE": "Potvrdit odstranění",
@@ -86,13 +86,13 @@
       "CANCEL_BUTTON_TEXT": "Zrušit",
       "API": {
         "SUCCESS_MESSAGE": "Agent úspěšně aktualizován",
-        "ERROR_MESSAGE": "Nelze se připojit k Woot serveru, opakujte akci později"
+        "ERROR_MESSAGE": "Nelze se připojit k TextyOmni serveru, opakujte akci později"
       },
       "PASSWORD_RESET": {
         "ADMIN_RESET_BUTTON": "Obnovit heslo",
         "ADMIN_SUCCESS_MESSAGE": "E-mail s instrukcemi pro obnovení hesla byl odeslán agentovi",
         "SUCCESS_MESSAGE": "Heslo agenta bylo úspěšně obnoveno",
-        "ERROR_MESSAGE": "Nelze se připojit k Woot serveru, opakujte akci později"
+        "ERROR_MESSAGE": "Nelze se připojit k TextyOmni serveru, opakujte akci později"
       }
     },
     "SEARCH": {

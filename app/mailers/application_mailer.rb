@@ -1,7 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
 
-  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'accounts@chatwoot.com')
+  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'support@textyomni.com')
   before_action { ensure_current_account(params.try(:[], :account)) }
   layout 'mailer/base'
   # Fetch template from Database if available

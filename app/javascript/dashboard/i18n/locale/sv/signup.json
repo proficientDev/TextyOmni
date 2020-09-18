@@ -2,7 +2,7 @@
   "REGISTER": {
     "TRY_WOOT": "Registrera ett konto",
     "TITLE": "Registrera",
-    "TERMS_ACCEPT": "Genom att registrera dig godkänner du vår <a href=\"https://www.chatwoot.com/terms\">T & C</a> och <a href=\"https://www.chatwoot.com/privacy-policy\">sekretesspolicy</a>",
+    "TERMS_ACCEPT": "Genom att registrera dig godkänner du vår <a href=\"https://www.textyomni.com/terms\">T & C</a> och <a href=\"https://www.textyomni.com/privacy-policy\">sekretesspolicy</a>",
     "ACCOUNT_NAME": {
       "LABEL": "Kontonamn",
       "PLACEHOLDER": "Wayne Företag",
@@ -25,7 +25,7 @@
     },
     "API": {
       "SUCCESS_MESSAGE": "Registreringen lyckades",
-      "ERROR_MESSAGE": "Kunde inte ansluta till Woot Server, försök igen senare"
+      "ERROR_MESSAGE": "Kunde inte ansluta till TextyOmni Server, försök igen senare"
     },
     "SUBMIT": "Skicka"
   }

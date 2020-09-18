@@ -1,5 +1,5 @@
 class ConversationReplyMailer < ApplicationMailer
-  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'accounts@chatwoot.com')
+  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'support@textyomni.com')
   layout :choose_layout
 
   def reply_with_summary(conversation, message_queued_time)
@@ -98,7 +98,7 @@ class ConversationReplyMailer < ApplicationMailer
     if inbound_email_enabled?
       "#{assignee_name} <#{account_support_email}>"
     else
-      "#{assignee_name} <#{ENV.fetch('MAILER_SENDER_EMAIL', 'accounts@chatwoot.com')}>"
+      "#{assignee_name} <#{ENV.fetch('MAILER_SENDER_EMAIL', 'support@textyomni.com')}>"
     end
   end
 
@@ -126,7 +126,7 @@ class ConversationReplyMailer < ApplicationMailer
     @account_support_email ||= begin
       @account.support_email ||
         GlobalConfig.get('MAILER_SUPPORT_EMAIL')['MAILER_SUPPORT_EMAIL'] ||
-        ENV.fetch('MAILER_SENDER_EMAIL', 'accounts@chatwoot.com')
+        ENV.fetch('MAILER_SENDER_EMAIL', 'support@textyomni.com')
     end
   end
 

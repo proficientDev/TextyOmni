@@ -38,6 +38,6 @@ class Channel::Email < ApplicationRecord
 
   def ensure_forward_to_address
     # TODO : implement better logic here
-    self.forward_to_address ||= "#{SecureRandom.hex}@xyc.com"
+    self.forward_to_address ||= "#{SecureRandom.hex}@usg.mail.textyomni.com"
   end
 end

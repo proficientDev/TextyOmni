@@ -1,13 +1,13 @@
 - name: LOGO_THUMBNAIL
   value: '/brand-assets/textyomni_logo.png'
 - name: LOGO
-  value: '/brand-assets/textyomni_log.png'
+  value: '/brand-assets/textyomni_logo.png'
 - name: INSTALLATION_NAME
-  value: 'Textyomni'
+  value: 'TextyOmni'
 - name: BRAND_URL
-  value: 'https://www.textyomni.com'
+  value: 'https://usg.textyomni.com'
 - name: WIDGET_BRAND_URL
-  value: 'https://www.textyomni.com'
+  value: 'https://usg.textyomni.com'
 - name: TERMS_URL
   value: 'https://www.textyomni.com/tc'
 - name: PRIVACY_URL
@@ -21,6 +21,6 @@
 - name: CREATE_NEW_ACCOUNT_FROM_DASHBOARD
   value: true
 - name: BRAND_NAME
-  value: 'Textyomni'
+  value: 'TextyOmni'
 - name: 'INSTALLATION_EVENTS_WEBHOOK_URL'
   value: 
