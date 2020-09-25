@@ -1,11 +1,12 @@
 class ConversationReplyMailer < ApplicationMailer
-  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'accounts@chatwoot.com')
+  default from: ENV.fetch('MAILER_SENDER_EMAIL', 'support@textyomni.com')
   layout :choose_layout
 
   def reply_with_summary(conversation, message_queued_time)
     return unless smtp_config_set_or_development?
 
     init_conversation_attributes(conversation)
+    return if conversation_already_viewed?
 
     recap_messages = @conversation.messages.chat.where('created_at < ?', message_queued_time).last(10)
     new_messages = @conversation.messages.chat.where('created_at >= ?', message_queued_time)
@@ -26,6 +27,7 @@ class ConversationReplyMailer < ApplicationMailer
     return unless smtp_config_set_or_development?
 
     init_conversation_attributes(conversation)
+    return if conversation_already_viewed?
 
     @messages = @conversation.messages.chat.outgoing.where('created_at >= ?', message_queued_time)
     return false if @messages.count.zero?
@@ -63,6 +65,18 @@ class ConversationReplyMailer < ApplicationMailer
     @agent = @conversation.assignee
   end
 
+  def conversation_already_viewed?
+    # whether contact already saw the message on widget
+    return unless @conversation.contact_last_seen_at
+    return unless last_outgoing_message&.created_at
+
+    @conversation.contact_last_seen_at > last_outgoing_message&.created_at
+  end
+
+  def last_outgoing_message
+    @conversation.messages.chat.where.not(message_type: :incoming)&.last
+  end
+
   def assignee_name
     @assignee_name ||= @agent&.available_name || 'Notifications'
   end
@@ -84,7 +98,7 @@ class ConversationReplyMailer < ApplicationMailer
     if inbound_email_enabled?
       "#{assignee_name} <#{account_support_email}>"
     else
-      "#{assignee_name} <#{ENV.fetch('MAILER_SENDER_EMAIL', 'accounts@chatwoot.com')}>"
+      "#{assignee_name} <#{ENV.fetch('MAILER_SENDER_EMAIL', 'support@textyomni.com')}>"
     end
   end
 
@@ -112,7 +126,7 @@ class ConversationReplyMailer < ApplicationMailer
     @account_support_email ||= begin
       @account.support_email ||
         GlobalConfig.get('MAILER_SUPPORT_EMAIL')['MAILER_SUPPORT_EMAIL'] ||
-        ENV.fetch('MAILER_SENDER_EMAIL', 'accounts@chatwoot.com')
+        ENV.fetch('MAILER_SENDER_EMAIL', 'support@textyomni.com')
     end
   end
 

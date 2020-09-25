@@ -1,9 +1,9 @@
 {
-  "name": "Chatwoot",
-  "description": "Chatwoot is a customer support tool for instant messaging channels",
-  "website": "https://www.chatwoot.com/",
-  "repository": "https://github.com/chatwoot/chatwoot",
-  "logo": "https://app.chatwoot.com/brand-assets/logo_thumbnail.svg",
+  "name": "TextyOmni",
+  "description": "TextyOmni is a customer support tool for instant messaging channels",
+  "website": "https://www.textyomni.com/",
+  "repository": "https://github.com/textyomni/textyomni",
+  "logo": "https://usg.textyomni.com/brand-assets/textyomni_logo.png",
   "keywords": [
     "live chat",
     "customer support",

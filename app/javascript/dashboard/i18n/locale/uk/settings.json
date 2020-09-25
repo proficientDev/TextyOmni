@@ -134,7 +134,7 @@
     "API": {
       "SUCCESS_MESSAGE": "Account created successfully",
       "EXIST_MESSAGE": "Account already exists",
-      "ERROR_MESSAGE": "Не вдалося підключитися до Woot Server, спробуйте ще раз пізніше"
+      "ERROR_MESSAGE": "Не вдалося підключитися до TextyOmni Server, спробуйте ще раз пізніше"
     },
     "FORM": {
       "NAME": {

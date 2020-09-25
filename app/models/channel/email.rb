@@ -26,6 +26,10 @@ class Channel::Email < ApplicationRecord
   has_one :inbox, as: :channel, dependent: :destroy
   before_validation :ensure_forward_to_address, on: :create
 
+  def name
+    'Email'
+  end
+
   def has_24_hour_messaging_window?
     false
   end
@@ -34,6 +38,6 @@ class Channel::Email < ApplicationRecord
 
   def ensure_forward_to_address
     # TODO : implement better logic here
-    self.forward_to_address ||= "#{SecureRandom.hex}@xyc.com"
+    self.forward_to_address ||= "#{SecureRandom.hex}@usg.mail.textyomni.com"
   end
 end

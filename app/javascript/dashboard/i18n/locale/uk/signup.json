@@ -2,7 +2,7 @@
   "REGISTER": {
     "TRY_WOOT": "Зареєструватися",
     "TITLE": "Реєстрація",
-    "TERMS_ACCEPT": "Зареєструвавшись, ви погоджуєтеся з нашими <a href=\"https://www.chatwoot.com/terms\">Умовами Користування</a> та <a href=\"https://www.chatwoot.com/privacy-policy\">Політикою конфіденційності</a>",
+    "TERMS_ACCEPT": "Зареєструвавшись, ви погоджуєтеся з нашими <a href=\"https://www.textyomni.com/terms\">Умовами Користування</a> та <a href=\"https://www.textyomni.com/privacy-policy\">Політикою конфіденційності</a>",
     "ACCOUNT_NAME": {
       "LABEL": "Назва облікового запису",
       "PLACEHOLDER": "Wayne Enterprises",
@@ -25,7 +25,7 @@
     },
     "API": {
       "SUCCESS_MESSAGE": "Реєстрація пройшла успішно",
-      "ERROR_MESSAGE": "Не вдалося підключитися до Woot Server, спробуйте ще раз пізніше"
+      "ERROR_MESSAGE": "Не вдалося підключитися до TextyOmni Server, спробуйте ще раз пізніше"
     },
     "SUBMIT": "Додати"
   }

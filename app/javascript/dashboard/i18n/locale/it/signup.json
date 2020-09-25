@@ -2,7 +2,7 @@
   "REGISTER": {
     "TRY_WOOT": "Registra un account",
     "TITLE": "Registrazione",
-    "TERMS_ACCEPT": "Registrandoti, accetti la nostra <a href=\"https://www.chatwoot.com/terms\">T & C</a> e <a href=\"https://www.chatwoot.com/privacy-policy\">informativa sulla privacy</a>",
+    "TERMS_ACCEPT": "Registrandoti, accetti la nostra <a href=\"https://www.textyomni.com/terms\">T & C</a> e <a href=\"https://www.textyomni.com/privacy-policy\">informativa sulla privacy</a>",
     "ACCOUNT_NAME": {
       "LABEL": "Nome del conto",
       "PLACEHOLDER": "Wayne Enterprises",
@@ -25,7 +25,7 @@
     },
     "API": {
       "SUCCESS_MESSAGE": "Registrazione riuscita",
-      "ERROR_MESSAGE": "Impossibile connettersi al server Woot, riprova più tardi"
+      "ERROR_MESSAGE": "Impossibile connettersi al server TextyOmni, riprova più tardi"
     },
     "SUBMIT": "Invia"
   }
