@@ -39,6 +39,7 @@ class Account < ApplicationRecord
   has_many :facebook_pages, dependent: :destroy, class_name: '::Channel::FacebookPage'
   has_many :telegram_bots, dependent: :destroy
   has_many :twilio_sms, dependent: :destroy, class_name: '::Channel::TwilioSms'
+  has_many :signalwire_sms, dependent: :destroy, class_name: '::Channel::SignalwireSms'
   has_many :twitter_profiles, dependent: :destroy, class_name: '::Channel::TwitterProfile'
   has_many :web_widgets, dependent: :destroy, class_name: '::Channel::WebWidget'
   has_many :email_channels, dependent: :destroy, class_name: '::Channel::Email'

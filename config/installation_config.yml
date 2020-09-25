@@ -1,26 +1,26 @@
 - name: LOGO_THUMBNAIL
-  value: '/brand-assets/logo_thumbnail.svg'
+  value: '/brand-assets/textyomni_logo.png'
 - name: LOGO
-  value: '/brand-assets/logo.svg'
+  value: '/brand-assets/textyomni_log.png'
 - name: INSTALLATION_NAME
-  value: 'Chatwoot'
+  value: 'Textyomni'
 - name: BRAND_URL
-  value: 'https://www.chatwoot.com'
+  value: 'https://www.textyomni.com'
 - name: WIDGET_BRAND_URL
-  value: 'https://www.chatwoot.com'
+  value: 'https://www.textyomni.com'
 - name: TERMS_URL
-  value: 'https://www.chatwoot.com/terms-of-service'
+  value: 'https://www.textyomni.com/tc'
 - name: PRIVACY_URL
-  value: 'https://www.chatwoot.com/privacy-policy'
+  value: 'https://www.textyomni.com/privacy'
 - name: DISPLAY_MANIFEST
   value: true
 - name: MAILER_INBOUND_EMAIL_DOMAIN
-  value:
+  value: 'textyomni.com'
 - name: MAILER_SUPPORT_EMAIL
-  value:
+  value: 'support@textyomni.com'
 - name: CREATE_NEW_ACCOUNT_FROM_DASHBOARD
-  value: false
+  value: true
 - name: BRAND_NAME
-  value: 'Chatwoot'
+  value: 'Textyomni'
 - name: 'INSTALLATION_EVENTS_WEBHOOK_URL'
   value: 

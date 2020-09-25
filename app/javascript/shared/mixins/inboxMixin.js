@@ -3,6 +3,7 @@ export const INBOX_TYPES = {
   FB: 'Channel::FacebookPage',
   TWITTER: 'Channel::TwitterProfile',
   TWILIO: 'Channel::TwilioSms',
+  SIGNALWIRE: 'Channel::SignalwireSms',
   API: 'Channel::Api',
   EMAIL: 'Channel::Email',
 };
