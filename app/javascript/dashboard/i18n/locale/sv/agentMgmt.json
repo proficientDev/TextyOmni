@@ -42,14 +42,14 @@
       "API": {
         "SUCCESS_MESSAGE": "Agentkommando har lagts till",
         "EXIST_MESSAGE": "Agentkommando redan använt, försök med en annan e-postadress",
-        "ERROR_MESSAGE": "Kunde inte ansluta till Woot Server, försök igen senare"
+        "ERROR_MESSAGE": "Kunde inte ansluta till TextyOmni Server, försök igen senare"
       }
     },
     "DELETE": {
       "BUTTON_TEXT": "Radera",
       "API": {
         "SUCCESS_MESSAGE": "Agentkommando har tagits bort",
-        "ERROR_MESSAGE": "Kunde inte ansluta till Woot Server, försök igen senare"
+        "ERROR_MESSAGE": "Kunde inte ansluta till TextyOmni Server, försök igen senare"
       },
       "CONFIRM": {
         "TITLE": "Bekräfta borttagning",
@@ -80,13 +80,13 @@
       "CANCEL_BUTTON_TEXT": "Avbryt",
       "API": {
         "SUCCESS_MESSAGE": "Agentkommando uppdaterades",
-        "ERROR_MESSAGE": "Kunde inte ansluta till Woot Server, försök igen senare"
+        "ERROR_MESSAGE": "Kunde inte ansluta till TextyOmni Server, försök igen senare"
       },
       "PASSWORD_RESET": {
         "ADMIN_RESET_BUTTON": "Återställ lösenord",
         "ADMIN_SUCCESS_MESSAGE": "Ett e-postmeddelande med instruktioner för att återställa lösenordet har skickats till agenten",
         "SUCCESS_MESSAGE": "Agentkommando återställs framgångsrikt",
-        "ERROR_MESSAGE": "Kunde inte ansluta till Woot Server, försök igen senare"
+        "ERROR_MESSAGE": "Kunde inte ansluta till TextyOmni Server, försök igen senare"
       }
     },
     "SEARCH": {

@@ -4,31 +4,31 @@ describe('#MessageFormatter', () => {
   describe('content with links', () => {
     it('should format correctly', () => {
       const message =
-        'Chatwoot is an opensource tool\nSee more at https://www.chatwoot.com';
+        'TextyOmni \nSee more at https://www.textyomni.com';
       expect(new MessageFormatter(message).formattedMessage).toEqual(
-        'Chatwoot is an opensource tool<br>See more at <a rel="noreferrer noopener nofollow" href="https://www.chatwoot.com" class="link" target="_blank">https://www.chatwoot.com</a>'
+        'TextyOmni<br>See more at <a rel="noreferrer noopener nofollow" href="https://www.textyomni.com" class="link" target="_blank">https://www.textyomni.com</a>'
       );
     });
   });
 
   describe('tweets', () => {
     it('should return the same string if not tags or @mentions', () => {
-      const message = 'Chatwoot is an opensource tool';
+      const message = 'TextyOmni';
       expect(new MessageFormatter(message).formattedMessage).toEqual(message);
     });
 
     it('should add links to @mentions', () => {
       const message =
-        '@chatwootapp is an opensource tool thanks @longnonexistenttwitterusername';
+        '@textyomni  @longnonexistenttwitterusername';
       expect(new MessageFormatter(message, true).formattedMessage).toEqual(
-        '<a href="http://twitter.com/chatwootapp" target="_blank" rel="noreferrer nofollow noopener">@chatwootapp</a> is an opensource tool thanks @longnonexistenttwitterusername'
+        '<a href="http://twitter.com/textyomni" target="_blank" rel="noreferrer nofollow noopener">@textyomni</a>  @longnonexistenttwitterusername'
       );
     });
 
     it('should add links to #tags', () => {
-      const message = '#chatwootapp is an opensource tool';
+      const message = '#textyomni';
       expect(new MessageFormatter(message, true).formattedMessage).toEqual(
-        '<a href="https://twitter.com/hashtag/chatwootapp" target="_blank" rel="noreferrer nofollow noopener">#chatwootapp</a> is an opensource tool'
+        '<a href="https://twitter.com/hashtag/textyomni" target="_blank" rel="noreferrer nofollow noopener">#textyomni</a>'
       );
     });
   });

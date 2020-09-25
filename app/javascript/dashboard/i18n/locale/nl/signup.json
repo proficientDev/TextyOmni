@@ -2,7 +2,7 @@
   "REGISTER": {
     "TRY_WOOT": "Registreer een account",
     "TITLE": "Registreren",
-    "TERMS_ACCEPT": "Door je aan te melden ga je akkoord met onze <a href=\"https://www.chatwoot.com/terms\">T & C</a> en <a href=\"https://www.chatwoot.com/privacy-policy\">Privacy Policy</a>",
+    "TERMS_ACCEPT": "Door je aan te melden ga je akkoord met onze <a href=\"https://www.textyomni.com/terms\">T & C</a> en <a href=\"https://www.textyomni.com/privacy-policy\">Privacy Policy</a>",
     "ACCOUNT_NAME": {
       "LABEL": "Klant naam",
       "PLACEHOLDER": "Wayne Ondernemingen",
@@ -25,7 +25,7 @@
     },
     "API": {
       "SUCCESS_MESSAGE": "Registratie geslaagd",
-      "ERROR_MESSAGE": "Kan geen verbinding maken met Woot Server, probeer het later opnieuw"
+      "ERROR_MESSAGE": "Kan geen verbinding maken met TextyOmni Server, probeer het later opnieuw"
     },
     "SUBMIT": "Bevestigen"
   }

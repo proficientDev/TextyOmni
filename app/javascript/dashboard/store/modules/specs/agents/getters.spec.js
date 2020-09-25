@@ -7,13 +7,13 @@ describe('#getters', () => {
         {
           id: 1,
           name: 'Agent 1',
-          email: 'agent1@chatwoot.com',
+          email: 'agent1@textyomni.com',
           confirmed: true,
         },
         {
           id: 2,
           name: 'Agent 2',
-          email: 'agent2@chatwoot.com',
+          email: 'agent2@textyomni.com',
           confirmed: false,
         },
       ],
@@ -22,13 +22,13 @@ describe('#getters', () => {
       {
         id: 1,
         name: 'Agent 1',
-        email: 'agent1@chatwoot.com',
+        email: 'agent1@textyomni.com',
         confirmed: true,
       },
       {
         id: 2,
         name: 'Agent 2',
-        email: 'agent2@chatwoot.com',
+        email: 'agent2@textyomni.com',
         confirmed: false,
       },
     ]);
@@ -40,13 +40,13 @@ describe('#getters', () => {
         {
           id: 1,
           name: 'Agent 1',
-          email: 'agent1@chatwoot.com',
+          email: 'agent1@textyomni.com',
           confirmed: true,
         },
         {
           id: 2,
           name: 'Agent 2',
-          email: 'agent2@chatwoot.com',
+          email: 'agent2@textyomni.com',
           confirmed: false,
         },
       ],
@@ -55,7 +55,7 @@ describe('#getters', () => {
       {
         id: 1,
         name: 'Agent 1',
-        email: 'agent1@chatwoot.com',
+        email: 'agent1@textyomni.com',
         confirmed: true,
       },
     ]);

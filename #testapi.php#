@@ -2,11 +2,11 @@
 
 $dbhost = 'localhost';
 $dbport = '5432';
-$dbname = 'chatwoot_dev';
+$dbname = 'chatwoot_production';
 $dbuser = 'chatwoot';
-$dbpass = 'NUsD1ntZhTlubgM';
+$dbpass = 'Usgtexty99!!';
 
-$chatwoot_token = 'echCJhSwLGKVxESpnEgPwBqr';
+$chatwoot_token = 'ech';
 $chatwoot_url = 'https://chat.textymedia.com';
 
 $inbox_id     = 3;      
@@ -34,7 +34,7 @@ $contact = search_contact($account_id, $query);
   if(count($contact->payload) > 0) {
 
     $contact_id = $contact->payload[0]->id;
-    $source_id = $contact_payload->payload[0]->contact_inboxes[0]->source_id;
+    $source_id = $contact->payload[0]->contact_inboxes[0]->source_id;
 	
     } else {
 

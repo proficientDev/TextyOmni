@@ -33,12 +33,8 @@ export default {
         { key: 'website', name: 'Website' },
         { key: 'facebook', name: 'Facebook' },
         { key: 'twitter', name: 'Twitter' },
-        { key: 'twilio', name: 'Twilio' },
-        { key: 'signalwire', name: 'Signalwire' },
         { key: 'email', name: 'Email' },
         { key: 'api', name: 'API' },
-        { key: 'telegram', name: 'Telegram' },
-        { key: 'line', name: 'Line' },
       ],
       enabledFeatures: {},
     };

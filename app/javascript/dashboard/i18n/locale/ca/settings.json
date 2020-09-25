@@ -134,7 +134,7 @@
     "API": {
       "SUCCESS_MESSAGE": "Account created successfully",
       "EXIST_MESSAGE": "Account already exists",
-      "ERROR_MESSAGE": "No s'ha pogut connectar amb el servidor Woot. Torna-ho a provar més endavant"
+      "ERROR_MESSAGE": "No s'ha pogut connectar amb el servidor TextyOmni. Torna-ho a provar més endavant"
     },
     "FORM": {
       "NAME": {
