@@ -4,6 +4,7 @@
 #
 #  id         :bigint           not null, primary key
 #  active_at  :datetime
+#  limits     :integer
 #  role       :integer          default("agent")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
