@@ -28,6 +28,19 @@
             </span>
           </label>
         </div>
+        <div class="medium-12 columns">
+          <label :class="{ error: $v.agentConversationLimits.$error }">
+            {{ $t('AGENT_MGMT.EDIT.FORM.CONVERSATION_LIMITS.LABEL') }}
+            <select v-model="agentConversationLimits">
+              <option v-for="value in values" :key="value" :value="value">
+                {{ value }}
+              </option>
+            </select>
+            <span v-if="$v.agentConversationLimits.$error" class="message">
+              {{ $t('AGENT_MGMT.EDIT.FORM.CONVERSATION_LIMITS.ERROR') }}
+            </span>
+          </label>
+        </div>
         <div class="medium-12 modal-footer">
           <div class="medium-6 columns">
             <woot-submit-button
@@ -84,6 +97,10 @@ export default {
       type: String,
       default: '',
     },
+    limits: {
+      type: Number,
+      default: 1,
+    },
     onClose: {
       type: Function,
       required: true,
@@ -107,6 +124,8 @@ export default {
         email: this.email,
       },
       show: true,
+      agentConversationLimits: 1,
+      values: [1,2,3,4,5,6,7,8,9,10],
     };
   },
   validations: {
@@ -115,6 +134,9 @@ export default {
       minLength: minLength(4),
     },
     agentType: {
+      required,
+    },
+    agentConversationLimits: {
       required,
     },
   },
@@ -136,6 +158,7 @@ export default {
           id: this.id,
           name: this.agentName,
           role: this.agentType,
+          limits: this.agentConversationLimits,
         });
         this.showAlert(this.$t('AGENT_MGMT.EDIT.API.SUCCESS_MESSAGE'));
         this.onClose();

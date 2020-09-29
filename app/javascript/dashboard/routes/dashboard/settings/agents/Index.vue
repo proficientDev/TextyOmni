@@ -101,6 +101,7 @@
         :type="currentAgent.role"
         :email="currentAgent.email"
         :on-close="hideEditPopup"
+        :limits="currentAgent.limits"
       />
     </woot-modal>
     <!-- Delete Agent -->
