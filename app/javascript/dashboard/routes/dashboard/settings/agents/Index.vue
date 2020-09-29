@@ -203,6 +203,7 @@ export default {
     openEditPopup(agent) {
       this.showEditPopup = true;
       this.currentAgent = agent;
+      console.log(agent);
     },
     hideEditPopup() {
       this.showEditPopup = false;

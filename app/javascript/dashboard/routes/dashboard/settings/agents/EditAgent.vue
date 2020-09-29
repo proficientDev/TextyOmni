@@ -124,7 +124,7 @@ export default {
         email: this.email,
       },
       show: true,
-      agentConversationLimits: 1,
+      agentConversationLimits: this.limits,
       values: [1,2,3,4,5,6,7,8,9,10],
     };
   },
