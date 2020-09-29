@@ -15,8 +15,9 @@ class Api::V1::Accounts::AgentsController < Api::V1::Accounts::BaseController
   end
 
   def update
-    @agent.update!(agent_params.except(:role))
+    @agent.update!(agent_params.except(:role, :limits))
     @agent.current_account_user.update!(role: agent_params[:role]) if agent_params[:role]
+    @agent.current_account_user.update!(limits: agent_params[:limits]) if agent_params[:limits]
     render partial: 'api/v1/models/agent.json.jbuilder', locals: { resource: @agent }
   end
 
@@ -49,21 +50,23 @@ class Api::V1::Accounts::AgentsController < Api::V1::Accounts::BaseController
       account_id: Current.account.id,
       user_id: @user.id,
       role: new_agent_params[:role],
+      limits: new_agent_params[:limits],
       inviter_id: current_user.id
     )
   end
 
   def agent_params
-    params.require(:agent).permit(:email, :name, :role)
+    params.require(:agent).permit(:email, :name, :role, :limits)
   end
 
   def new_agent_params
     time = Time.now.to_i
-    params.require(:agent).permit(:email, :name, :role)
+    params.require(:agent).permit(:email, :name, :role, :limits)
           .merge!(password: time, password_confirmation: time, inviter: current_user)
   end
 
   def agents
+    Rails.logger.info "CURRENT AGENT GETTING: #{Current.account.users.find(3).limits}"
     @agents ||= Current.account.users.order_by_full_name
   end
 end

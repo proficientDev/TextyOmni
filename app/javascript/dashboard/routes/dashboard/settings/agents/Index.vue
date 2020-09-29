@@ -101,6 +101,7 @@
         :type="currentAgent.role"
         :email="currentAgent.email"
         :on-close="hideEditPopup"
+        :limits="currentAgent.limits"
       />
     </woot-modal>
     <!-- Delete Agent -->
@@ -202,6 +203,7 @@ export default {
     openEditPopup(agent) {
       this.showEditPopup = true;
       this.currentAgent = agent;
+      console.log(agent);
     },
     hideEditPopup() {
       this.showEditPopup = false;

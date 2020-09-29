@@ -37,6 +37,11 @@
           "LABEL": "Email Address",
           "PLACEHOLDER": "Please enter an email address of the agent"
         },
+        "CONVERSATION_LIMITS": {
+          "LABEL": "Conversation Threshold Value",
+          "PLACEHOLDER": "Please select a value for conversation auto assignment threshold",
+          "ERROR": "Limit value is required"
+        },
         "SUBMIT": "Add Agent"
       },
       "API": {
@@ -73,6 +78,11 @@
         "EMAIL": {
           "LABEL": "Email Address",
           "PLACEHOLDER": "Please enter an email address of the agent"
+        },
+        "CONVERSATION_LIMITS": {
+          "LABEL": "Conversation Threshold Value",
+          "PLACEHOLDER": "Please select a value for conversation auto assignment threshold",
+          "ERROR": "Limit value is required"
         },
         "SUBMIT": "Edit Agent"
       },
