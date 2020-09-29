@@ -6,4 +6,5 @@ json.available_name resource.available_name
 json.id resource.id
 json.name resource.name
 json.role resource.role
+json.limits resource.limits
 json.thumbnail resource.avatar_url
