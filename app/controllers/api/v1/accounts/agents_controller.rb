@@ -66,7 +66,6 @@ class Api::V1::Accounts::AgentsController < Api::V1::Accounts::BaseController
   end
 
   def agents
-    Rails.logger.info "CURRENT AGENT GETTING: #{Current.account.users.find(3).limits}"
     @agents ||= Current.account.users.order_by_full_name
   end
 end
