@@ -65,6 +65,7 @@ Rails.application.routes.draw do
 
           resources :contacts, only: [:index, :show, :update, :create] do
             collection do
+              get :active
               get :search
             end
             scope module: :contacts do
@@ -98,6 +99,15 @@ Rails.application.routes.draw do
           namespace :integrations do
             resources :apps, only: [:index, :show]
             resource :slack, only: [:create, :update, :destroy], controller: 'slack'
+          end
+
+          namespace :kbase do
+            resources :portals do
+              resources :categories do
+                resources :folders
+              end
+              resources :articles
+            end
           end
         end
       end
