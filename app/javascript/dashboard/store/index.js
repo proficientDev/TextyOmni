@@ -18,6 +18,7 @@ import inboxes from './modules/inboxes';
 import inboxMembers from './modules/inboxMembers';
 import integrations from './modules/integrations';
 import labels from './modules/labels';
+import codes from './modules/codes';
 import reports from './modules/reports';
 import userNotificationSettings from './modules/userNotificationSettings';
 import webhooks from './modules/webhooks';
@@ -42,6 +43,7 @@ export default new Vuex.Store({
     inboxMembers,
     integrations,
     labels,
+    codes,
     reports,
     userNotificationSettings,
     webhooks,

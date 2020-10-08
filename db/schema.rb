@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_194344) do
+ActiveRecord::Schema.define(version: 2020_10_08_091526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -194,6 +194,14 @@ ActiveRecord::Schema.define(version: 2020_09_28_194344) do
     t.string "welcome_tagline"
     t.integer "feature_flags", default: 3, null: false
     t.index ["website_token"], name: "index_channel_web_widgets_on_website_token", unique: true
+  end
+
+  create_table "codes", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "account_id"
   end
 
   create_table "contact_inboxes", force: :cascade do |t|

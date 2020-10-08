@@ -128,6 +128,10 @@ export default {
     &__busy {
       background: $warning-color;
     }
+    
+    &__busy-codes {
+      background: $alert-color
+    }
   }
 
   & &--title {

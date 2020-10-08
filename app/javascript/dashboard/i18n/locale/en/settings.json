@@ -69,6 +69,10 @@
           {
             "value": "offline",
             "label": "Offline"
+          },
+          {
+            "value": "busy-codes",
+            "label": "Busy Codes"
           }
         ]
       },
@@ -129,7 +133,8 @@
     "CANNED_RESPONSES": "Canned Responses",
     "INTEGRATIONS": "Integrations",
     "ACCOUNT_SETTINGS": "Account Settings",
-    "LABELS": "Labels"
+    "LABELS": "Labels",
+    "BUSYCODES": "Busy Codes"
   },
   "CREATE_ACCOUNT": {
     "NEW_ACCOUNT": "New Account",

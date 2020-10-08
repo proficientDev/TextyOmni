@@ -47,6 +47,7 @@ class Account < ApplicationRecord
   has_many :canned_responses, dependent: :destroy
   has_many :webhooks, dependent: :destroy
   has_many :labels, dependent: :destroy
+  has_many :codes, dependent: :destroy
   has_many :notification_settings, dependent: :destroy
   has_many :hooks, dependent: :destroy, class_name: 'Integrations::Hook'
   has_many :kbase_portals, dependent: :destroy, class_name: '::Kbase::Portal'

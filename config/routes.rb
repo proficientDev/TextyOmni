@@ -87,6 +87,8 @@ Rails.application.routes.draw do
           end
           resources :inbox_members, only: [:create, :show], param: :inbox_id
           resources :labels, only: [:index, :show, :create, :update, :destroy]
+          
+          resources :codes, only: [:index, :show, :create, :update, :destroy]
 
           resources :notifications, only: [:index, :update] do
             collection do
