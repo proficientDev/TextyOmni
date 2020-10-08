@@ -69,10 +69,6 @@
           {
             "value": "offline",
             "label": "Offline"
-          },
-          {
-            "value": "busy-codes",
-            "label": "Busy Codes"
           }
         ]
       },

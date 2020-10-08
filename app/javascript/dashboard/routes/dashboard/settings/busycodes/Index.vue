@@ -135,14 +135,6 @@ export default {
       } ?`;
     },
   },
-  watch: {
-    records: {
-      handler(records) {
-        console.log('records', records);
-      },
-      deep: true
-    }
-  },
   mounted() {
     this.$store.dispatch('codes/get');
   },

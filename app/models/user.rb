@@ -3,7 +3,7 @@
 # Table name: users
 #
 #  id                     :integer          not null, primary key
-#  availability           :integer          default("online")
+#  availability           :string           default("online")
 #  confirmation_sent_at   :datetime
 #  confirmation_token     :string
 #  confirmed_at           :datetime
@@ -53,7 +53,7 @@ class User < ApplicationRecord
          :validatable,
          :confirmable
 
-  enum availability: { online: 0, offline: 1, busy: 2, "busy-codes": 3 }
+  # enum availability: { online: 0, offline: 1, busy: 2, "busy-codes": 3 }
 
   # The validation below has been commented out as it does not
   # work because :validatable in devise overrides this.

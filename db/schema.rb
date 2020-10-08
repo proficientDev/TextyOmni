@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_08_091526) do
+ActiveRecord::Schema.define(version: 2020_10_08_174429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -514,7 +514,7 @@ ActiveRecord::Schema.define(version: 2020_10_08_091526) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "pubsub_token"
-    t.integer "availability", default: 0
+    t.string "availability", default: "0"
     t.index ["email"], name: "index_users_on_email"
     t.index ["pubsub_token"], name: "index_users_on_pubsub_token", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
