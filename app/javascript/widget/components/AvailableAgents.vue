@@ -38,7 +38,12 @@ export default {
       }));
     },
     title() {
-      return this.getAvailableAgentsText(this.agents);
+      if (this.agents.length !== 0) {
+        return 'Customer Service Agents Available';
+      }
+      else {
+        return this.getAvailableAgentsText(this.agents);
+      }
     },
   },
 };
