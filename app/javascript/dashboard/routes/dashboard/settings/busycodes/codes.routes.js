@@ -9,7 +9,7 @@ export default {
       component: SettingsContent,
       props: {
         headerTitle: 'CODE_MGMT.HEADER',
-        icon: 'ion-pricetags',
+        icon: 'ion-flag',
         showNewButton: false,
       },
       children: [

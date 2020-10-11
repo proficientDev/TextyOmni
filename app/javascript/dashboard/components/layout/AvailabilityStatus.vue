@@ -57,7 +57,7 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'getCurrentUser',
-      records: 'codes/getCodes'
+      records: 'getCodes',
     }),
     currentUserAvailabilityStatus() {
       return this.currentUser.availability_status;

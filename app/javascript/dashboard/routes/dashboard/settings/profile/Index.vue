@@ -174,7 +174,7 @@ export default {
       currentUser: 'getCurrentUser',
       currentUserId: 'getCurrentUserID',
       currentAvailabilityStatus: 'getCurrentUserAvailabilityStatus',
-      records: 'codes/getCodes',
+      records: 'getCodes',
     }),
     availabilityStatuses() {
       const originStatues = this.$t('PROFILE_SETTINGS.FORM.AVAILABILITY.STATUSES_LIST').map(

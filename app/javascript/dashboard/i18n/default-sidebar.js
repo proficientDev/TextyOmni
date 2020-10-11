@@ -88,7 +88,7 @@ export const getSidebarItems = accountId => ({
         toStateName: 'labels_list',
       },
       codes: {
-        icon: 'ion-pricetags',
+        icon: 'ion-flag',
         label: 'BUSYCODES',
         hasSubMenu: false,
         toState: frontendURL(`accounts/${accountId}/settings/busycodes/list`),
