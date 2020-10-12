@@ -11,14 +11,28 @@
       <audio id="remoteAudio" controls>
         <p>Your browser doesn't support HTML5 audio.</p>
       </audio>
-      <button
-        class="call-btn"
-        :class="{
-          'accept-call': callBtn === 'call',
-          'decline-call': callBtn === 'hangup',
-        }"
-        @click="handleCallButton()"
-      ></button>
+      <div>
+        <button
+          v-if="callBtn === 'makeCall'"
+          class="call-btn accept-call"
+          @click="handleCall()"
+        ></button>
+        <div v-if="callBtn === 'inComingCall'" class="buttons-row">
+          <button
+            class="call-btn accept-call"
+            @click="handleGetCall()"
+          ></button>
+          <button
+            class="call-btn decline-call"
+            @click="handleHangup()"
+          ></button>
+        </div>
+        <button
+          v-if="callBtn === 'hangup' || callBtn === 'outComingCall'"
+          class="call-btn decline-call"
+          @click="handleHangup()"
+        ></button>
+      </div>
       <chat-attachment-button
         v-if="showAttachment"
         :on-attach="onSendAttachment"
@@ -44,7 +58,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import emojione from 'emojione';
 import { mixin as clickaway } from 'vue-clickaway';
 import ChatSendButton from 'widget/components/ChatSendButton.vue';
@@ -53,6 +67,7 @@ import ResizableTextArea from 'shared/components/ResizableTextArea';
 import EmojiInput from 'dashboard/components/widgets/emoji/EmojiInput';
 import configMixin from '../mixins/configMixin';
 import { Web } from 'sip.js';
+import { MESSAGE_CONTENT_TYPE } from '../helpers/constants';
 
 export default {
   name: 'ChatInputWrap',
@@ -72,20 +87,27 @@ export default {
       type: Function,
       default: () => {},
     },
+    fetchOldConversations: {
+      type: Function,
+      default: () => {},
+    },
   },
 
   data() {
     return {
       userInput: '',
       showEmojiPicker: false,
-      callBtn: 'call',
+      callBtn: 'makeCall',
       simpleUserObject: null,
+      calls: {},
+      call: true,
     };
   },
 
   computed: {
     ...mapGetters({
       widgetColor: 'appConfig/getWidgetColor',
+      conversation: 'conversation/getGroupedConversation',
     }),
     showAttachment() {
       return this.hasAttachmentsEnabled && this.userInput.length === 0;
@@ -94,88 +116,181 @@ export default {
       return this.userInput.length > 0;
     },
   },
-
   destroyed() {
     document.removeEventListener('keypress', this.handleEnterKeyPress);
   },
   mounted() {
     document.addEventListener('keypress', this.handleEnterKeyPress);
+
+    const self = this;
+    this.fetchAvailableAgents(window.chatwootWebChannel.websiteToken).then(
+      () => {
+        const target = self.$store.state.agent.records[0].sip_target;
+        const webSocketServer = self.$store.state.agent.records[0].sip_server;
+        const displayName = self.$store.state.agent.records[0].sip_display_name;
+
+        const simpleUserOptions = {
+          aor: target,
+          delegate: {
+            onCallCreated() {},
+            onCallReceived() {
+              const callId = self.simpleUser.session.id;
+              self.conversation.map(c => {
+                c.messages.map(m => {
+                  if (callId.indexOf(m.content) !== -1) {
+                    self.callBtn = 'inComingCall';
+                  }
+                  return true;
+                });
+                return true;
+              });
+            },
+            onCallAnswered() {
+              self.callBtn = 'hangup';
+            },
+            onCallHangup() {
+              self.callBtn = 'makeCall';
+            },
+            onCallHold(held) {},
+          },
+          media: {
+            remote: {
+              audio: document.getElementById('remoteAudio'),
+            },
+          },
+          userAgentOptions: {
+            displayName,
+          },
+        };
+
+        this.simpleUser = new Web.SimpleUser(
+          webSocketServer,
+          simpleUserOptions
+        );
+
+        this.simpleUser
+          .connect()
+          .catch(error => {
+            console.error(`[${this.simpleUser.id}] failed to connect`);
+            console.error(error);
+            alert('Failed to connect.\n' + error);
+          })
+          .then(() => {
+            this.simpleUser.register().then(() => {
+              this.simpleUser.delegate = {
+                onCallReceived() {
+                  const callId = self.simpleUser.session.id;
+                  self.conversation.map(c => {
+                    c.messages.map(m => {
+                      if (callId.indexOf(m.content) !== -1) {
+                        self.callBtn = 'inComingCall';
+                      }
+                      return true;
+                    });
+                    return true;
+                  });
+                },
+                onCallAnswered() {
+                  self.callBtn = 'hangup';
+                },
+                onCallHangup() {
+                  self.callBtn = 'makeCall';
+                },
+              };
+            });
+          });
+      }
+    );
   },
 
   methods: {
-    handleCallButton() {
-      if (this.callBtn === 'call') {
-        this.handleCall();
-      }
-      if (this.callBtn === 'hangup') {
-        this.handleHangup();
-      }
+    ...mapActions('agent', ['fetchAvailableAgents']),
+    handleGetCall() {
+      this.simpleUser.answer();
     },
     handleCall() {
+      const contentType = MESSAGE_CONTENT_TYPE.RESOLVE_AUTOASSIGN;
+      const content = 'Call started';
       const self = this;
-      const target = 'sip:andryifabr@vevidi.onsip.com';
-      const webSocketServer = 'wss://edge.sip.onsip.com';
-      const displayName = 'Andriy';
 
-      const simpleUserOptions = {
-        destination: target,
-        media: {
-          remote: {
-            audio: document.getElementById('remoteAudio'),
-          },
-        },
-        userAgentOptions: {
-          displayName,
-        },
-      };
+      this.onSendMessage({ content, contentType }).then(() => {
+        if (
+          self.conversation[this.conversation.length - 1].messages[
+            self.conversation[this.conversation.length - 1].messages.length - 1
+          ].status
+        ) {
+          const target = self.$store.state.agent.records[0].sip_target;
+          const webSocketServer = self.$store.state.agent.records[0].sip_server;
+          const displayName =
+            self.$store.state.agent.records[0].sip_display_name;
 
-      const simpleUser = new Web.SimpleUser(webSocketServer, simpleUserOptions);
+          const simpleUserOptions = {
+            destination: target,
+            media: {
+              remote: {
+                audio: document.getElementById('remoteAudio'),
+              },
+            },
+            userAgentOptions: {
+              displayName,
+            },
+          };
 
-      this.simpleUserObject = simpleUser;
-
-      const delegate = {
-        onCallCreated() {
-          console.log(`Call created`);
-          const content = simpleUser.session.id.substr(
-            0,
-            simpleUser.session.id.indexOf(simpleUser.session.fromTag)
+          const simpleUser = new Web.SimpleUser(
+            webSocketServer,
+            simpleUserOptions
           );
-          const contentType = 9;
-          self.onSendMessage({ content, contentType });
-        },
-        onCallAnswered() {
-          console.log(`Call answered`);
-        },
-        onCallHangup() {
-          console.log(`Call hangup`);
-          self.callBtn = 'call';
-        },
-        onCallHold(held) {
-          console.log(`Call hold ${held}`);
-        },
-      };
 
-      simpleUser.delegate = delegate;
+          self.simpleUserObject = simpleUser;
 
-      simpleUser
-        .connect()
-        .catch(error => {
-          console.error(`[${simpleUser.id}] failed to connect`);
-          console.error(error);
-          alert('Failed to connect.\n' + error);
-        })
-        .then(() => {
-          simpleUser.call(target).catch(error => {
-            console.error(`[${simpleUser.id}] failed to place call`);
-            console.error(error);
-            alert('Failed to place call.\n' + error);
-          });
-          this.callBtn = 'hangup';
-        });
+          const delegate = {
+            onCallCreated() {
+              const callContent = simpleUser.session.id.substr(
+                0,
+                simpleUser.session.id.indexOf(simpleUser.session.fromTag)
+              );
+              const callContentType = MESSAGE_CONTENT_TYPE.CALL_ID;
+              self.onSendMessage({
+                content: callContent,
+                contentType: callContentType,
+              });
+              self.callBtn = 'hangup';
+            },
+            onCallAnswered() {
+              self.callBtn = 'hangup';
+            },
+            onCallReceived() {
+              self.callBtn = 'outComingCall';
+            },
+            onCallHangup() {
+              self.callBtn = 'makeCall';
+            },
+            onCallHold(held) {},
+          };
+
+          simpleUser.delegate = delegate;
+
+          simpleUser
+            .connect()
+            .catch(error => {
+              console.error(`[${simpleUser.id}] failed to connect`);
+              console.error(error);
+              alert('Failed to connect.\n' + error);
+            })
+            .then(() => {
+              simpleUser.call(target).catch(error => {
+                console.error(`[${simpleUser.id}] failed to place call`);
+                console.error(error);
+                alert('Failed to place call.\n' + error);
+              });
+              self.callBtn = 'hangup';
+            });
+        }
+      });
     },
     handleHangup() {
-      this.simpleUserObject.hangup();
-      this.callBtn = 'call';
+      this.simpleUser.hangup();
+      this.callBtn = 'makeCall';
     },
     handleButtonClick() {
       if (this.userInput && this.userInput.trim()) {
@@ -280,5 +395,9 @@ export default {
 }
 .call-btn:focus {
   outline: none;
+}
+.buttons-row {
+  display: flex;
+  justify-content: flex-start;
 }
 </style>

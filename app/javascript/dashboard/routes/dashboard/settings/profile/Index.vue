@@ -251,6 +251,9 @@ export default {
       this.avatarUrl = this.currentUser.avatar_url;
       this.availability = this.currentUser.availability_status;
       this.displayName = this.currentUser.display_name;
+      this.sipTarget = this.currentUser.sip_target;
+      this.sipServer = this.currentUser.sip_server;
+      this.sipDisplayName = this.currentUser.sip_display_name;
     },
     async updateUser() {
       this.$v.$touch();

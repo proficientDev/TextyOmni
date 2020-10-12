@@ -316,7 +316,6 @@ export default {
   },
   methods: {
     handleFeatureFlag(e) {
-      console.log(e.target.value);
       this.selectedFeatureFlags = this.toggleInput(
         this.selectedFeatureFlags,
         e.target.value
@@ -359,6 +358,7 @@ export default {
         } = response;
         this.selectedAgents = inboxMembers;
       } catch (error) {
+        // eslint-disable-next-line
         console.log(error);
       }
     },
@@ -404,7 +404,6 @@ export default {
     handleImageUpload({ file, url }) {
       this.avatarFile = file;
       this.avatarUrl = url;
-      console.log(this.avatarUrl);
     },
   },
   validations: {

@@ -152,7 +152,12 @@ export default {
       const [chat] = this.allConversations.filter(
         c => c.id === this.currentChat.id
       );
-      const messages = chat.messages.filter(x => x.content_type !== 'call_id');
+
+      const messages = chat.messages.filter(
+        x =>
+          x.content_type !== 'call_id' &&
+          x.content_type !== 'resolve_autoassign'
+      );
       return {
         ...chat,
         messages,

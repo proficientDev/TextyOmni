@@ -23,8 +23,8 @@ export default {
   },
   methods: {
     ...mapActions('conversation', ['sendMessage', 'sendAttachment']),
-    handleSendMessage(params) {
-      this.sendMessage(params);
+    async handleSendMessage(params) {
+      await this.sendMessage(params);
     },
     handleSendAttachment(attachment) {
       this.sendAttachment({ attachment });

@@ -41,10 +41,26 @@
         </span>
         <span class="unread">{{ getUnreadCount }}</span>
       </div>
-      <div v-if="callBtn">
-        <button v-if="call" class="accept-call" @click="acceptCall"></button>
-        <button class="decline-call" @click="declineCall"></button>
+      <button
+        v-if="buttonStatus === 'makeCall'"
+        class="accept-call"
+        @click="createCall(chat.id)"
+      ></button>
+      <div
+        v-if="buttonStatus === 'inComingCall' && chatId === chat.id"
+        class="buttons-row"
+      >
+        <button class="accept-call" @click="handleCall()"></button>
+        <button class="decline-call" @click="handleHangUp()"></button>
       </div>
+      <button
+        v-if="
+          (buttonStatus === 'hangup' && chatId === chat.id) ||
+            (buttonStatus === 'outComingCall' && chatId === chat.id)
+        "
+        class="decline-call"
+        @click="handleHangUp()"
+      ></button>
     </div>
   </div>
 </template>
@@ -72,10 +88,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    callBtn: {
-      type: Boolean,
-      default: false,
-    },
     hideInboxName: {
       type: Boolean,
       default: false,
@@ -92,6 +104,18 @@ export default {
       type: Function,
       default: () => {},
     },
+    createCall: {
+      type: Function,
+      default: () => {},
+    },
+    buttonStatus: {
+      type: String,
+      default: '',
+    },
+    chatId: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -99,7 +123,6 @@ export default {
       callBtnToggle: false,
     };
   },
-
   computed: {
     ...mapGetters({
       currentChat: 'getSelectedChat',
@@ -163,14 +186,6 @@ export default {
     },
   },
   methods: {
-    acceptCall() {
-      this.handleCall(this.chat.id);
-      this.call = false;
-    },
-    declineCall() {
-      this.handleHangUp(this.chat.id);
-      this.callBtnToggle = false;
-    },
     cardClick(chat) {
       const { activeInbox } = this;
       const path = conversationUrl({
@@ -197,6 +212,7 @@ export default {
   border: 1px solid green;
   border-radius: 16px;
 }
+
 .decline-call {
   background: url('../../../../../javascript/shared/assets/images/decline-call.png');
   width: 32px;

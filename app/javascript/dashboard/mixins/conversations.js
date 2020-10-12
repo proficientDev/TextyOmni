@@ -5,7 +5,13 @@
 export default {
   methods: {
     lastMessage(m) {
-      return m.messages.filter(x => x.content_type !== 'call_id').last();
+      return m.messages
+        .filter(
+          x =>
+            x.content_type !== 'call_id' &&
+            x.content_type !== 'resolve_autoassign'
+        )
+        .last();
     },
     unreadMessagesCount(m) {
       return m.messages.filter(

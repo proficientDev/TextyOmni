@@ -128,7 +128,6 @@ export default {
         this.showAlert(this.$t('AGENT_MGMT.EDIT.API.SUCCESS_MESSAGE'));
         this.onClose();
       } catch (error) {
-        console.log(error);
         this.showAlert(this.$t('AGENT_MGMT.EDIT.API.ERROR_MESSAGE'));
       }
     },
