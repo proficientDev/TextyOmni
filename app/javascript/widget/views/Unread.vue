@@ -12,7 +12,11 @@
     </div>
     <div class="unread-messages">
       <agent-bubble
-        v-for="message in unreadMessages"
+        v-for="message in unreadMessages.filter(
+          x =>
+            x.content_type !== 'call_id' &&
+            x.content_type !== 'resolve_autoassign'
+        )"
         :key="message.id"
         :message-id="message.id"
         :message="message.content"

@@ -23,7 +23,10 @@ class Api::V1::ProfilesController < Api::BaseController
       :password,
       :password_confirmation,
       :avatar,
-      :availability
+      :availability,
+      :sip_target,
+      :sip_server,
+      :sip_display_name
     )
   end
 end

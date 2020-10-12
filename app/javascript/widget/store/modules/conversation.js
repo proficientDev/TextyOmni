@@ -133,9 +133,8 @@ export const getters = {
 
 export const actions = {
   sendMessage: async ({ commit }, params) => {
-    const { content } = params;
-    commit('pushMessageToConversation', createTemporaryMessage({ content }));
-    await sendMessageAPI(content);
+    commit('pushMessageToConversation', createTemporaryMessage(params));
+    await sendMessageAPI(params);
   },
 
   sendAttachment: async ({ commit }, params) => {

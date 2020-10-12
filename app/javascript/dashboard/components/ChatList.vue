@@ -23,16 +23,17 @@
     <p v-if="!chatListLoading && !conversationList.length" class="content-box">
       {{ $t('CHAT_LIST.LIST.404') }}
     </p>
-
     <div class="conversations-list">
       <conversation-card
         v-for="chat in conversationList"
-        :key="chat.id"
+        :key="`${chat.id}${chat.callBtn}`"
         :active-label="label"
         :chat="chat"
-        :call-btn.sync="chat.callBtn"
         :handle-call="handleCall"
         :handle-hang-up="handleHangUp"
+        :create-call="createCall"
+        :button-status="buttonStatus"
+        :chat-id="chatId"
       />
 
       <div v-if="chatListLoading" class="text-center">
@@ -62,9 +63,6 @@
 </template>
 
 <script>
-/* eslint-env browser */
-/* eslint no-console: 0 */
-
 import { mapGetters } from 'vuex';
 
 import ChatFilter from './widgets/conversation/ChatFilter';
@@ -74,6 +72,7 @@ import timeMixin from '../mixins/time';
 import conversationMixin from '../mixins/conversations';
 import wootConstants from '../constants';
 import { Web } from 'sip.js';
+import { MESSAGE_CONTENT_TYPE } from '../../widget/helpers/constants';
 
 export default {
   components: {
@@ -96,8 +95,9 @@ export default {
     return {
       activeAssigneeTab: wootConstants.ASSIGNEE_TYPE.ME,
       activeStatus: wootConstants.STATUS_TYPE.OPEN,
-      simpleUser: null,
       calls: {},
+      buttonStatus: 'makeCall',
+      chatId: 0,
     };
   },
   computed: {
@@ -110,9 +110,10 @@ export default {
       currentUserID: 'getCurrentUserID',
       activeInbox: 'getSelectedInbox',
       conversationStats: 'conversationStats/getStats',
+      currentChat: 'getSelectedChat',
     }),
     assigneeTabItems() {
-      return this.$t('CHAT_LIST.ASSIGNEE_TYPE_TABS').map(item => {
+      return this.$t(`CHAT_LIST.ASSIGNEE_TYPE_TABS`).map(item => {
         const count = this.conversationStats[item.COUNT_KEY] || 0;
         return {
           key: item.KEY,
@@ -193,25 +194,24 @@ export default {
     });
 
     const self = this;
-    const target = 'sip:andryifabr@vevidi.onsip.com';
-    const webSocketServer = 'wss://edge.sip.onsip.com';
-    const displayName = 'Andriy';
-
+    const target = window.chatwootConfig.sipTarget;
+    const webSocketServer = window.chatwootConfig.sipServer;
+    const displayName = window.chatwootConfig.sipDisplayName;
     const simpleUserOptions = {
       aor: target,
       delegate: {
-        onCallCreated() {
-          console.log(`Call created`);
+        onCallCreated() {},
+        onCallReceived() {
+          self.buttonStatus = 'inComingCall';
         },
         onCallAnswered() {
-          console.log(`Call answered`);
+          self.buttonStatus = 'hangup';
+          self.chatId = self.currentChat.id;
         },
         onCallHangup() {
-          console.log(`Call hangup`);
+          self.buttonStatus = 'makeCall';
         },
-        onCallHold(held) {
-          console.log(`Call hold ${held}`);
-        },
+        onCallHold(held) {},
       },
       media: {
         remote: {
@@ -237,13 +237,24 @@ export default {
           this.simpleUser.delegate = {
             onCallReceived() {
               const callId = self.simpleUser.session.id;
-              self.allChatList.forEach(c => {
-                c.messages.forEach(m => {
+
+              self.chatLists.map(c => {
+                c.messages.map(m => {
                   if (callId.indexOf(m.content) !== -1) {
-                    self.calls[c.id] = true;
+                    self.buttonStatus = 'inComingCall';
+                    self.chatId = c.id;
                   }
+                  return true;
                 });
+                return true;
               });
+            },
+            onCallAnswered() {
+              self.buttonStatus = 'hangup';
+              self.chatId = self.currentChat.id;
+            },
+            onCallHangup() {
+              self.buttonStatus = 'makeCall';
             },
           };
         });
@@ -253,12 +264,98 @@ export default {
     handleCall() {
       this.simpleUser.answer();
     },
-    handleHangUp(id) {
-      this.calls[id] = false;
-      this.$nextTick(() => {
-        this.$forceUpdate();
-      });
+    handleHangUp() {
       this.simpleUser.hangup();
+      this.buttonStatus = 'makeCall';
+    },
+    async sendMessage(params) {
+      try {
+        await this.$store.dispatch('sendMessage', params);
+      } catch (error) {
+        // Error
+      }
+    },
+    createCall(chatId) {
+      const contentType = MESSAGE_CONTENT_TYPE.RESOLVE_AUTOASSIGN;
+      const content = 'Call started';
+      const self = this;
+
+      this.sendMessage({
+        message: content,
+        private: false,
+        conversationId: chatId,
+        contentType: contentType,
+      }).then(() => {
+        const target = window.chatwootConfig.sipTarget;
+        const webSocketServer = window.chatwootConfig.sipServer;
+        const displayName = window.chatwootConfig.sipDisplayName;
+
+        const simpleUserOptions = {
+          destination: target,
+          media: {
+            remote: {
+              audio: document.getElementById('remoteAudio'),
+            },
+          },
+          userAgentOptions: {
+            displayName,
+          },
+        };
+
+        const simpleUser = new Web.SimpleUser(
+          webSocketServer,
+          simpleUserOptions
+        );
+
+        self.simpleUserObject = simpleUser;
+
+        const delegate = {
+          onCallCreated() {
+            const callContent = simpleUser.session.id.substr(
+              0,
+              simpleUser.session.id.indexOf(simpleUser.session.fromTag)
+            );
+            const callContentType = MESSAGE_CONTENT_TYPE.CALL_ID;
+            self.sendMessage({
+              message: callContent,
+              contentType: callContentType,
+              conversationId: chatId,
+              private: false,
+            });
+          },
+          onCallReceived() {
+            self.buttonStatus = 'outComingCall';
+          },
+          onCallAnswered() {
+            self.buttonStatus = 'hangup';
+            self.chatId = chatId;
+          },
+          onCallHangup() {
+            self.callBtn = true;
+            self.buttonStatus = 'makeCall';
+          },
+          onCallHold(held) {},
+        };
+
+        simpleUser.delegate = delegate;
+
+        simpleUser
+          .connect()
+          .catch(error => {
+            console.error(`[${simpleUser.id}] failed to connect`);
+            console.error(error);
+            alert('Failed to connect.\n' + error);
+          })
+          .then(() => {
+            simpleUser.call(target).catch(error => {
+              console.error(`[${simpleUser.id}] failed to place call`);
+              console.error(error);
+              alert('Failed to place call.\n' + error);
+            });
+            self.callBtn = false;
+            self.buttonStatus = 'makeCall';
+          });
+      });
     },
     resetAndFetchData() {
       this.$store.dispatch('conversationPage/reset');
