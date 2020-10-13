@@ -1,6 +1,8 @@
+import Vue from 'vue';
 import * as MutationHelpers from 'shared/helpers/vuex/mutationHelpers';
 import * as types from '../mutation-types';
 import AgentAPI from '../../api/agents';
+import AgentHistoriesAPI from '../../api/agent_histories';
 
 export const state = {
   records: [],
@@ -10,6 +12,7 @@ export const state = {
     isUpdating: false,
     isDeleting: false,
   },
+  records_status: [],
 };
 
 export const getters = {
@@ -22,6 +25,9 @@ export const getters = {
   getUIFlags($state) {
     return $state.uiFlags;
   },
+  getAgentHistories($state) {
+    return $state.records_status;
+  }
 };
 
 export const actions = {
@@ -75,6 +81,16 @@ export const actions = {
       throw new Error(error);
     }
   },
+  
+  getHistories: async ({ commit }, agentId) => {
+    try {
+      const response = await AgentHistoriesAPI.show(agentId);
+      console.log(response);
+      commit(types.default.SET_AGENT_HISTORIES, response.data);
+    } catch (error) {
+      // Ignore error
+    }
+  },
 };
 
 export const mutations = {
@@ -96,6 +112,10 @@ export const mutations = {
   [types.default.EDIT_AGENT]: MutationHelpers.update,
   [types.default.DELETE_AGENT]: MutationHelpers.destroy,
   [types.default.UPDATE_AGENTS_PRESENCE]: MutationHelpers.updatePresence,
+  
+  [types.default.SET_AGENT_HISTORIES]($state, data) {
+    $state.records_status = data;
+  }
 };
 
 export default {

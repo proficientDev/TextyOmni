@@ -60,6 +60,9 @@ export default {
   EDIT_AGENT: 'EDIT_AGENT',
   DELETE_AGENT: 'DELETE_AGENT',
   UPDATE_AGENTS_PRESENCE: 'UPDATE_AGENTS_PRESENCE',
+  
+  // Agent availability status histories
+  SET_AGENT_HISTORIES: 'SET_AGENT_HISTORIES',
 
   // Canned Response
   SET_CANNED_UI_FLAG: 'SET_CANNED_UI_FLAG',

@@ -33,6 +33,7 @@ Rails.application.routes.draw do
           end
 
           resources :agents, except: [:show, :edit, :new]
+          
           resources :callbacks, only: [] do
             collection do
               post :register_facebook_page
@@ -89,6 +90,7 @@ Rails.application.routes.draw do
           resources :labels, only: [:index, :show, :create, :update, :destroy]
           
           resources :codes, only: [:index, :show, :create, :update, :destroy]
+          resources :agent_histories, only: [:index, :show]
 
           resources :notifications, only: [:index, :update] do
             collection do

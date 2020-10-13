@@ -63,6 +63,19 @@
         "NO": "No, Keep "
       }
     },
+    "VIEW_TRACKS": {
+      "HEADER": "Agents Availability Statuses"
+      "BUTTON_TEXT": "Histories",
+      "SIDEBAR_TXT": "<p><b>Histories of changes of availability status</b></p><p>You can track the histries of chages of every agents availability statues.</p>",
+      "LIST": {
+        "404": "There are no chnages of availability status associated to this agent.",
+        "TABLE_HEADER": [
+          "Agent Name",
+          "Availability",
+          "Date/Time"
+        ]
+      }
+    },
     "EDIT": {
       "TITLE": "Edit agent",
       "FORM": {

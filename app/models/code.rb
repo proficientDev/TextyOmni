@@ -10,4 +10,6 @@
 #  account_id  :integer
 #
 class Code < ApplicationRecord
+  include RegexHelper
+  belongs_to :account
 end

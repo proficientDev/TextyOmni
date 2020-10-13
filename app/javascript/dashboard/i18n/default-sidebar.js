@@ -42,6 +42,7 @@ export const getSidebarItems = accountId => ({
   settings: {
     routes: [
       'agent_list',
+      'agent_histories',
       'canned_list',
       'labels_list',
       'codes_list',

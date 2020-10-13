@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_08_174429) do
+ActiveRecord::Schema.define(version: 2020_10_12_011640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -111,6 +111,13 @@ ActiveRecord::Schema.define(version: 2020_10_08_174429) do
     t.datetime "updated_at", null: false
     t.string "fallback_title"
     t.string "extension"
+  end
+
+  create_table "availability_statuses", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "availability"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "canned_responses", id: :serial, force: :cascade do |t|

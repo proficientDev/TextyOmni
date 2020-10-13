@@ -92,6 +92,7 @@ export default {
       this.isStatusMenuOpened = false;
     },
     changeAvailabilityStatus(availability) {
+      console.log(availability);
       if (this.isUpdating) {
         return;
       }
