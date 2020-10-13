@@ -17,6 +17,7 @@
         ref="messageInput"
         v-model="message"
         class="input"
+        spellcheck="true"
         :placeholder="messagePlaceHolder"
         :min-height="4"
         @focus="onFocus"

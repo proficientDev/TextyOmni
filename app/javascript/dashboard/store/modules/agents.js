@@ -85,7 +85,6 @@ export const actions = {
   getHistories: async ({ commit }, agentId) => {
     try {
       const response = await AgentHistoriesAPI.show(agentId);
-      console.log(response);
       commit(types.default.SET_AGENT_HISTORIES, response.data);
     } catch (error) {
       // Ignore error

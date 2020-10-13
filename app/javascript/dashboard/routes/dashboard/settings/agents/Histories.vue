@@ -99,7 +99,6 @@ export default {
     },
     getSelectedAgent() {
       this.agent = this.agentList.filter(agent => this.selectedAgentId.includes(agent.id))[0];
-      console.log(this.agent);
     },
   },
 };

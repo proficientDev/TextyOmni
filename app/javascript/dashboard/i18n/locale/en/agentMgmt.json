@@ -64,7 +64,7 @@
       }
     },
     "VIEW_TRACKS": {
-      "HEADER": "Agents Availability Statuses"
+      "HEADER": "Agents Availability Statuses",
       "BUTTON_TEXT": "Histories",
       "SIDEBAR_TXT": "<p><b>Histories of changes of availability status</b></p><p>You can track the histries of chages of every agents availability statues.</p>",
       "LIST": {
