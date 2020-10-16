@@ -58,6 +58,7 @@ export const getSidebarItems = accountId => ({
       'settings_integrations_integration',
       'general_settings',
       'general_settings_index',
+      'agent_status_conversations',
     ],
     menuItems: {
       back: {

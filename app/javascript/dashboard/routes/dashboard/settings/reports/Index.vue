@@ -1,16 +1,31 @@
 <template>
   <div class="column content-box">
-    <div class="small-3 pull-right">
-      <multiselect
-        v-model="currentDateRangeSelection"
-        track-by="name"
-        label="name"
-        placeholder="Select one"
-        :options="dateRange"
-        :searchable="false"
-        :allow-empty="true"
-        @select="changeDateSelection"
-      />
+    <div class="row">
+      <div class="small-3 pull-right">
+        <multiselect
+          v-model="currentDateRangeSelection"
+          track-by="name"
+          label="name"
+          placeholder="Select one"
+          :options="dateRange"
+          :searchable="false"
+          :allow-empty="true"
+          @select="changeDateSelection"
+        />
+      </div>
+      <div class="small-1"></div>
+      <div class="small-5">
+        <router-link
+          :to="`/app/accounts/${currentAccountId}/reports/status`"
+        >
+          <button
+            type="button"
+            class="button nice ion-shuffle"
+          >
+          {{ $t('REPORT.AGENT_STATUS.DISPLAY_BUTTON_TEXT') }}
+          </button>
+        </router-link>
+      </div>
     </div>
     <div class="row">
       <woot-report-stats-card
@@ -46,6 +61,7 @@ import subDays from 'date-fns/subDays';
 import getUnixTime from 'date-fns/getUnixTime';
 import fromUnixTime from 'date-fns/fromUnixTime';
 import format from 'date-fns/format';
+import { frontendURL } from '../../../../helper/URLHelper';
 
 const REPORTS_KEYS = {
   CONVERSATIONS: 'conversations_count',
@@ -68,6 +84,7 @@ export default {
     ...mapGetters({
       accountSummary: 'getAccountSummary',
       accountReport: 'getAccountReports',
+      currentAccountId: 'getCurrentAccountId',
     }),
     to() {
       return getUnixTime(startOfDay(new Date()));

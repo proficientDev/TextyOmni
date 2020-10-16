@@ -1,6 +1,7 @@
 {
   "REPORT": {
     "HEADER": "Reports",
+    "HEADER_BTN_TXT": "Reports",
     "LOADING_CHART": "Loading chart data...",
     "NO_ENOUGH_DATA": "We've not received enough data points to generate report, Please try again later.",
     "METRICS": {
@@ -38,6 +39,31 @@
         "id": 1,
         "name": "Last 30 days"
       }
-    ]
+    ],
+    "AGENT_STATUS": {
+      "DISPLAY_BUTTON_TEXT": "Agent Status & Open Conversations",
+      "LIST": {
+        "404": "There is no data to display.",
+        "TABLE_HEADER": [
+          "Agent Name",
+          "Current Status/Busy Code",
+          "Start Date/Time"
+        ]
+      },
+      "ASSIGNED_CONVERSATIONS": {
+        "TABLE_HEADER": [
+          "Contact Name",
+          "Inbox/Channel",
+          "Started",
+          "Duration"
+        ],
+        "OPEN": {
+          "TITLE": "Assigned Open Conversations"
+        },
+        "RESOLVED": {
+          "TITLE": "Assigned Resolved Conversations"
+        }
+      }
+    }
   }
 }

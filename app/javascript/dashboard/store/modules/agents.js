@@ -86,6 +86,7 @@ export const actions = {
     try {
       const response = await AgentHistoriesAPI.show(agentId);
       commit(types.default.SET_AGENT_HISTORIES, response.data);
+      return response.data;
     } catch (error) {
       // Ignore error
     }
