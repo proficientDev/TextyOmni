@@ -70,6 +70,17 @@
                       button-class="link hollow grey-btn"
                       @click="openDeletePopup(agent, index)"
                     />
+                    <router-link
+                      :to="addAccountScoping(`settings/agents/${agent.id}/histories`)"
+                    >
+                      <woot-submit-button
+                        v-if="showViewHistoriesAction(agent)"
+                        :button-text="$t('AGENT_MGMT.VIEW_TRACKS.BUTTON_TEXT')"
+                        :loading="loading[agent.id]"
+                        icon-class="ion-clock"
+                        button-class="link hollow grey-btn"
+                      />
+                    </router-link>
                   </div>
                 </td>
               </tr>
@@ -88,6 +99,12 @@
         />
       </div>
     </div>
+    <histories
+      v-if="showHistories"
+      :show.sync="showHistories"
+      :on-close="closeHistories"
+      :agent="selectedAgent"
+    />
     <!-- Add Agent -->
     <woot-modal :show.sync="showAddPopup" :on-close="hideAddPopup">
       <add-agent :on-close="hideAddPopup" />
@@ -122,14 +139,17 @@ import globalConfigMixin from 'shared/mixins/globalConfigMixin';
 import Thumbnail from '../../../../components/widgets/Thumbnail';
 import AddAgent from './AddAgent';
 import EditAgent from './EditAgent';
+import accountMixin from '../../../../mixins/account';
+import Histories from './Histories';
 
 export default {
   components: {
     AddAgent,
     EditAgent,
     Thumbnail,
+    Histories,
   },
-  mixins: [globalConfigMixin],
+  mixins: [globalConfigMixin, accountMixin],
   data() {
     return {
       loading: {},
@@ -140,6 +160,8 @@ export default {
         message: '',
       },
       currentAgent: {},
+      showHistories: false,
+      selectedAgent: {},
     };
   },
   computed: {
@@ -186,6 +208,9 @@ export default {
       }
       return true;
     },
+    showViewHistoriesAction(agent) {
+      return this.currentUserId !== agent.id;
+    },
     verifiedAdministrators() {
       return this.agentList.filter(
         agent => agent.role === 'administrator' && agent.confirmed
@@ -228,6 +253,15 @@ export default {
       } catch (error) {
         this.showAlert(this.$t('AGENT_MGMT.DELETE.API.ERROR_MESSAGE'));
       }
+    },
+    // Get Agent for histories
+    openHistories(agent) {
+      this.showHistories = true;
+      this.selectedAgent = agent;
+    },
+    closeHistories() {
+      this.showHistories = false;
+      this.selectedAgent = {};
     },
     // Show SnackBar
     showAlert(message) {

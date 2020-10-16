@@ -7,6 +7,7 @@ class Api::V1::ProfilesController < Api::BaseController
 
   def update
     @user.update!(profile_params)
+    current_user.availability_statuses.create!(profile_params)
   end
 
   private

@@ -3,9 +3,11 @@ import axios from 'axios';
 import Vue from 'vue';
 import * as types from '../mutation-types';
 import authAPI from '../../api/auth';
+import CodesAPI from '../../api/codes';
 import createAxios from '../../helper/APIHelper';
 import actionCable from '../../helper/actionCable';
 import { setUser, getHeaderExpiry, clearCookiesOnLogout } from '../utils/api';
+import * as MutationHelpers from 'shared/helpers/vuex/mutationHelpers';
 
 const state = {
   currentUser: {
@@ -22,6 +24,7 @@ const state = {
     },
   },
   currentAccountId: null,
+  records: [],
 };
 
 // getters
@@ -53,10 +56,25 @@ export const getters = {
   getCurrentUser(_state) {
     return _state.currentUser;
   },
+  
+  getCodes(_state) {
+    return _state.records;
+  },
+  
+  
 };
 
 // actions
 export const actions = {
+  async getCodes({ commit }) {
+    try {
+      const response = await CodesAPI.get();
+      commit(types.default.SET_CODES, response.data.payload);
+    } catch (error) {
+      // Ignore error
+    }
+  },
+  
   login({ commit }, credentials) {
     return new Promise((resolve, reject) => {
       authAPI
@@ -87,7 +105,9 @@ export const actions = {
   setUser({ commit, dispatch }) {
     if (authAPI.isLoggedIn()) {
       commit(types.default.SET_CURRENT_USER);
+      // console.log("SET USER: ", types.default.SET_CURRENT_USER);
       dispatch('validityCheck');
+      dispatch('getCodes');
     } else {
       commit(types.default.CLEAR_USER);
     }
@@ -145,6 +165,10 @@ const mutations = {
   [types.default.SET_CURRENT_ACCOUNT_ID](_state, accountId) {
     Vue.set(_state, 'currentAccountId', Number(accountId));
   },
+  // [types.SET_CODES]: MutationHelpers.set,
+  [types.default.SET_CODES](_state, codes) {
+    Vue.set(_state, 'records', codes);
+  }
 };
 
 export default {

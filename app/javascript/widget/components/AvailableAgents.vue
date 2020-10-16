@@ -14,11 +14,12 @@
 <script>
 import GroupedAvatars from 'widget/components/GroupedAvatars.vue';
 import agentMixin from '../mixins/agentMixin';
+import globalConfigMixin from 'shared/mixins/globalConfigMixin';
 
 export default {
   name: 'AvailableAgents',
   components: { GroupedAvatars },
-  mixins: [agentMixin],
+  mixins: [globalConfigMixin, agentMixin],
   props: {
     agents: {
       type: Array,
@@ -38,7 +39,12 @@ export default {
       }));
     },
     title() {
-      return this.getAvailableAgentsText(this.agents);
+      if (this.agents.length !== 0 && window.chatwootWebChannel.disableAgentNameWidget) {
+        return 'Customer Service Agents Available';
+      }
+      else {
+        return this.getAvailableAgentsText(this.agents);
+      }
     },
   },
 };

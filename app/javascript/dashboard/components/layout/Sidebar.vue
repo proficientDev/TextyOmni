@@ -234,7 +234,7 @@ export default {
           menuItems = Object.values(groupItem.menuItems);
         }
       }
-
+      
       return this.filterMenuItemsByRole(menuItems);
     },
     currentRoute() {

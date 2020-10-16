@@ -5,6 +5,7 @@ import canned from './canned/canned.routes';
 import inbox from './inbox/inbox.routes';
 import integrations from './integrations/integrations.routes';
 import labels from './labels/labels.routes';
+import codes from './busycodes/codes.routes';
 import profile from './profile/profile.routes';
 import reports from './reports/reports.routes';
 import store from '../../../store';
@@ -28,6 +29,7 @@ export default {
     ...inbox.routes,
     ...integrations.routes,
     ...labels.routes,
+    ...codes.routes,
     ...profile.routes,
     ...reports.routes,
   ],

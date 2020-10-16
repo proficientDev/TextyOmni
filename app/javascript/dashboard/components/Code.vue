@@ -18,6 +18,7 @@ export default {
   props: {
     script: {
       type: String,
+      default: "undefined",
       required: true,
     },
     lang: {

@@ -3,7 +3,7 @@
     <div class="status-view">
       <div
         :class="
-          `status-view--badge status-view--badge__${currentUserAvailabilityStatus}`
+          `status-view--badge status-view--badge__${currentUserAvailabilityStatusFilter()}`
         "
       />
 
@@ -57,20 +57,33 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'getCurrentUser',
+      records: 'getCodes',
     }),
     currentUserAvailabilityStatus() {
       return this.currentUser.availability_status;
     },
+    currentUserBusyCodes() {
+      return this.records;
+    },
     availabilityStatuses() {
-      return this.$t('PROFILE_SETTINGS.FORM.AVAILABILITY.STATUSES_LIST').map(
+      const originStatues = this.$t('PROFILE_SETTINGS.FORM.AVAILABILITY.STATUSES_LIST').map(
         status => ({
           ...status,
           disabled: this.currentUserAvailabilityStatus === status.value,
         })
       );
+      const customStatues = this.records.map(
+        status => ({
+          value: status.title,
+          label: status.title,
+          disabled: this.currentUserAvailabilityStatus === status.title,
+        })
+      );
+      const statuses = [...originStatues, ...customStatues];
+      return statuses;
     },
   },
-
+  
   methods: {
     openStatusMenu() {
       this.isStatusMenuOpened = true;
@@ -79,6 +92,7 @@ export default {
       this.isStatusMenuOpened = false;
     },
     changeAvailabilityStatus(availability) {
+      console.log(availability);
       if (this.isUpdating) {
         return;
       }
@@ -92,6 +106,11 @@ export default {
         .finally(() => {
           this.isUpdating = false;
         });
+    },
+    currentUserAvailabilityStatusFilter() {
+      const arr = ['online', 'offline', 'busy'];
+      
+      return arr.includes(this.currentUserAvailabilityStatus) ? this.currentUserAvailabilityStatus : 'busy-codes';
     },
   },
 };
@@ -127,6 +146,10 @@ export default {
 
     &__busy {
       background: $warning-color;
+    }
+    
+    &__busy-codes {
+      background: $alert-color
     }
   }
 

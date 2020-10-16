@@ -53,9 +53,7 @@
             {{ $t('PROFILE_SETTINGS.FORM.AVAILABILITY.LABEL') }}
             <select v-model="availability">
               <option
-                v-for="status in $t(
-                  'PROFILE_SETTINGS.FORM.AVAILABILITY.STATUSES_LIST'
-                )"
+                v-for="status in availabilityStatuses"
                 :key="status.key"
                 class="text-capitalize"
                 :value="status.value"
@@ -176,7 +174,23 @@ export default {
       currentUser: 'getCurrentUser',
       currentUserId: 'getCurrentUserID',
       currentAvailabilityStatus: 'getCurrentUserAvailabilityStatus',
+      records: 'getCodes',
     }),
+    availabilityStatuses() {
+      const originStatues = this.$t('PROFILE_SETTINGS.FORM.AVAILABILITY.STATUSES_LIST').map(
+        status => ({
+          ...status,
+        })
+      );
+      const customStatues = this.records.map(
+        status => ({
+          value: status.title,
+          label: status.title,
+        })
+      );
+      const statuses = [...originStatues, ...customStatues];
+      return statuses;
+    },
   },
   watch: {
     currentUserId(newCurrentUserId, prevCurrentUserId) {

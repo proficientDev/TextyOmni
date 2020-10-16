@@ -1,0 +1,61 @@
+{
+  "CODE_MGMT": {
+    "HEADER": "Busy Codes",
+    "HEADER_BTN_TXT": "Add busy code",
+    "LOADING": "Fetching busy codes",
+    "SEARCH_404": "There are no items matching this query",
+    "SIDEBAR_TXT": "<p><b>Busy Codes</b> <p>Busy Codes help supervisor to track agent's availability. You can assign code to a availability from the sidepanel. <br /><br />Busy codes are tied to the account and can be used to create custom workflows in your organization.</p>",
+    "LIST": {
+      "404": "There are no busy codes available in this account.",
+      "TITLE": "Manage busy codes",
+      "DESC": "Busy codes let supervisor to track agent's history.",
+      "TABLE_HEADER": [
+        "Name",
+        "Description"
+      ]
+    },
+    "FORM": {
+      "NAME": {
+        "LABEL": "Busy Code Name",
+        "PLACEHOLDER": "Busy Code name",
+        "ERROR": "Busy Code Name is required"
+      },
+      "DESCRIPTION": {
+        "LABEL": "Description",
+        "PLACEHOLDER": "Busy Code Description"
+      },
+      "EDIT": "Edit",
+      "CREATE": "Create",
+      "DELETE": "Delete",
+      "CANCEL": "Cancel"
+    },
+    "ADD": {
+      "TITLE": "Add busy code",
+      "DESC": "Busy Codes let supervisor to track agent's history.",
+      "API": {
+        "SUCCESS_MESSAGE": "Busy Code added successfully",
+        "ERROR_MESSAGE": "There was an error, please try again"
+      }
+    },
+    "EDIT": {
+      "TITLE": "Edit busy code",
+      "API": {
+        "SUCCESS_MESSAGE": "Busy Code updated successfully",
+        "ERROR_MESSAGE": "There was an error, please try again"
+      }
+    },
+    "DELETE": {
+      "BUTTON_TEXT": "Delete",
+      "API": {
+        "SUCCESS_MESSAGE": "Busy Code deleted successfully",
+        "ERROR_MESSAGE": "There was an error, please try again"
+      },
+      "CONFIRM": {
+        "TITLE": "Confirm Deletion",
+        "MESSAGE": "Are you sure to delete ",
+        "YES": "Yes, Delete ",
+        "NO": "No, Keep "
+      }
+    }
+  }
+}

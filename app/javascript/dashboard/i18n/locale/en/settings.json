@@ -129,7 +129,8 @@
     "CANNED_RESPONSES": "Canned Responses",
     "INTEGRATIONS": "Integrations",
     "ACCOUNT_SETTINGS": "Account Settings",
-    "LABELS": "Labels"
+    "LABELS": "Labels",
+    "BUSYCODES": "Busy Codes"
   },
   "CREATE_ACCOUNT": {
     "NEW_ACCOUNT": "New Account",

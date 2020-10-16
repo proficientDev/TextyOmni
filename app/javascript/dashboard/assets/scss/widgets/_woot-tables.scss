@@ -34,10 +34,23 @@ table {
     }
   }
 
-  .agent-name {
+  .agent-name, .agent-availability, .sub-title {
     display: block;
     font-weight: $font-weight-medium;
     text-transform: capitalize;
+  }
+
+  .no-items-erro-message{
+    font-weight: $font-weight-medium;
+    text-align: center;
+  }
+  
+  .open-conversations {
+    padding-left: 10vw;
+  }
+  
+  .resolved-conversations {
+    padding-left: 10vw;
   }
 
   .woot-thumbnail {
@@ -56,4 +69,8 @@ table {
   .button {
     @include margin($zero);
   }
+}
+
+.conversation-table {
+  background-color: #d3d3d361;
 }

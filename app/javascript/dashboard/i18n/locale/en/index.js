@@ -1,5 +1,6 @@
 import { default as _agentMgmt } from './agentMgmt.json';
 import { default as _labelsMgmt } from './labelsMgmt.json';
+import { default as _codesMgmt } from './codesMgmt.json';
 import { default as _cannedMgmt } from './cannedMgmt.json';
 import { default as _chatlist } from './chatlist.json';
 import { default as _contact } from './contact.json';
@@ -24,6 +25,7 @@ export default {
   ..._login,
   ..._report,
   ..._labelsMgmt,
+  ..._codesMgmt,
   ..._resetPassword,
   ..._setNewPassword,
   ..._settings,
