@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     convertTime(timestamp) {
-      return moment(timestamp).format('YYYY-MM-DD HH:mm');
+      return moment(timestamp).format('YYYY-MM-DD HH:mm:ss a');
     },
     calculateDuration(conversation) {
       let tStart = moment(moment(conversation.additional_attributes.initiated_at && conversation.additional_attributes.initiated_at.timestamp).format("YYYY-MM-DD HH:mm"), "YYYY-MM-DD HH:mm");

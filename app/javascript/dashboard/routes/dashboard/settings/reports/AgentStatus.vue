@@ -27,7 +27,7 @@
               <span 
                 class="status-time"
               >
-                {{ statusTime[index] }}
+                {{ convertTime(statusTime[index]) }}
               </span>
             </td>
           </tr>
@@ -55,6 +55,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import ConversationReport from './ConversationReport';
+import moment from 'moment';
 
 export default {
   components: {
@@ -90,14 +91,6 @@ export default {
       }
     },
     async fetchStatusTime(agentList) {
-      // await Promise.all(agentList.map(async (agent) => {
-      //   const agentHistories = await this.$store.dispatch('agents/getHistories', agent.id);
-      //   if (!agentHistories.length) {
-      //     this.statusTime.push(agentHistories[agentHistories.length - 1].updated_at);
-      //   } else {
-      //     this.statusTime.push('');
-      //   }
-      // }));
       for (const agent of agentList) {
         const agentHistories = await this.$store.dispatch('agents/getHistories', agent.id);
         if (agentHistories.length) {
@@ -106,6 +99,9 @@ export default {
           this.statusTime.push('');
         }
       }
+    },
+    convertTime(timestamp) {
+      return moment(timestamp).format('YYYY-MM-DD HH:mm:ss a');
     },
   },
 };

@@ -18,13 +18,13 @@
           <tbody>
             <tr v-for="(history, index) in historyList" :key="history.availability">
               <td>
-                <span class="agent-name">{{ agent.name }}</span>
+                <span class="agent-name">{{ agent && agent.name }}</span>
               </td>
               <td>
                 <span class="history-availability">{{ history.availability }}</span>
               </td>
               <td>
-                <span class="history-time">{{ history.updated_at }}</span>
+                <span class="history-time">{{ convertTime(history.updated_at) }}</span>
               </td>
             </tr>
           </tbody>
@@ -47,6 +47,7 @@
 import { mapGetters } from 'vuex';
 import globalConfigMixin from 'shared/mixins/globalConfigMixin';
 import accountMixin from '../../../../mixins/account';
+import moment from 'moment';
 
 export default {
   components: {
@@ -99,6 +100,9 @@ export default {
     },
     getSelectedAgent() {
       this.agent = this.agentList.filter(agent => this.selectedAgentId.includes(agent.id))[0];
+    },
+    convertTime(timestamp) {
+      return moment(timestamp).format('YYYY-MM-DD HH:mm:ss a');
     },
   },
 };
