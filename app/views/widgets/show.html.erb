@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <script>
       window.chatwootWebChannel = {
+        disableAgentNameWidget: '<%= ENV.fetch('DISABLE_ACTUAL_AGENT_NAME', true) %>',
         avatarUrl: '<%= @web_widget.inbox.avatar_url %>',
         hasAConnectedAgentBot: '<%= @web_widget.inbox.agent_bot&.name %>',
         <% if @web_widget.inbox.agent_bot %>
