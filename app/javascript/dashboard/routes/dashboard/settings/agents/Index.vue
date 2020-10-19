@@ -119,6 +119,7 @@
         :email="currentAgent.email"
         :on-close="hideEditPopup"
         :limits="currentAgent.limits"
+        :availability="currentAgent.availability_status"
       />
     </woot-modal>
     <!-- Delete Agent -->
@@ -188,7 +189,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('agents/get');
+    this.$store.dispatch('agents/get').then(() => {console.log(this.currentAgent);});
   },
   methods: {
     showEditAction(agent) {

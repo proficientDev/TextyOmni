@@ -364,6 +364,7 @@ export default {
         } = response;
         this.selectedAgents = inboxMembers;
       } catch (error) {
+        // eslint-disable-next-line
         console.log(error);
       }
     },
@@ -409,7 +410,6 @@ export default {
     handleImageUpload({ file, url }) {
       this.avatarFile = file;
       this.avatarUrl = url;
-      console.log(this.avatarUrl);
     },
   },
   validations: {

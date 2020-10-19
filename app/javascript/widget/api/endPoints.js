@@ -1,6 +1,6 @@
 import { buildSearchParamsWithLocale } from '../helpers/urlParamsHelper';
 
-const sendMessage = content => {
+const sendMessage = ({ content, contentType }) => {
   const refererURL = window.refererURL || '';
   const search = buildSearchParamsWithLocale(window.location.search);
   return {
@@ -10,6 +10,7 @@ const sendMessage = content => {
         content,
         timestamp: new Date().toString(),
         referer_url: refererURL,
+        content_type: contentType,
       },
     },
   };
