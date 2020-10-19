@@ -13,4 +13,9 @@ export const MESSAGE_TYPE = {
   TEMPLATE: 3,
 };
 
+export const MESSAGE_CONTENT_TYPE = {
+  CALL_ID: 9,
+  RESOLVE_AUTOASSIGN: 10,
+};
+
 export const WOOT_PREFIX = 'chatwoot-widget:';

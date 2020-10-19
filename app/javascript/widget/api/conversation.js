@@ -1,8 +1,8 @@
 import endPoints from 'widget/api/endPoints';
 import { API } from 'widget/helpers/axios';
 
-const sendMessageAPI = async content => {
-  const urlData = endPoints.sendMessage(content);
+const sendMessageAPI = async (content, contentType) => {
+  const urlData = endPoints.sendMessage(content, contentType);
   const result = await API.post(urlData.url, urlData.params);
   return result;
 };
