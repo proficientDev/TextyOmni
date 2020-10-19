@@ -11,7 +11,11 @@
       >
         <date-separator :date="groupedMessage.date"></date-separator>
         <chat-message
-          v-for="message in groupedMessage.messages"
+          v-for="message in groupedMessage.messages.filter(
+            x =>
+              x.content_type !== 'call_id' &&
+              x.content_type !== 'resolve_autoassign'
+          )"
           :key="message.id"
           :message="message"
         />

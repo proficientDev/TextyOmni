@@ -13,6 +13,9 @@ json.confirmed resource.confirmed?
 json.avatar_url resource.avatar_url
 json.access_token resource.access_token.token
 json.availability_status resource.availability_status
+json.sip_target resource.sip_target
+json.sip_server resource.sip_server
+json.sip_display_name resource.sip_display_name
 json.accounts do
   json.array! resource.account_users do |account_user|
     json.id account_user.account_id

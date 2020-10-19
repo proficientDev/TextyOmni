@@ -9668,6 +9668,11 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
+sip.js@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/sip.js/-/sip.js-0.17.1.tgz#82d6d45939d1360726020c31731d16f0feb29cda"
+  integrity sha512-JxuPm2E4RUdmzLFpI26f0iP2A84arsXRgmfY8cbIlmK95gnZFdE8Jh1PRx8eOJlS7ACgm0WFBNL9jVEtMigh9A==
+
 sisteransi@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"

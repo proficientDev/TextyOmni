@@ -521,7 +521,10 @@ ActiveRecord::Schema.define(version: 2020_10_12_011640) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "pubsub_token"
-    t.string "availability", default: "0"
+    t.integer "availability", default: 0
+    t.string "sip_target", default: "", null: false
+    t.string "sip_server", default: "", null: false
+    t.string "sip_display_name", default: "", null: false
     t.index ["email"], name: "index_users_on_email"
     t.index ["pubsub_token"], name: "index_users_on_pubsub_token", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
