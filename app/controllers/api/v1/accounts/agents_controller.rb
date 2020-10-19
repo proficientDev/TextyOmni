@@ -15,9 +15,10 @@ class Api::V1::Accounts::AgentsController < Api::V1::Accounts::BaseController
   end
 
   def update
-    @agent.update!(agent_params.except(:role, :limits))
+    @agent.update!(agent_params.except(:role, :limits, :availability))
     @agent.current_account_user.update!(role: agent_params[:role]) if agent_params[:role]
     @agent.current_account_user.update!(limits: agent_params[:limits]) if agent_params[:limits]
+    @agent.update!(availability: agent_params[:availability]) unless agent_params[:availability] == "System Status"
     render partial: 'api/v1/models/agent.json.jbuilder', locals: { resource: @agent }
   end
 
@@ -56,7 +57,7 @@ class Api::V1::Accounts::AgentsController < Api::V1::Accounts::BaseController
   end
 
   def agent_params
-    params.require(:agent).permit(:email, :name, :role, :limits)
+    params.require(:agent).permit(:email, :name, :role, :limits, :availability)
   end
 
   def new_agent_params

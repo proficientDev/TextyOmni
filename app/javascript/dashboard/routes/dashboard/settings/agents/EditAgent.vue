@@ -32,13 +32,23 @@
           <label :class="{ error: $v.agentConversationLimits.$error }">
             {{ $t('AGENT_MGMT.EDIT.FORM.CONVERSATION_LIMITS.LABEL') }}
             <select v-model="agentConversationLimits">
-              <option v-for="value in values" :key="value" :value="value">
+              <option v-for="value in valuesOfLimit" :key="value" :value="value">
                 {{ value }}
               </option>
             </select>
             <span v-if="$v.agentConversationLimits.$error" class="message">
               {{ $t('AGENT_MGMT.EDIT.FORM.CONVERSATION_LIMITS.ERROR') }}
             </span>
+          </label>
+        </div>
+        <div class="medium-12 columns">
+          <label>
+            {{ $t('AGENT_MGMT.EDIT.FORM.AVAILABILITY_STATUS.LABEL') }}
+            <select v-model="agentAvailabilityStatus == 'online' || agentAvailabilityStatus == 'offline' || agentAvailabilityStatus == 'busy' ? 'System Status' : agentAvailabilityStatus">
+              <option v-for="value in availabilityStatuses" :key="value.value" :value="value.value">
+                {{ value.label }}
+              </option>
+            </select>
           </label>
         </div>
         <div class="medium-12 modal-footer">
@@ -101,6 +111,10 @@ export default {
       type: Number,
       default: 1,
     },
+    availability: {
+      type: String,
+      default: '',
+    },
     onClose: {
       type: Function,
       required: true,
@@ -125,7 +139,8 @@ export default {
       },
       show: true,
       agentConversationLimits: this.limits,
-      values: [1,2,3,4,5,6,7,8,9,10],
+      valuesOfLimit: [1,2,3,4,5,6,7,8,9,10],
+      agentAvailabilityStatus: this.availability,
     };
   },
   validations: {
@@ -146,7 +161,22 @@ export default {
     },
     ...mapGetters({
       uiFlags: 'agents/getUIFlags',
+      valuesOfAvailability: 'codes/getCodes',
     }),
+    availabilityStatuses() {
+      const originStatues = [{value: 'System Status', label: 'System Status'}];
+      const customStatues = this.valuesOfAvailability.map(
+        status => ({
+          value: status.title,
+          label: status.title,
+        })
+      );
+      const statuses = [...originStatues, ...customStatues];
+      return statuses;
+    },
+  },
+  mounted() {
+    this.$store.dispatch('codes/get').then(() => {console.log(this.agentAvailabilityStatus);});
   },
   methods: {
     showAlert(message) {
@@ -159,6 +189,7 @@ export default {
           name: this.agentName,
           role: this.agentType,
           limits: this.agentConversationLimits,
+          availability: this.agentAvailabilityStatus,
         });
         this.showAlert(this.$t('AGENT_MGMT.EDIT.API.SUCCESS_MESSAGE'));
         this.onClose();

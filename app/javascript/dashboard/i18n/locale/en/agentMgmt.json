@@ -97,6 +97,11 @@
           "PLACEHOLDER": "Please select a value for conversation auto assignment threshold",
           "ERROR": "Limit value is required"
         },
+        "AVAILABILITY_STATUS": {
+          "LABEL": "Agent Availability Status(Please do not select \"System Status\", otherwise your availability change will ignore.)",
+          "PLACEHOLDER": "Please select an availability staus(Busy Code) for particular agent",
+          "ERROR": ""
+        },
         "SUBMIT": "Edit Agent"
       },
       "BUTTON_TEXT": "Edit",
