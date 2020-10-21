@@ -90,7 +90,15 @@
     }
   },
   "SIDEBAR_ITEMS": {
-    "CHANGE_AVAILABILITY_STATUS": "Change",
+    "CHANGE_AVAILABILITY_STATUS": {
+      "LABEL": "Change",
+      "LABEL_TXT": "Change Agent Availability Status",
+      "MODAL": {
+        "LABEL": "Change",
+        "SUBMIT": "Edit",
+        "CANCEL_BUTTON": "Cancel"
+      }
+    },
     "CHANGE_ACCOUNTS": "Switch Account",
     "SELECTOR_SUBTITLE": "Select an account from the following list",
     "PROFILE_SETTINGS": "Profile Settings",
