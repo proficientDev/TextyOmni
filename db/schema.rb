@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_12_011640) do
+ActiveRecord::Schema.define(version: 2020_10_11_152227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(version: 2020_10_12_011640) do
     t.string "welcome_title"
     t.string "welcome_tagline"
     t.integer "feature_flags", default: 3, null: false
+    t.integer "reply_time", default: 0
     t.index ["website_token"], name: "index_channel_web_widgets_on_website_token", unique: true
   end
 
@@ -307,6 +308,7 @@ ActiveRecord::Schema.define(version: 2020_10_12_011640) do
     t.boolean "enable_auto_assignment", default: true
     t.boolean "greeting_enabled", default: false
     t.string "greeting_message"
+    t.string "email_address"
     t.index ["account_id"], name: "index_inboxes_on_account_id"
   end
 
