@@ -4,13 +4,13 @@
 
 <script>
 import GroupedAvatars from 'widget/components/GroupedAvatars.vue';
-import agentMixin from '../mixins/agentMixin';
+// import agentMixin from '../mixins/agentMixin';
 import globalConfigMixin from 'shared/mixins/globalConfigMixin';
 
 export default {
   name: 'AvailableAgents',
   components: { GroupedAvatars },
-  mixins: [globalConfigMixin, agentMixin],
+  mixins: [globalConfigMixin],
   props: {
     agents: {
       type: Array,
