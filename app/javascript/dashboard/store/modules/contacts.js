@@ -1,6 +1,7 @@
 import { DuplicateContactException } from 'shared/helpers/CustomErrors';
 import * as types from '../mutation-types';
 import ContactAPI from '../../api/contacts';
+import ContactSearchAPI from '../../api/contactsSearch';
 import Vue from 'vue';
 
 const state = {
@@ -71,6 +72,15 @@ export const actions = {
   setContact({ commit }, data) {
     commit(types.default.SET_CONTACT_ITEM, data);
   },
+  
+  async searchContact({ commit }, {keyWords}) {
+    try {
+      const response = await ContactSearchAPI.getContacts(keyWords);
+      return response.data.payload;
+    } catch (error) {
+      // Ignore error
+    }
+  }
 };
 
 export const mutations = {

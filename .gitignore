@@ -50,6 +50,7 @@ buildreports
 coverage
 
 /storage
+/vendor
 
 # ignore packages
 node_modules

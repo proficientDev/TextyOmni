@@ -7,6 +7,20 @@
       </h1>
       <chat-filter @statusFilterChange="updateStatusType" />
     </div>
+    
+    <!-- <search-box
+      v-on:searchToList='generateChats'
+    /> -->
+    <div class="search">
+      <i class="icon ion-ios-search-strong" />
+      <input 
+        class="input" 
+        type="text" 
+        :placeholder="$t('CHAT_LIST.SEARCH.CONTACT')"
+        v-model.trim="searchKey"
+        @keyup="search()"
+      >
+    </div>
 
     <chat-type-tabs
       :items="assigneeTabItems"
@@ -87,6 +101,8 @@ export default {
     return {
       activeAssigneeTab: wootConstants.ASSIGNEE_TYPE.ME,
       activeStatus: wootConstants.STATUS_TYPE.OPEN,
+      contactsSearched: null,
+      searchKey: '',
     };
   },
   computed: {
@@ -99,6 +115,7 @@ export default {
       currentUserID: 'getCurrentUserID',
       activeInbox: 'getSelectedInbox',
       conversationStats: 'conversationStats/getStats',
+      currentContacts: 'contacts/getContacts',
     }),
     assigneeTabItems() {
       return this.$t('CHAT_LIST.ASSIGNEE_TYPE_TABS').map(item => {
@@ -143,12 +160,20 @@ export default {
     },
     conversationList() {
       let conversationList = [];
+      
       if (this.activeAssigneeTab === 'me') {
         conversationList = this.mineChatsList.slice();
       } else if (this.activeAssigneeTab === 'unassigned') {
         conversationList = this.unAssignedChatsList.slice();
       } else {
         conversationList = this.allChatList.slice();
+      }
+      
+      // Return filtered array with searched contacts
+      if (this.contactsSearched) {
+        const conversations = conversationList.filter(conversation => 
+          this.contactsSearched.some(contact => contact.id == conversation.meta.sender.id));
+        return conversations;
       }
 
       if (!this.label) {
@@ -201,6 +226,26 @@ export default {
         this.activeStatus = index;
         this.resetAndFetchData();
       }
+    },
+    generateChats(contacts) {
+      this.contactsSearched = contacts;
+    },
+    search() {
+      if (this.searchKey.length < 1) this.contactsSearched = this.currentContacts;
+      else {
+        this.contactsSearched = this.currentContacts.filter(contact => {
+          if (contact.name) {
+            if (contact.name.includes(this.searchKey)) return contact;
+          }
+          if (contact.phone_number) {
+            if (contact.phone_number.includes(this.searchKey)) return contact;
+          }
+          if (contact.email) {
+            if (contact.email.includes(this.searchKey)) return contact;
+          }
+        });
+      }
+      
     },
   },
 };

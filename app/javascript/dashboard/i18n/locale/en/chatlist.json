@@ -8,7 +8,8 @@
     },
     "TAB_HEADING": "Conversations",
     "SEARCH": {
-      "INPUT": "Search for People, Chats, Saved Replies .."
+      "INPUT": "Search for People, Chats, Saved Replies ..",
+      "CONTACT": "Search for contact name, email, phone..."
     },
     "STATUS_TABS": [
       {
