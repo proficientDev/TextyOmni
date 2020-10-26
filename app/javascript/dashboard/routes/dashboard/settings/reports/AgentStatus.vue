@@ -75,6 +75,14 @@ export default {
   },
   mounted() {
     this.$store.dispatch('agents/get').then(() => {this.fetchStatusTime(this.agentList);});
+    this.$store.dispatch('setChatFilter', 'open');
+    this.$store.dispatch('emptyAllConversations');
+    this.$store.dispatch('fetchAllConversations', {
+      assigneeType: "all",
+      staus: "open",
+      page: 1,
+    });
+    this.$store.dispatch('inboxes/get');
   },
   methods: {
     async currentStatusTime(agentId) {
