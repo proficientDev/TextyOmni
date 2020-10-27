@@ -57,7 +57,11 @@ export default {
     },
     agentId: {
       type: Number,
-      defualt: 0,
+      default: 0,
+    },
+    conversationList: {
+      type: Array,
+      default: [],
     },
   },
   data() {
@@ -67,14 +71,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      conversationList: 'getAllConversations',
       inboxes: 'inboxes/getInboxes',
     }),
   },
   watch: {
     conversationList: {
       handler(conversationList) {
-        // console.log(conversationList);
+        console.log(conversationList);
       },
       deep: true,
     },
