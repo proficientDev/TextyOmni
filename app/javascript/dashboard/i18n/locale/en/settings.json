@@ -29,6 +29,28 @@
         "CONVERSATION_CREATION": "Send email notifications when a new conversation is created",
         "ASSIGNED_CONVERSATION_NEW_MESSAGE": "Send email notifications when a new message is created in an assigned conversation"
       },
+      "SIP_SECTION": {
+        "TITLE": "SIP",
+        "NOTE": "Update your sip settings here",
+        "TARGET": "Target",
+        "WEBSOCKET_SERVER": "webSocketServer",
+        "": "Send email notifications when a new conversation is created"
+      },
+      "TARGET": {
+        "LABEL": "Target",
+        "ERROR": "Please enter a valid target",
+        "PLACEHOLDER": "Please enter your target"
+      },
+      "WEBSOCKET_SERVER": {
+        "LABEL": "WebSocket Server",
+        "ERROR": "Please enter a valid WebSocket server",
+        "PLACEHOLDER": "Please enter your WebSocket server"
+      },
+      "SIP_DISPLAY_NAME": {
+        "LABEL": "Display Name",
+        "ERROR": "Please enter a valid display name",
+        "PLACEHOLDER": "Please enter your display name"
+      },
       "API": {
         "UPDATE_SUCCESS": "Your notification preferences are updated successfully",
         "UPDATE_ERROR": "There is an error while updating the preferences, please try again"
