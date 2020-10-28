@@ -35,6 +35,7 @@
             <td colspan="3" class="open-conversations">
               <conversation-report
                 :conversationStatus="'open'"
+                :conversationList="conversationList"
                 :agentId="agent.id"
               />
             </td>
@@ -43,6 +44,7 @@
             <td colspan="3" class="resolved-conversations">
               <conversation-report
                 :conversationStatus="'resolved'"
+                :conversationList="conversationListResolved"
                 :agentId="agent.id"
               />
             </td>
@@ -66,15 +68,26 @@ export default {
       showHistories: false,
       agent: {},
       statusTime: [],
+      conversationListResolved: [],
     };
   },
   computed: {
     ...mapGetters({
       agentList: 'agents/getAgents',
+      conversationList: 'getAllConversations',
     }),
   },
   mounted() {
     this.$store.dispatch('agents/get').then(() => {this.fetchStatusTime(this.agentList);});
+    this.$store.dispatch('setChatFilter', 'open');
+    this.$store.dispatch('emptyAllConversations');
+    this.$store.dispatch('fetchAllConversations', {
+      assigneeType: "all",
+      status: "open",
+      page: 1,
+    });
+    this.$store.dispatch('inboxes/get');
+    this.resetAndFetchData();
   },
   methods: {
     async currentStatusTime(agentId) {
@@ -102,6 +115,17 @@ export default {
     },
     convertTime(timestamp) {
       return moment(timestamp).format('YYYY-MM-DD HH:mm:ss a');
+    },
+    resetAndFetchData() {
+      this.$store.dispatch('emptyAllConversations');
+      this.$store.dispatch('fetchAllConversations', {
+        assigneeType: "all",
+        status: "resolved",
+        page: 1,
+      }).then(response => {
+        const conversationListResolved = this.$store.getters['getAllConversations'];
+        this.conversationListResolved = conversationListResolved.sort((a,b) => b.timestamp - a.timestamp).slice(0,5)
+      });
     },
   },
 };

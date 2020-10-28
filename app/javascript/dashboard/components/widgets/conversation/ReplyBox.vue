@@ -180,7 +180,8 @@ export default {
       return (
         this.isAWebWidgetInbox ||
         this.isAFacebookInbox ||
-        this.isATwilioWhatsappChannel
+        this.isATwilioWhatsappChannel ||
+        this.isAPIInbox
       );
     },
     replyButtonLabel() {

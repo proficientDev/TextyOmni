@@ -28,7 +28,7 @@
             <span class="conversation-contact">{{ conversation.meta.sender.name }}</span>
           </td>
           <td>
-            <span class="conversation-inbox">{{ inboxes[conversation.inbox_id - 1].name }}</span>
+            <span class="conversation-inbox">{{ getInboxName(conversation.inbox_id) }}</span>
           </td>
           <td>
             <span class="conversation-started">{{ conversation.additional_attributes.initiated_at && convertTime(conversation.additional_attributes.initiated_at.timestamp) }}</span>
@@ -57,7 +57,11 @@ export default {
     },
     agentId: {
       type: Number,
-      defualt: 0,
+      default: 0,
+    },
+    conversationList: {
+      type: Array,
+      default: [],
     },
   },
   data() {
@@ -67,28 +71,25 @@ export default {
   },
   computed: {
     ...mapGetters({
-      conversationList: 'getAllConversations',
       inboxes: 'inboxes/getInboxes',
     }),
   },
   watch: {
     conversationList: {
       handler(conversationList) {
-        // console.log(conversationList);
+        console.log(conversationList);
       },
       deep: true,
-    }
+    },
+    inboxes: {
+      handler(inboxes) {
+        // console.log(inboxes);
+      },
+      deep: true,
+    },
   },
   mounted() {
     // this.$store.dispatch('agents/get').then(() => {this.fetchStatusTime(this.conversationList);});
-    this.$store.dispatch('setChatFilter', 'open');
-    this.$store.dispatch('emptyAllConversations');
-    this.$store.dispatch('fetchAllConversations', {
-      assigneeType: "all",
-      staus: "open",
-      page: 1,
-    });
-    this.$store.dispatch('inboxes/get');
   },
   methods: {
     convertTime(timestamp) {
@@ -106,6 +107,9 @@ export default {
     },
     removeNone() {
       this.showNone = false;
+    },
+    getInboxName(inboxId) {
+      return this.inboxes.find(inbox => inbox.id == inboxId).name;
     },
   },
 };

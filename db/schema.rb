@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(version: 2020_10_12_011640) do
     t.string "welcome_title"
     t.string "welcome_tagline"
     t.integer "feature_flags", default: 3, null: false
+    t.integer "reply_time", default: 0
     t.index ["website_token"], name: "index_channel_web_widgets_on_website_token", unique: true
   end
 
@@ -307,6 +308,7 @@ ActiveRecord::Schema.define(version: 2020_10_12_011640) do
     t.boolean "enable_auto_assignment", default: true
     t.boolean "greeting_enabled", default: false
     t.string "greeting_message"
+    t.string "email_address"
     t.index ["account_id"], name: "index_inboxes_on_account_id"
   end
 
@@ -521,7 +523,7 @@ ActiveRecord::Schema.define(version: 2020_10_12_011640) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "pubsub_token"
-    t.integer "availability", default: 0
+    t.string "availability", default: "0"
     t.string "sip_target", default: "", null: false
     t.string "sip_server", default: "", null: false
     t.string "sip_display_name", default: "", null: false

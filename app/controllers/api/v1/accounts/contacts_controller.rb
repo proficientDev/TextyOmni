@@ -36,14 +36,10 @@ class Api::V1::Accounts::ContactsController < Api::V1::Accounts::BaseController
   def search
     render json: { error: 'Specify search string with parameter q' }, status: :unprocessable_entity if params[:q].blank? && return
 
-    @contacts = Current.account.contacts.where('name LIKE :search OR email LIKE :search', search: "%#{params[:q]}%")
+    @contacts = Current.account.contacts.where('name LIKE :search OR email LIKE :search OR phone_number LIKE :search', search: "%#{params[:q]}%")
   end
 
   private
-
-  def check_authorization
-    authorize(Contact)
-  end
 
   def build_contact_inbox
     return if params[:inbox_id].blank?

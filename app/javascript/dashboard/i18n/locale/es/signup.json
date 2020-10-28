@@ -5,7 +5,7 @@
     "TERMS_ACCEPT": "Al registrarte, aceptas nuestra <a href=\"https://www.textyomni.com/terms\">T & C</a> y nuestra <a href=\"https://www.textyomni.com/privacy-policy\">política de privacidad</a>",
     "ACCOUNT_NAME": {
       "LABEL": "Nombre de cuenta",
-      "PLACEHOLDER": "Empresas de Wayne",
+      "PLACEHOLDER": "Empresas Wayne",
       "ERROR": "El nombre de la cuenta es demasiado corto"
     },
     "EMAIL": {

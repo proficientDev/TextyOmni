@@ -13,30 +13,43 @@
     </div>
 
     <div class="status-change">
-      <transition name="menu-slide">
-        <div
-          v-if="isStatusMenuOpened"
-          v-on-clickaway="closeStatusMenu"
-          class="dropdown-pane top"
-        >
-          <ul class="vertical dropdown menu">
-            <li v-for="status in availabilityStatuses" :key="status.value">
-              <button
-                class="button clear status-change--dropdown-button"
-                :disabled="status.disabled"
-                @click="changeAvailabilityStatus(status.value)"
-              >
-                {{ status.label }}
-              </button>
-            </li>
-          </ul>
-        </div>
-      </transition>
-
       <button class="status-change--change-button" @click="openStatusMenu">
-        {{ $t('SIDEBAR_ITEMS.CHANGE_AVAILABILITY_STATUS') }}
+        {{ $t('SIDEBAR_ITEMS.CHANGE_AVAILABILITY_STATUS.LABEL') }}
       </button>
     </div>
+    <woot-modal :show.sync="isStatusMenuOpened" :on-close="closeStatusMenu">
+      <woot-modal-header
+        :header-title="$t('SIDEBAR_ITEMS.CHANGE_AVAILABILITY_STATUS.LABEL')"
+      />
+      <form class="row medium-8" @submit.prevent="changeAvailabilityStatus()">
+        <div class="medium-12 columns">
+          <label>
+            {{ $t('SIDEBAR_ITEMS.CHANGE_AVAILABILITY_STATUS.LABEL_TXT') }}
+            <select v-model="availability">
+              <option
+                v-for="status in availabilityStatuses"
+                :key="status.key"
+                class="text-capitalize"
+                :value="status.value"
+              >
+                {{ status.label }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="medium-12 modal-footer">
+          <div class="medium-6 columns">
+            <woot-submit-button
+              :button-text="$t('SIDEBAR_ITEMS.CHANGE_AVAILABILITY_STATUS.MODAL.SUBMIT')"
+              :loading="isUpdating"
+            />
+            <button class="button clear" @click.prevent="closeStatusMenu">
+              {{ $t('SIDEBAR_ITEMS.CHANGE_AVAILABILITY_STATUS.MODAL.CANCEL_BUTTON') }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </woot-modal>
   </div>
 </template>
 
@@ -51,12 +64,14 @@ export default {
     return {
       isStatusMenuOpened: false,
       isUpdating: false,
+      availability: 'online',
     };
   },
 
   computed: {
     ...mapGetters({
       currentUser: 'getCurrentUser',
+      currentAvailabilityStatus: 'getCurrentUserAvailabilityStatus',
       records: 'getCodes',
     }),
     currentUserAvailabilityStatus() {
@@ -69,18 +84,24 @@ export default {
       const originStatues = this.$t('PROFILE_SETTINGS.FORM.AVAILABILITY.STATUSES_LIST').map(
         status => ({
           ...status,
-          disabled: this.currentUserAvailabilityStatus === status.value,
         })
       );
       const customStatues = this.records.map(
         status => ({
           value: status.title,
           label: status.title,
-          disabled: this.currentUserAvailabilityStatus === status.title,
         })
       );
       const statuses = [...originStatues, ...customStatues];
       return statuses;
+    },
+  },
+
+  watch: {
+    currentAvailabilityStatus(newStatus, oldStatus) {
+      if (newStatus !== oldStatus) {
+        this.availability = newStatus;
+      }
     },
   },
   
@@ -91,7 +112,8 @@ export default {
     closeStatusMenu() {
       this.isStatusMenuOpened = false;
     },
-    changeAvailabilityStatus(availability) {
+    changeAvailabilityStatus() {
+      let availability = this.availability;
       console.log(availability);
       if (this.isUpdating) {
         return;
@@ -105,6 +127,7 @@ export default {
         })
         .finally(() => {
           this.isUpdating = false;
+          this.isStatusMenuOpened = false;
         });
     },
     currentUserAvailabilityStatusFilter() {

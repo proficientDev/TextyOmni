@@ -1,7 +1,7 @@
 import { buildSearchParamsWithLocale } from '../helpers/urlParamsHelper';
 
-const sendMessage = ({ content, contentType }) => {
-  const refererURL = window.refererURL || '';
+const sendMessage = content => {
+  const referrerURL = window.referrerURL || '';
   const search = buildSearchParamsWithLocale(window.location.search);
   return {
     url: `/api/v1/widget/messages${search}`,
@@ -9,21 +9,20 @@ const sendMessage = ({ content, contentType }) => {
       message: {
         content,
         timestamp: new Date().toString(),
-        referer_url: refererURL,
-        content_type: contentType,
+        referer_url: referrerURL,
       },
     },
   };
 };
 
 const sendAttachment = ({ attachment }) => {
-  const { refererURL = '' } = window;
+  const { referrerURL = '' } = window;
   const timestamp = new Date().toString();
   const { file } = attachment;
 
   const formData = new FormData();
   formData.append('message[attachments][]', file, file.name);
-  formData.append('message[referer_url]', refererURL);
+  formData.append('message[referer_url]', referrerURL);
   formData.append('message[timestamp]', timestamp);
   return {
     url: `/api/v1/widget/messages${window.location.search}`,
