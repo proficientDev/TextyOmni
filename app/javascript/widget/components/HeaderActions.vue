@@ -7,6 +7,11 @@
     >
       <span class="ion-android-open"></span>
     </button>
+
+    <button v-if="showCallButton" class="button transparent call-button">
+    	<span class="ion-android-call" @click="callOptions"></span>
+    </button>
+
     <button class="button transparent compact close-button">
       <span class="ion-android-close" @click="closeWindow"></span>
     </button>
@@ -16,6 +21,7 @@
 import { IFrameHelper } from 'widget/helpers/utils';
 import { buildPopoutURL } from '../helpers/urlParamsHelper';
 import Vue from 'vue';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'HeaderActions',
@@ -24,6 +30,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    showCallButton: {
+    	type: Boolean,
+    	default: false,
+    },
+  },
+  data() {
+  	return {
+  		callRequest: 'call request',
+  	};
   },
   computed: {
     isIframe() {
@@ -31,6 +46,7 @@ export default {
     },
   },
   methods: {
+  	...mapActions('conversation', ['sendMessage', 'callUserRequest']),
     popoutWindow() {
       this.closeWindow();
       const {
@@ -58,6 +74,11 @@ export default {
           event: 'toggleBubble',
         });
       }
+    },
+    callOptions() {
+    	// const content = this.callRequest;
+    	// this.sendMessage({content});
+    	this.callUserRequest();
     },
   },
 };

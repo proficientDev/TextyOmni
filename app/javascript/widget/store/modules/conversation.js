@@ -6,6 +6,7 @@ import {
   sendAttachmentAPI,
   toggleTyping,
   setUserLastSeenAt,
+  callRequest,
 } from 'widget/api/conversation';
 import { MESSAGE_TYPE } from 'widget/helpers/constants';
 import { playNotificationAudio } from 'shared/helpers/AudioNotificationHelper';
@@ -193,6 +194,14 @@ export const actions = {
     } catch (error) {
       // IgnoreError
     }
+  },
+  
+  callUserRequest: async () => {
+  	try {
+  		await callRequest();
+  	} catch (error) {
+  		// IgnoreError
+  	}
   },
 
   setUserLastSeen: async ({ commit, getters: appGetters }) => {

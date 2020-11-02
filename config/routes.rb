@@ -136,6 +136,7 @@ Rails.application.routes.draw do
             post :update_last_seen
             post :toggle_typing
             post :transcript
+            post :call_request
           end
         end
         resource :contact, only: [:update]
