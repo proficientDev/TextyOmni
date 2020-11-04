@@ -10,6 +10,11 @@
         :message-id="messageId"
         :message-content-attributes="messageContentAttributes"
       />
+      <phone-input
+      	v-if="isTemplatePhone"
+      	:message-id="messageId"
+        :message-content-attributes="messageContentAttributes"
+      />
     </div>
     <div v-if="isOptions">
       <chat-options
@@ -52,6 +57,7 @@ import ChatForm from 'shared/components/ChatForm';
 import ChatOptions from 'shared/components/ChatOptions';
 import ChatArticle from './template/Article';
 import EmailInput from './template/EmailInput';
+import PhoneInput from './template/PhoneInput';
 
 export default {
   name: 'AgentMessageBubble',
@@ -61,6 +67,7 @@ export default {
     ChatForm,
     ChatOptions,
     EmailInput,
+    PhoneInput,
   },
   mixins: [messageFormatterMixin],
   props: {
@@ -91,6 +98,9 @@ export default {
     },
     isArticle() {
       return this.contentType === 'article';
+    },
+    isTemplatePhone() {
+    	return this.contentType === 'input_phone';
     },
   },
   methods: {

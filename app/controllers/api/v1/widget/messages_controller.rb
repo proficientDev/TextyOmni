@@ -21,11 +21,17 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
     elsif @message.content_type == 'form'
       @message.update!(message_update_params[:message])
       update_contact(contact_email_original, contact_name_original, contact_phone_number)
+    elsif @message.content_type == 'input_phone'
+    	# @message.update!(submitted_phone: permitted_params[:contact][:phone])
+    	update_contact(nil, nil, permitted_params[:contact][:phone])
     else 
+    	# Call options from parameter
+    	call_option if message_update_params[:message][:submitted_values].length() == 1
+    	
       @message.update!(message_update_params[:message])
     end
-  rescue StandardError => e
-    render json: { error: @contact.errors, message: e.message }.to_json, status: 500
+  # rescue StandardError => e
+  #   render json: { error: @contact.errors, message: e.message }.to_json, status: 500
   end
 
   private
@@ -123,6 +129,12 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
         phone_number: phone_number
       )
     end
+    
+    if phone_number
+    	@contact.update!(
+    		phone_number: phone_number
+    	)
+    end
   end
 
   def contact_email
@@ -153,10 +165,35 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
   end
 
   def permitted_params
-    params.permit(:id, :before, :website_token, contact: [:email], message: [:content, :referer_url, :timestamp, :echo_id])
+    params.permit(:id, :before, :website_token, contact: [:email, :phone], message: [:content, :referer_url, :timestamp, :echo_id])
   end
 
   def set_message
     @message = @web_widget.inbox.messages.find(permitted_params[:id])
+  end
+  
+  def call_option
+  	message_update_params[:message][:submitted_values][0][:title] == 'call back later' ? call_back_message : voice_chat
+  end
+  
+  def call_back_message
+  	@call_back_message = conversation.messages.new(call_back_message_params)
+  	@call_back_message.save
+  end
+  
+  def voice_chat
+  	# Todo for WebRTC voice chat
+  end
+  
+  def call_back_message_params
+  	
+    {
+      account_id: conversation.account_id,
+      # content_attributes: call_back_contents,
+      inbox_id: conversation.inbox_id,
+      message_type: :template,
+      content: message_update_params[:message][:submitted_values][0][:value],
+      content_type: :input_phone
+    }
   end
 end

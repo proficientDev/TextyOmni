@@ -40,7 +40,7 @@ class Api::V1::Widget::ConversationsController < Api::V1::Widget::BaseController
   
   def call_request
   	@conversation = ::Conversation.create!(conversation_params) if conversation.nil?
-  	@message = conversation.messages.new(message_params)
+  	@message = conversation.messages.new(message_params_call_back)
   	@message.save
   end
 
@@ -57,7 +57,7 @@ class Api::V1::Widget::ConversationsController < Api::V1::Widget::BaseController
     params.permit(:id, :typing_status, :website_token, :email)
   end
   
-  def message_params
+  def message_params_call_back
   	content = I18n.t('conversations.templates.call_options',
   										account_name: account.name)
   	
@@ -103,13 +103,13 @@ class Api::V1::Widget::ConversationsController < Api::V1::Widget::BaseController
   end
   
   def call_request_attributes
-  	option1 = "Call back"
-  	option2 = "Voice chat now"
+  	option1 = "call back later"
+  	option2 = "voice chat now"
   	
   	{
   		items: [
-            { title: option1, value: option1 },
-            { title: option2, value: option2 }
+            { title: option1, value: "Call back phone number" },
+            { title: option2, value: "Voice chat now" }
         ]
   	}
   end

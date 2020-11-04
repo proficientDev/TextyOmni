@@ -27,5 +27,6 @@
   },
   "POWERED_BY": "Powered by TextyOmni",
   "EMAIL_PLACEHOLDER": "Please enter your email",
-  "CHAT_PLACEHOLDER": "Type your message"
+  "CHAT_PLACEHOLDER": "Type your message",
+  "PHONE_PLACEHOLDER": "Call back phone number"
 }
