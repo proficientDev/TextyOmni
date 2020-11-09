@@ -24,11 +24,15 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
     elsif @message.content_type == 'input_phone'
     	# @message.update!(submitted_phone: permitted_params[:contact][:phone])
     	update_contact(nil, nil, permitted_params[:contact][:phone])
+    elsif @message.content_type == 'voice_chat'
+    	@message.update!(message_update_params[:message])
     else 
     	# Call options from parameter
-    	call_option if message_update_params[:message][:submitted_values].length() == 1
-    	
-      @message.update!(message_update_params[:message])
+    	if message_update_params[:message][:submitted_values].length() == 1
+    		call_option 
+    	else
+	      @message.update!(message_update_params[:message])
+      end
     end
   # rescue StandardError => e
   #   render json: { error: @contact.errors, message: e.message }.to_json, status: 500
@@ -173,19 +177,23 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
   end
   
   def call_option
-  	message_update_params[:message][:submitted_values][0][:title] == 'call back later' ? call_back_message : voice_chat
+  	message_update_params[:message][:submitted_values][0][:title] == 'call back later' ? call_back_message : voice_chat_message
   end
   
   def call_back_message
-  	@call_back_message = conversation.messages.new(call_back_message_params)
+  	option = 1
+  	@call_back_message = conversation.messages.new(call_message_params(option))
   	@call_back_message.save
   end
   
-  def voice_chat
+  def voice_chat_message
   	# Todo for WebRTC voice chat
+  	option = 2
+  	@voice_chat_message = conversation.messages.new(call_message_params(option))
+  	@voice_chat_message.save
   end
   
-  def call_back_message_params
+  def call_message_params(option)
   	
     {
       account_id: conversation.account_id,
@@ -193,7 +201,7 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
       inbox_id: conversation.inbox_id,
       message_type: :template,
       content: message_update_params[:message][:submitted_values][0][:value],
-      content_type: :input_phone
+      content_type: option == 1? :input_phone : :voice_chat
     }
   end
 end

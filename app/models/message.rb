@@ -50,7 +50,8 @@ class Message < ApplicationRecord
     form: 6,
     article: 7,
     incoming_email: 8,
-    input_phone: 9
+    input_phone: 9,
+    voice_chat: 10
   }
   enum status: { sent: 0, delivered: 1, read: 2, failed: 3 }
   # [:submitted_email, :items, :submitted_values] : Used for bot message types

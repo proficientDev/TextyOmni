@@ -103,13 +103,13 @@ class Api::V1::Widget::ConversationsController < Api::V1::Widget::BaseController
   end
   
   def call_request_attributes
-  	option1 = "call back later"
-  	option2 = "voice chat now"
+  	option1 = I18n.t('conversations.templates.call_back_later')
+  	option2 = I18n.t('conversations.templates.voice_chat_now')
   	
   	{
   		items: [
-            { title: option1, value: "Call back phone number" },
-            { title: option2, value: "Voice chat now" }
+            { title: option1, value: I18n.t('conversations.templates.call_back_later_text'), },
+            { title: option2, value: I18n.t('conversations.templates.voice_chat_now_text'), }
         ]
   	}
   end

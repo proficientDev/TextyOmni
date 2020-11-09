@@ -24,6 +24,12 @@
           {{ inboxName(chat.inbox_id) }}
         </span>
       </h4>
+      <button class="conversation--call">
+      	<!--<span class="ion-android-call"></span>-->
+      	
+      	<b-icon icon="telephone-inbound-fill" v-if="isInbounding" animation="throb" font-scale="0.8" @click="incomingCall"></b-icon>
+      	<b-icon icon="telephone-fill" v-else @click="outgoingCall"></b-icon>
+      </button>
       <p v-if="lastMessageInChat" class="conversation--message">
         <i v-if="messageByAgent" class="ion-ios-undo message-from-agent"></i>
         <span v-if="lastMessageInChat.content">
@@ -54,9 +60,16 @@ import timeMixin from '../../../mixins/time';
 import router from '../../../routes';
 import { frontendURL, conversationUrl } from '../../../helper/URLHelper';
 
+import { BIcon, BootstrapVue, BIconTelephoneFill, BIconTelephoneInboundFill } from 'bootstrap-vue';
+import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css';
+
 export default {
   components: {
     Thumbnail,
+    BIcon,
+    BootstrapVue,
+    BIconTelephoneFill,
+    BIconTelephoneInboundFill,
   },
 
   mixins: [timeMixin, conversationMixin],
@@ -129,6 +142,26 @@ export default {
       const { message_type: messageType } = lastMessage;
       return messageType === MESSAGE_TYPE.OUTGOING;
     },
+    
+    isInbounding() {
+    	let lastMessage = this.lastMessageInChat;
+    	let { content_type: contentType } = lastMessage;
+    	if (contentType === 'text' && lastMessage.message_type === 2) {
+    		let chat = this.chat;
+    		let messages = chat.messages.filter(message => { return message.content_type === 'voice_chat'; });
+    		if (messages.length > 0) {
+    			lastMessage = messages.last();
+    			contentType = lastMessage.content_type;
+    		}
+    		// contentType = lastMessage.content_type;
+    	}
+    	return contentType === 'voice_chat';
+    },
+    
+  },
+  
+  mounted() {
+  	this.toggleStatus();
   },
 
   methods: {
@@ -145,6 +178,15 @@ export default {
     inboxName(inboxId) {
       const stateInbox = this.$store.getters['inboxes/getInbox'](inboxId);
       return stateInbox.name || '';
+    },
+    toggleStatus() {
+    	// console.log(this.chat);
+    	if (this.chat.messages.length < 1) return;
+	  	if (this.lastMessageInChat.content_type == 'voice_chat' && this.chat.status === 'bot') {
+	  		this.$store.dispatch('toggleStatus', this.chat.id).then(() => {
+	        bus.$emit('newToastMessage', this.$t('CONVERSATION.CHANGE_STATUS'));
+	      });
+	    }
     },
   },
 };

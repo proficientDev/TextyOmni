@@ -62,6 +62,10 @@ en:
       email_input_box_message_body: "Get notified by email"
       phone_number_input_box_message_body: "Get phone number"
       call_options: "Select one of below for call options"
+      call_back_later: "call back later"
+      voice_chat_now: "voice chat now"
+      call_back_later_text: "We will reach out you later with this phone number"
+      voice_chat_now_text: "Possible to voice chat now"
     reply:
       email_subject: "New messages on this conversation"
       transcript_subject: "Conversation Transcript"

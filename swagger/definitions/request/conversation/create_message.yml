@@ -12,7 +12,7 @@ properties:
     description: Flag to identify if it is a private note
   content_type:
     type: string
-    enum: ['input_email', 'cards', 'input_select', 'form' , 'article', 'input_phone']
+    enum: ['input_email', 'cards', 'input_select', 'form' , 'article', 'input_phone', 'voice_chat']
     example: 'cards'
     description: 'if you want to create custom message types'
   content_attributes:
