@@ -33,7 +33,7 @@
     "moment": "^2.29.1",
     "query-string": "5",
     "spinkit": "~1.2.5",
-    "tailwindcss": "^1.8.3",
+    "tailwindcss": "^1.9.6",
     "tween.js": "~16.6.0",
     "url-loader": "^2.0.0",
     "v-tooltip": "~2.0.2",

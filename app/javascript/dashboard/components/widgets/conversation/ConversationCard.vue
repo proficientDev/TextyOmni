@@ -153,14 +153,14 @@ export default {
     			lastMessage = messages.last();
     			contentType = lastMessage.content_type;
     		}
-    		// contentType = lastMessage.content_type;
     	}
+    	console.log(lastMessage);
     	return contentType === 'voice_chat';
     },
     
   },
   
-  mounted() {
+  created() {
   	this.toggleStatus();
   },
 
@@ -187,6 +187,12 @@ export default {
 	        bus.$emit('newToastMessage', this.$t('CONVERSATION.CHANGE_STATUS'));
 	      });
 	    }
+    },
+    incomingCall() {
+    	console.log('INCOMING CALL');
+    },
+    outgoingCall() {
+    	console.log('OUTGOING CALL');
     },
   },
 };
