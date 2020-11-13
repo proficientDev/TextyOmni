@@ -44,7 +44,7 @@
         <div class="medium-12 columns" v-if="showElement(id)">
           <label>
             {{ $t('AGENT_MGMT.EDIT.FORM.AVAILABILITY_STATUS.LABEL') }}
-            <select v-model="agentAvailabilityStatus == 'online' || agentAvailabilityStatus == 'offline' || agentAvailabilityStatus == 'busy' ? 'System Status' : agentAvailabilityStatus">
+            <select v-model="agentAvailabilityStatus">
               <option v-for="value in availabilityStatuses" :key="value.value" :value="value.value">
                 {{ value.label }}
               </option>
@@ -165,7 +165,11 @@ export default {
       valuesOfAvailability: 'codes/getCodes',
     }),
     availabilityStatuses() {
-      const originStatues = [{value: 'System Status', label: 'System Status'}];
+      const originStatues = this.$t('PROFILE_SETTINGS.FORM.AVAILABILITY.STATUSES_LIST').map(
+        status => ({
+          ...status,
+        })
+      );
       const customStatues = this.valuesOfAvailability.map(
         status => ({
           value: status.title,
@@ -173,10 +177,12 @@ export default {
         })
       );
       const statuses = [...originStatues, ...customStatues];
+      console.log(statuses);
       return statuses;
     },
   },
   mounted() {
+  	console.log(this.availability);
     this.$store.dispatch('codes/get').then(() => {console.log(this.agentAvailabilityStatus);});
   },
   methods: {
