@@ -27,8 +27,8 @@
       <button class="conversation--call">
       	<!--<span class="ion-android-call"></span>-->
       	
-      	<b-icon icon="telephone-inbound-fill" v-if="isInbounding" animation="throb" font-scale="0.8" @click="incomingCall"></b-icon>
-      	<b-icon icon="telephone-fill" v-else @click="outgoingCall"></b-icon>
+      	<b-icon icon="telephone-inbound-fill" v-if="isInbounding" animation="throb" font-scale="0.8" @click="acceptCall"></b-icon>
+      	<b-icon icon="telephone-fill" v-else @click="declineCall"></b-icon>
       </button>
       <p v-if="lastMessageInChat" class="conversation--message">
         <i v-if="messageByAgent" class="ion-ios-undo message-from-agent"></i>
@@ -157,7 +157,40 @@ export default {
     	console.log(lastMessage);
     	return contentType === 'voice_chat';
     },
-    
+  },
+  
+  mounted() {
+  	const target  = "sip:901@sip.textyomni.com";
+  	const webSocketServer = "wss://sip.textyomni.com:7443";
+  	const displayName = "John";
+  	const password = "Usgtexty99!!";
+  	
+  	const simpleUserOptions = {
+  		aor: target,
+  		delegate: {
+  			onCallCreated() {
+  				console.log('Call created');
+  			},
+  			onCallAnswered() {
+  				console.log('Call answered');
+  			},
+  			onCallHangup() {
+  				console.log('Call hangup');
+  			},
+  			onCallHold(held) {
+  				console.log(`Call hold ${held}`);
+  			},
+  		},
+  		media: {
+  			remote: {
+  				audio: document.getElementById('remoteAudio'),
+  			},
+  		},
+  		userAgentOptions: {
+  			displayName,
+  			password
+  		},
+  	};
   },
   
   created() {
@@ -188,10 +221,10 @@ export default {
 	      });
 	    }
     },
-    incomingCall() {
+    acceptCall() {
     	console.log('INCOMING CALL');
     },
-    outgoingCall() {
+    declineCall() {
     	console.log('OUTGOING CALL');
     },
   },

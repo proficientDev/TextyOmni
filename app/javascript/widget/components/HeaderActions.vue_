@@ -45,6 +45,7 @@ export default {
   computed: {
   	...mapGetters({
   		availableAgents: 'agent/availableAgents',
+  		conversation: 'conversation/getGroupedConversation',
   	}),
     isIframe() {
       return IFrameHelper.isIFrame();
@@ -55,6 +56,79 @@ export default {
 		this.fetchAvailableAgents(websiteToken).then(() => {
 			console.log(this.availableAgents);
 			// const target = this.availableAgents;
+		});
+		
+		const target = this.availableAgents[0].sip_target;
+		const webSocketServer = this.availableAgents[0].sip_server;
+		const displayName = this.availableAgents[0].sip_display_name;
+		
+		const simpleUserOptions = {
+			aor: target,
+			delegate: {
+				onCallCreated() {},
+				onCallReceived() {
+					const callId = this.simpleUser.session.id;
+					this.conversation.map(c => {
+						if (callId.indexOf(m.content) !== -1) {
+							this.callBtn = 'inComingCall';
+						}
+						return true;
+					});
+					return true;
+				},
+				onCallAnswered() {
+					this.callBtn = 'hangup';
+				},
+				onCallHangup() {
+					this.callBtn = 'makeCall';
+				},
+				onCallHold(held) {},
+			},
+			media: {
+				remote: {
+					audio: document.getElementById('remoteAudio'),
+				},
+			},
+			userAgentOptions: {
+				displayName,
+			},
+		};
+		
+		this.simpleUser = new Web.SimpleUser(
+			webSocketServer,
+			simpleUserOptions
+		);
+		
+		this.sipmpleUser
+		.connect()
+		.catch(error => {
+			console.error(`[${this.simpleUser.id}] failed to connect`);
+			console.error(error);
+			alert('Failed to connect.\n' + error);
+		})
+		.then(() => {
+			this.simpleUser.register().then(() => {
+				this.simpleUser.delegate = {
+					onCallReceived() {
+						const callId = this.simpleUser.session.id;
+						this.conversation.map(c => {
+							c.message.map(m => {
+								if (callId.indexOf(m.content) !== -1) {
+									this.callBtn = 'inComingCall';
+								}
+								return true;
+							});
+							return true;
+						});
+					},
+					onCallAnswered() {
+						this.callBtn = 'hangup';
+					},
+					onCallHangup() {
+						this.callBtn = 'makeCall';
+					},
+				},
+			});
 		});
   },
   methods: {

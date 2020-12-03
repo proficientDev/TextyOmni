@@ -42,13 +42,17 @@ class Api::V1::Accounts::Conversations::AssignmentsController < Api::V1::Account
       next_index = index + 1
     end
     
+    Rails.logger.info "NEXT AGENT OFFSET #{next_index}"
+    
     # Return nil when @agents are cycled fully
-    if index == @index - 1 || index == -1
+    if index == @index - 1 || index == 0
       Rails.logger.info "Conversation limits overflow, index: #{index}"
       return nil
     end
     
     next_assignee = @agents.offset(next_index).first
+    next_assignee_availability = next_assignee["availability"]
+    Rails.logger.info "NEXT AGENT AVAILABILITY #{next_assignee_availability}"
    	unless next_assignee["availability"] == "offline"
 	    Rails.logger.info "NEXT ASSIGNMENT ID: #{next_assignee["id"]}"
 	    next_assignment_maximum = next_assignee.account_users.first["limits"]

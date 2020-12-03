@@ -37,6 +37,9 @@
         <% end %>
         enabledLanguages: <%= available_locales_with_name.to_json.html_safe %>,
         disableAgentNameWidget: '<%= ENV.fetch('DISABLE_ACTUAL_AGENT_NAME', true) %>',
+        sipTarget: '<%= current_user&.sip_target %>',
+        sipServer: '<%= current_user&.sip_server %>',
+        sipDisplayName: '<%= current_user&.sip_display_name %>'
       }
       window.globalConfig = <%= raw @global_config.to_json %>
     </script>

@@ -189,7 +189,7 @@ Rails.application.routes.draw do
 
   # ----------------------------------------------------------------------
   # Routes for testing
-  resources :widget_tests, only: [:index] unless Rails.env.development?
+  resources :widget_tests, only: [:index] unless Rails.env.production?
   
   # ----------------------------------------------------------------------
   # Routes for external service verifications
