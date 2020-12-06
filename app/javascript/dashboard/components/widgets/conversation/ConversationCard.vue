@@ -26,10 +26,12 @@
       </h4>
       <button class="conversation--call">
       	<!--<span class="ion-android-call"></span>-->
-      	
-      	<b-icon icon="telephone-inbound-fill" v-if="isInbounding" animation="throb" font-scale="0.8" @click="acceptCall"></b-icon>
-      	<b-icon icon="telephone-fill" v-else @click="declineCall"></b-icon>
+      	<b-icon icon="telephone-inbound-fill" v-if="isInbounding" animation="throb" font-scale="0.8" @click="toggleIncomingCallModal"></b-icon>
+      	<b-icon icon="telephone-fill" v-else></b-icon>
       </button>
+      <audio id="remoteAudio" controls>
+        <p>Your browser doesn't support HTML5 audio.</p>
+      </audio>
       <p v-if="lastMessageInChat" class="conversation--message">
         <i v-if="messageByAgent" class="ion-ios-undo message-from-agent"></i>
         <span v-if="lastMessageInChat.content">
@@ -48,6 +50,15 @@
         <span class="unread">{{ getUnreadCount }}</span>
       </div>
     </div>
+    <woot-modal :show.sync="showIncomingCallModal" :on-close="toggleIncomingCallModal">
+      <woot-modal-header :header-tile="'Would you like to call with customer in voice?'"></woot-modal-header>
+      <div class="medium-12 modal-footer">
+        <div class="medium-6 columns">
+          <button class="button clear" @click.prevent="acceptCall">Accept</button>
+          <button class="button clear" @click.prevent="toggleIncomingCallModal">Cancel</button>
+        </div>
+      </div>
+    </woot-modal>
   </div>
 </template>
 <script>
@@ -90,6 +101,12 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  
+  data() {
+    return {
+      showIncomingCallModal: false
+    };
   },
 
   computed: {
@@ -221,12 +238,36 @@ export default {
 	      });
 	    }
     },
-    acceptCall() {
+    handelIncomingCall() {
     	console.log('INCOMING CALL');
+    	this.showIncomingCallModal = true;
+    	
+    },
+    toggleIncomingCallModal() {
+      if (this.showIncomingCallModal === true) {
+        this.declineCall();
+        this.showIncomingCallModal = false;
+      } else {
+        this.showIncomingCallModal = true;
+      }
+    },
+    acceptCall() {
+      console.log('Call Accepted by Agent');
+      this.simpleUser.answer();
     },
     declineCall() {
     	console.log('OUTGOING CALL');
+    	this.simpleUser.hangup();
     },
   },
 };
 </script>
+<style scoped lang="scss">
+@import '~dashboard/assets/scss/variables';
+
+#remoteAudio {
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+</style>
