@@ -3923,6 +3923,11 @@ emoji-regex@^8.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
+emojione@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/emojione/-/emojione-4.5.0.tgz#cf1f5d417394988296aef72bd3ac3d480890838a"
+  integrity sha512-Tq55Y3UgPOnayFDN+Qd6QMP0rpoH10a1nhSFN27s8gXW3qymgFIHiXys2ECYYAI134BafmI3qP9ni2rZOe9BjA==
+
 emojis-list@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
@@ -9803,6 +9808,11 @@ simple-swizzle@^0.2.2:
   integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
   dependencies:
     is-arrayish "^0.3.1"
+
+sip.js@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/sip.js/-/sip.js-0.17.1.tgz#82d6d45939d1360726020c31731d16f0feb29cda"
+  integrity sha512-JxuPm2E4RUdmzLFpI26f0iP2A84arsXRgmfY8cbIlmK95gnZFdE8Jh1PRx8eOJlS7ACgm0WFBNL9jVEtMigh9A==
 
 sisteransi@^1.0.4:
   version "1.0.5"

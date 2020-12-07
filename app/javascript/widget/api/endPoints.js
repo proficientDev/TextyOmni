@@ -10,6 +10,7 @@ const sendMessage = content => {
         content,
         timestamp: new Date().toString(),
         referer_url: referrerURL,
+        content_type: contentType,
       },
     },
   };

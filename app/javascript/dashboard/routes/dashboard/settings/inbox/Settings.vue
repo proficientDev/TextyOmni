@@ -391,6 +391,8 @@ export default {
         this.selectedAgents = inboxMembers;
       } catch (error) {
         //  Handle error
+        // eslint-disable-next-line
+        console.log(error);
       }
     },
     async updateAgents() {

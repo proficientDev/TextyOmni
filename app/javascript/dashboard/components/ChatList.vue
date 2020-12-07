@@ -5,6 +5,7 @@
         <woot-sidemenu-icon />
         {{ pageTitle }}
       </h1>
+
       <chat-filter @statusFilterChange="updateStatusType" />
     </div>
     
@@ -22,6 +23,10 @@
       >
     </div>
 
+    <audio id="remoteAudio" controls>
+      <p>Your browser doesn't support HTML5 audio.</p>
+    </audio>
+
     <chat-type-tabs
       :items="assigneeTabItems"
       :active-tab="activeAssigneeTab"
@@ -32,13 +37,17 @@
     <p v-if="!chatListLoading && !conversationList.length" class="content-box">
       {{ $t('CHAT_LIST.LIST.404') }}
     </p>
-
     <div class="conversations-list">
       <conversation-card
         v-for="chat in conversationList"
-        :key="chat.id"
+        :key="`${chat.id}${chat.callBtn}`"
         :active-label="label"
         :chat="chat"
+        :handle-call="handleCall"
+        :handle-hang-up="handleHangUp"
+        :create-call="createCall"
+        :button-status="buttonStatus"
+        :chat-id="chatId"
       />
 
       <div v-if="chatListLoading" class="text-center">
@@ -68,9 +77,6 @@
 </template>
 
 <script>
-/* eslint-env browser */
-/* eslint no-console: 0 */
-/* global bus */
 import { mapGetters } from 'vuex';
 
 import ChatFilter from './widgets/conversation/ChatFilter';
@@ -79,6 +85,8 @@ import ConversationCard from './widgets/conversation/ConversationCard';
 import timeMixin from '../mixins/time';
 import conversationMixin from '../mixins/conversations';
 import wootConstants from '../constants';
+import { Web } from 'sip.js';
+import { MESSAGE_CONTENT_TYPE } from '../../widget/helpers/constants';
 
 export default {
   components: {
@@ -103,6 +111,9 @@ export default {
       activeStatus: wootConstants.STATUS_TYPE.OPEN,
       contactsSearched: null,
       searchKey: '',
+      calls: {},
+      buttonStatus: 'makeCall',
+      chatId: 0,
     };
   },
   computed: {
@@ -116,9 +127,10 @@ export default {
       activeInbox: 'getSelectedInbox',
       conversationStats: 'conversationStats/getStats',
       currentContacts: 'contacts/getContacts',
+      currentChat: 'getSelectedChat',
     }),
     assigneeTabItems() {
-      return this.$t('CHAT_LIST.ASSIGNEE_TYPE_TABS').map(item => {
+      return this.$t(`CHAT_LIST.ASSIGNEE_TYPE_TABS`).map(item => {
         const count = this.conversationStats[item.COUNT_KEY] || 0;
         return {
           key: item.KEY,
@@ -177,15 +189,17 @@ export default {
       }
 
       if (!this.label) {
-        return conversationList;
+        return conversationList.map(c => ({ ...c, callBtn: this.calls[c.id] }));
       }
 
-      return conversationList.filter(conversation => {
-        const labels = this.$store.getters[
-          'conversationLabels/getConversationLabels'
-        ](conversation.id);
-        return labels.includes(this.label);
-      });
+      return conversationList
+        .filter(conversation => {
+          const labels = this.$store.getters[
+            'conversationLabels/getConversationLabels'
+          ](conversation.id);
+          return labels.includes(this.label);
+        })
+        .map(c => ({ ...c, callBtn: this.calls[c.id] }));
     },
   },
   watch: {
@@ -203,8 +217,171 @@ export default {
     bus.$on('fetch_conversation_stats', () => {
       this.$store.dispatch('conversationStats/get', this.conversationFilters);
     });
+
+    const self = this;
+    const target = window.chatwootConfig.sipTarget;
+    const webSocketServer = window.chatwootConfig.sipServer;
+    const displayName = window.chatwootConfig.sipDisplayName;
+    const simpleUserOptions = {
+      aor: target,
+      delegate: {
+        onCallCreated() {},
+        onCallReceived() {
+          self.buttonStatus = 'inComingCall';
+        },
+        onCallAnswered() {
+          self.buttonStatus = 'hangup';
+          self.chatId = self.currentChat.id;
+        },
+        onCallHangup() {
+          self.buttonStatus = 'makeCall';
+        },
+        onCallHold(held) {},
+      },
+      media: {
+        remote: {
+          audio: document.getElementById('remoteAudio'),
+        },
+      },
+      userAgentOptions: {
+        displayName,
+      },
+    };
+
+    this.simpleUser = new Web.SimpleUser(webSocketServer, simpleUserOptions);
+
+    this.simpleUser
+      .connect()
+      .catch(error => {
+        console.error(`[${this.simpleUser.id}] failed to connect`);
+        console.error(error);
+        alert('Failed to connect.\n' + error);
+      })
+      .then(() => {
+        this.simpleUser.register().then(() => {
+          this.simpleUser.delegate = {
+            onCallReceived() {
+              const callId = self.simpleUser.session.id;
+
+              self.chatLists.map(c => {
+                c.messages.map(m => {
+                  if (callId.indexOf(m.content) !== -1) {
+                    self.buttonStatus = 'inComingCall';
+                    self.chatId = c.id;
+                  }
+                  return true;
+                });
+                return true;
+              });
+            },
+            onCallAnswered() {
+              self.buttonStatus = 'hangup';
+              self.chatId = self.currentChat.id;
+            },
+            onCallHangup() {
+              self.buttonStatus = 'makeCall';
+            },
+          };
+        });
+      });
   },
   methods: {
+    handleCall() {
+      this.simpleUser.answer();
+    },
+    handleHangUp() {
+      this.simpleUser.hangup();
+      this.buttonStatus = 'makeCall';
+    },
+    async sendMessage(params) {
+      try {
+        await this.$store.dispatch('sendMessage', params);
+      } catch (error) {
+        // Error
+      }
+    },
+    createCall(chatId) {
+      const contentType = MESSAGE_CONTENT_TYPE.RESOLVE_AUTOASSIGN;
+      const content = 'Call started';
+      const self = this;
+
+      this.sendMessage({
+        message: content,
+        private: false,
+        conversationId: chatId,
+        contentType: contentType,
+      }).then(() => {
+        const target = window.chatwootConfig.sipTarget;
+        const webSocketServer = window.chatwootConfig.sipServer;
+        const displayName = window.chatwootConfig.sipDisplayName;
+
+        const simpleUserOptions = {
+          destination: target,
+          media: {
+            remote: {
+              audio: document.getElementById('remoteAudio'),
+            },
+          },
+          userAgentOptions: {
+            displayName,
+          },
+        };
+
+        const simpleUser = new Web.SimpleUser(
+          webSocketServer,
+          simpleUserOptions
+        );
+
+        self.simpleUserObject = simpleUser;
+
+        const delegate = {
+          onCallCreated() {
+            const callContent = simpleUser.session.id.substr(
+              0,
+              simpleUser.session.id.indexOf(simpleUser.session.fromTag)
+            );
+            const callContentType = MESSAGE_CONTENT_TYPE.CALL_ID;
+            self.sendMessage({
+              message: callContent,
+              contentType: callContentType,
+              conversationId: chatId,
+              private: false,
+            });
+          },
+          onCallReceived() {
+            self.buttonStatus = 'outComingCall';
+          },
+          onCallAnswered() {
+            self.buttonStatus = 'hangup';
+            self.chatId = chatId;
+          },
+          onCallHangup() {
+            self.callBtn = true;
+            self.buttonStatus = 'makeCall';
+          },
+          onCallHold(held) {},
+        };
+
+        simpleUser.delegate = delegate;
+
+        simpleUser
+          .connect()
+          .catch(error => {
+            console.error(`[${simpleUser.id}] failed to connect`);
+            console.error(error);
+            alert('Failed to connect.\n' + error);
+          })
+          .then(() => {
+            simpleUser.call(target).catch(error => {
+              console.error(`[${simpleUser.id}] failed to place call`);
+              console.error(error);
+              alert('Failed to place call.\n' + error);
+            });
+            self.callBtn = false;
+            self.buttonStatus = 'makeCall';
+          });
+      });
+    },
     resetAndFetchData() {
       this.$store.dispatch('conversationPage/reset');
       this.$store.dispatch('emptyAllConversations');
@@ -256,5 +433,45 @@ export default {
 .spinner {
   margin-top: $space-normal;
   margin-bottom: $space-normal;
+}
+#remoteAudio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+button {
+  width: 32px;
+  height: 32px;
+}
+#accept-call {
+  background: url('../../../javascript/shared/assets/images/accept-call.png');
+  width: 32px;
+  height: 32px;
+  border: 1px solid green;
+  border-radius: 16px;
+}
+#decline-call {
+  background: url('../../../javascript/shared/assets/images/decline-call.png');
+  width: 32px;
+  height: 32px;
+  border: 1px solid red;
+  border-radius: 16px;
+}
+
+@-webkit-keyframes blinker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.blink {
+  text-decoration: blink;
+  -webkit-animation-name: blinker;
+  -webkit-animation-duration: 0.6s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-in-out;
+  -webkit-animation-direction: alternate;
 }
 </style>

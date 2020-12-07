@@ -85,6 +85,7 @@ class User < ApplicationRecord
   after_save :update_presence_in_redis, if: :saved_change_to_availability?
 
   scope :order_by_full_name, -> { order('lower(name) ASC') }
+  # scope :with_sip
 
   def send_devise_notification(notification, *args)
     devise_mailer.send(notification, self, *args).deliver_later
