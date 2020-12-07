@@ -193,7 +193,8 @@ export default {
   },
   methods: {
     showEditAction(agent) {
-      return this.currentUserId !== agent.id;
+      // return this.currentUserId !== agent.id;
+      return true;
     },
     showDeleteAction(agent) {
       if (this.currentUserId === agent.id) {

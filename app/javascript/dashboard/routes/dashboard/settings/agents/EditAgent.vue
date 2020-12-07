@@ -3,7 +3,7 @@
     <div class="column content-box">
       <woot-modal-header :header-title="pageTitle" />
       <form class="row medium-8" @submit.prevent="editAgent()">
-        <div class="medium-12 columns">
+        <div class="medium-12 columns" v-if="showElement(id)">
           <label :class="{ error: $v.agentName.$error }">
             {{ $t('AGENT_MGMT.EDIT.FORM.NAME.LABEL') }}
             <input
@@ -15,7 +15,7 @@
           </label>
         </div>
 
-        <div class="medium-12 columns">
+        <div class="medium-12 columns" v-if="showElement(id)">
           <label :class="{ error: $v.agentType.$error }">
             {{ $t('AGENT_MGMT.EDIT.FORM.AGENT_TYPE.LABEL') }}
             <select v-model="agentType">
@@ -41,10 +41,10 @@
             </span>
           </label>
         </div>
-        <div class="medium-12 columns">
+        <div class="medium-12 columns" v-if="showElement(id)">
           <label>
             {{ $t('AGENT_MGMT.EDIT.FORM.AVAILABILITY_STATUS.LABEL') }}
-            <select v-model="agentAvailabilityStatus == 'online' || agentAvailabilityStatus == 'offline' || agentAvailabilityStatus == 'busy' ? 'System Status' : agentAvailabilityStatus">
+            <select v-model="agentAvailabilityStatus">
               <option v-for="value in availabilityStatuses" :key="value.value" :value="value.value">
                 {{ value.label }}
               </option>
@@ -66,7 +66,7 @@
               {{ $t('AGENT_MGMT.EDIT.CANCEL_BUTTON_TEXT') }}
             </button>
           </div>
-          <div class="medium-6 columns text-right">
+          <div class="medium-6 columns text-right" v-if="showElement(id)">
             <button class="button clear" @click.prevent="resetPassword">
               <i class="ion-locked"></i>
               {{ $t('AGENT_MGMT.EDIT.PASSWORD_RESET.ADMIN_RESET_BUTTON') }}
@@ -161,10 +161,15 @@ export default {
     },
     ...mapGetters({
       uiFlags: 'agents/getUIFlags',
+      currentUserId: 'getCurrentUserID',
       valuesOfAvailability: 'codes/getCodes',
     }),
     availabilityStatuses() {
-      const originStatues = [{value: 'System Status', label: 'System Status'}];
+      const originStatues = this.$t('PROFILE_SETTINGS.FORM.AVAILABILITY.STATUSES_LIST').map(
+        status => ({
+          ...status,
+        })
+      );
       const customStatues = this.valuesOfAvailability.map(
         status => ({
           value: status.title,
@@ -172,10 +177,12 @@ export default {
         })
       );
       const statuses = [...originStatues, ...customStatues];
+      console.log(statuses);
       return statuses;
     },
   },
   mounted() {
+  	console.log(this.availability);
     this.$store.dispatch('codes/get').then(() => {console.log(this.agentAvailabilityStatus);});
   },
   methods: {
@@ -206,6 +213,9 @@ export default {
       } catch (error) {
         this.showAlert(this.$t('AGENT_MGMT.EDIT.PASSWORD_RESET.ERROR_MESSAGE'));
       }
+    },
+    showElement(id) {
+    	return id !== this.currentUserId;
     },
   },
 };

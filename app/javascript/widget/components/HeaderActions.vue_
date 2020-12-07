@@ -1,0 +1,194 @@
+<template>
+  <div v-if="isIframe" class="actions flex items-center">
+    <button
+      v-if="showPopoutButton"
+      class="button transparent compact new-window--button"
+      @click="popoutWindow"
+    >
+      <span class="ion-android-open"></span>
+    </button>
+
+    <button v-if="showCallButton" class="button transparent call-button">
+    	<span class="ion-android-call" @click="callOptions"></span>
+    </button>
+
+    <button class="button transparent compact close-button">
+      <span class="ion-android-close" @click="closeWindow"></span>
+    </button>
+  </div>
+</template>
+<script>
+import Vue from 'vue';
+import { mapGetters, mapActions } from 'vuex';
+import { IFrameHelper } from 'widget/helpers/utils';
+import { buildPopoutURL } from '../helpers/urlParamsHelper';
+
+import { Web } from 'sip.js';
+
+export default {
+  name: 'HeaderActions',
+  props: {
+    showPopoutButton: {
+      type: Boolean,
+      default: false,
+    },
+    showCallButton: {
+    	type: Boolean,
+    	default: false,
+    },
+  },
+  data() {
+  	return {
+  		callRequest: 'call request',
+  	};
+  },
+  computed: {
+  	...mapGetters({
+  		availableAgents: 'agent/availableAgents',
+  		conversation: 'conversation/getGroupedConversation',
+  	}),
+    isIframe() {
+      return IFrameHelper.isIFrame();
+    },
+  },
+  mounted() {
+		const { websiteToken } = window.chatwootWebChannel;
+		this.fetchAvailableAgents(websiteToken).then(() => {
+			console.log(this.availableAgents);
+			// const target = this.availableAgents;
+		});
+		
+		const target = this.availableAgents[0].sip_target;
+		const webSocketServer = this.availableAgents[0].sip_server;
+		const displayName = this.availableAgents[0].sip_display_name;
+		
+		const simpleUserOptions = {
+			aor: target,
+			delegate: {
+				onCallCreated() {},
+				onCallReceived() {
+					const callId = this.simpleUser.session.id;
+					this.conversation.map(c => {
+						if (callId.indexOf(m.content) !== -1) {
+							this.callBtn = 'inComingCall';
+						}
+						return true;
+					});
+					return true;
+				},
+				onCallAnswered() {
+					this.callBtn = 'hangup';
+				},
+				onCallHangup() {
+					this.callBtn = 'makeCall';
+				},
+				onCallHold(held) {},
+			},
+			media: {
+				remote: {
+					audio: document.getElementById('remoteAudio'),
+				},
+			},
+			userAgentOptions: {
+				displayName,
+			},
+		};
+		
+		this.simpleUser = new Web.SimpleUser(
+			webSocketServer,
+			simpleUserOptions
+		);
+		
+		this.sipmpleUser
+		.connect()
+		.catch(error => {
+			console.error(`[${this.simpleUser.id}] failed to connect`);
+			console.error(error);
+			alert('Failed to connect.\n' + error);
+		})
+		.then(() => {
+			this.simpleUser.register().then(() => {
+				this.simpleUser.delegate = {
+					onCallReceived() {
+						const callId = this.simpleUser.session.id;
+						this.conversation.map(c => {
+							c.message.map(m => {
+								if (callId.indexOf(m.content) !== -1) {
+									this.callBtn = 'inComingCall';
+								}
+								return true;
+							});
+							return true;
+						});
+					},
+					onCallAnswered() {
+						this.callBtn = 'hangup';
+					},
+					onCallHangup() {
+						this.callBtn = 'makeCall';
+					},
+				},
+			});
+		});
+  },
+  methods: {
+  	...mapActions('conversation', ['sendMessage', 'callUserRequest']),
+  	...mapActions('agent', ['fetchAvailableAgents']),
+    popoutWindow() {
+      this.closeWindow();
+      const {
+        location: { origin },
+        chatwootWebChannel: { websiteToken },
+        authToken,
+      } = window;
+
+      const popoutWindowURL = buildPopoutURL({
+        origin,
+        websiteToken,
+        locale: Vue.config.lang,
+        conversationCookie: authToken,
+      });
+      const popoutWindow = window.open(
+        popoutWindowURL,
+        `webwidget_session_${websiteToken}`,
+        'resizable=off,width=400,height=600'
+      );
+      popoutWindow.focus();
+    },
+    closeWindow() {
+      if (IFrameHelper.isIFrame()) {
+        IFrameHelper.sendMessage({
+          event: 'toggleBubble',
+        });
+      }
+    },
+    callOptions() {
+    	// const content = this.callRequest;
+    	// this.sendMessage({content});
+    	this.callUserRequest();
+    },
+  },
+};
+</script>
+<style scoped lang="scss">
+@import '~widget/assets/scss/variables.scss';
+
+.actions {
+  button {
+    margin-left: $space-normal;
+  }
+
+  span {
+    color: $color-heading;
+    font-size: $font-size-large;
+
+    &.ion-android-close {
+      font-size: $font-size-big;
+    }
+  }
+
+  .close-button {
+    display: none;
+  }
+}
+</style>

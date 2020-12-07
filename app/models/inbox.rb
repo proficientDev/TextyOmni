@@ -26,6 +26,7 @@
 class Inbox < ApplicationRecord
   include Reportable
   include Avatarable
+  include OutOfOffisable
 
   validates :account_id, presence: true
 

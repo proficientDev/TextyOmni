@@ -60,6 +60,11 @@
       white-space: nowrap;
     }
   }
+  
+  .conversation--call {
+  	font-size: $font-size-default;
+  	margin-right: 1rem;
+  }
 
   .conversation--message {
     color: $color-body;
@@ -73,6 +78,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 27rem;
+    display: inline;
 
     .small-icon {
       font-size: $font-size-mini;

@@ -98,7 +98,7 @@
           "ERROR": "Limit value is required"
         },
         "AVAILABILITY_STATUS": {
-          "LABEL": "Agent Availability Status(Please do not select \"System Status\", otherwise your availability change will ignore.)",
+          "LABEL": "Agent Availability Status",
           "PLACEHOLDER": "Please select an availability staus(Busy Code) for particular agent",
           "ERROR": ""
         },

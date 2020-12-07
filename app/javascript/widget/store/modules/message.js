@@ -12,13 +12,14 @@ const getters = {
 };
 
 const actions = {
-  update: async ({ commit }, { email, messageId, submittedValues }) => {
+  update: async ({ commit }, { phone, email, messageId, submittedValues }) => {
     commit('toggleUpdateStatus', true);
     try {
       const {
         data: { contact: { pubsub_token: pubsubToken } = {} },
       } = await MessageAPI.update({
         email,
+        phone,
         messageId,
         values: submittedValues,
       });
@@ -28,6 +29,7 @@ const actions = {
           id: messageId,
           content_attributes: {
             submitted_email: email,
+            submitted_phone: phone,
             submitted_values: email ? null : submittedValues,
           },
         },

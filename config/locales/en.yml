@@ -47,6 +47,7 @@ en:
       status:
         resolved: "Conversation was marked resolved by %{user_name}"
         open: "Conversation was reopened by %{user_name}"
+        auto_resolved: "Conversation was marked resolved by system due to %{duration} days of inactivity"
       assignee:
         self_assigned: "%{user_name} self-assigned this conversation"
         assigned: "Assigned to %{assignee_name} by %{user_name}"
@@ -61,6 +62,11 @@ en:
       ways_to_reach_you_message_body: "Give the team a way to reach you."
       email_input_box_message_body: "Get notified by email"
       phone_number_input_box_message_body: "Get phone number"
+      call_options: "Select one of below for call options"
+      call_back_later: "call back later"
+      voice_chat_now: "voice chat now"
+      call_back_later_text: "We will reach out you later with this phone number"
+      voice_chat_now_text: "Possible to voice chat now"
     reply:
       email_subject: "New messages on this conversation"
       transcript_subject: "Conversation Transcript"

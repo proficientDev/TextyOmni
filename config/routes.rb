@@ -105,6 +105,7 @@ Rails.application.routes.draw do
             resources :apps, only: [:index, :show]
             resource :slack, only: [:create, :update, :destroy], controller: 'slack'
           end
+          resources :working_hours, only: [:update]
 
           namespace :kbase do
             resources :portals do
@@ -136,6 +137,7 @@ Rails.application.routes.draw do
             post :update_last_seen
             post :toggle_typing
             post :transcript
+            post :call_request
           end
         end
         resource :contact, only: [:update]

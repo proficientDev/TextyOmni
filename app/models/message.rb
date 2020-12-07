@@ -50,8 +50,10 @@ class Message < ApplicationRecord
     form: 6,
     article: 7,
     incoming_email: 8,
-    call_id: 9,
-    resolve_autoassign: 10
+    input_phone: 9,
+    voice_chat: 10,
+    call_id: 11,
+    resolve_autoassign: 12
   }
   enum status: { sent: 0, delivered: 1, read: 2, failed: 3 }
   # [:submitted_email, :items, :submitted_values] : Used for bot message types
@@ -64,6 +66,7 @@ class Message < ApplicationRecord
   # .succ is a hack to avoid https://makandracards.com/makandra/1057-why-two-ruby-time-objects-are-not-equal-although-they-appear-to-be
   scope :unread_since, ->(datetime) { where('EXTRACT(EPOCH FROM created_at) > (?)', datetime.to_i.succ) }
   scope :chat, -> { where.not(message_type: :activity).where(private: false) }
+  scope :today, -> { where("date_trunc('day', created_at) = ?", Date.current) }
   default_scope { order(created_at: :asc) }
 
   belongs_to :account

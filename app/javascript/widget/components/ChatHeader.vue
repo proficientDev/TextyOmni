@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <header-actions :show-popout-button="showPopoutButton" />
+    <header-actions :show-popout-button="showPopoutButton" :show-call-button="showCallButton"/>
   </header>
 </template>
 
@@ -56,6 +56,11 @@ export default {
       type: Array,
       default: () => {},
     },
+  },
+  data() {
+  	return {
+  		showCallButton: true,
+  	};
   },
   computed: {
     ...mapGetters({

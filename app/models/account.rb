@@ -30,6 +30,7 @@ class Account < ApplicationRecord
   }.freeze
 
   validates :name, presence: true
+  validates :auto_resolve_duration, numericality: { greater_than_or_equal_to: 1, allow_nil: true }
 
   has_many :account_users, dependent: :destroy
   has_many :agent_bot_inboxes, dependent: :destroy
@@ -52,6 +53,7 @@ class Account < ApplicationRecord
   has_many :codes, dependent: :destroy
   has_many :notification_settings, dependent: :destroy
   has_many :hooks, dependent: :destroy, class_name: 'Integrations::Hook'
+  has_many :working_hours, dependent: :destroy
   has_many :kbase_portals, dependent: :destroy, class_name: '::Kbase::Portal'
   has_many :kbase_categories, dependent: :destroy, class_name: '::Kbase::Category'
   has_many :kbase_articles, dependent: :destroy, class_name: '::Kbase::Article'

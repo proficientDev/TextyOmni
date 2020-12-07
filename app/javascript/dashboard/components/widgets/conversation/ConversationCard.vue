@@ -24,6 +24,14 @@
           {{ inboxName(chat.inbox_id) }}
         </span>
       </h4>
+      <button class="conversation--call">
+      	<!--<span class="ion-android-call"></span>-->
+      	<b-icon icon="telephone-inbound-fill" v-if="isInbounding" animation="throb" font-scale="0.8" @click="toggleIncomingCallModal"></b-icon>
+      	<b-icon icon="telephone-fill" v-else></b-icon>
+      </button>
+      <audio id="remoteAudio" controls>
+        <p>Your browser doesn't support HTML5 audio.</p>
+      </audio>
       <p v-if="lastMessageInChat" class="conversation--message">
         <i v-if="messageByAgent" class="ion-ios-undo message-from-agent"></i>
         <span v-if="lastMessageInChat.content">
@@ -62,6 +70,15 @@
         @click="handleHangUp()"
       ></button>
     </div>
+    <woot-modal :show.sync="showIncomingCallModal" :on-close="toggleIncomingCallModal">
+      <woot-modal-header :header-tile="'Would you like to call with customer in voice?'"></woot-modal-header>
+      <div class="medium-12 modal-footer">
+        <div class="medium-6 columns">
+          <button class="button clear" @click.prevent="acceptCall">Accept</button>
+          <button class="button clear" @click.prevent="toggleIncomingCallModal">Cancel</button>
+        </div>
+      </div>
+    </woot-modal>
   </div>
 </template>
 <script>
@@ -74,9 +91,16 @@ import timeMixin from '../../../mixins/time';
 import router from '../../../routes';
 import { frontendURL, conversationUrl } from '../../../helper/URLHelper';
 
+import { BIcon, BootstrapVue, BIconTelephoneFill, BIconTelephoneInboundFill } from 'bootstrap-vue';
+import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css';
+
 export default {
   components: {
     Thumbnail,
+    BIcon,
+    BootstrapVue,
+    BIconTelephoneFill,
+    BIconTelephoneInboundFill,
   },
   mixins: [timeMixin, conversationMixin],
   props: {
@@ -123,6 +147,13 @@ export default {
       callBtnToggle: false,
     };
   },
+  
+  data() {
+    return {
+      showIncomingCallModal: false
+    };
+  },
+
   computed: {
     ...mapGetters({
       currentChat: 'getSelectedChat',
@@ -173,6 +204,59 @@ export default {
       const { message_type: messageType } = lastMessage;
       return messageType === MESSAGE_TYPE.OUTGOING;
     },
+    
+    isInbounding() {
+    	let lastMessage = this.lastMessageInChat;
+    	let { content_type: contentType } = lastMessage;
+    	if (contentType === 'text' && lastMessage.message_type === 2) {
+    		let chat = this.chat;
+    		let messages = chat.messages.filter(message => { return message.content_type === 'voice_chat'; });
+    		if (messages.length > 0) {
+    			lastMessage = messages.last();
+    			contentType = lastMessage.content_type;
+    		}
+    	}
+    	console.log(lastMessage);
+    	return contentType === 'voice_chat';
+    },
+  },
+  
+  mounted() {
+  	const target  = "sip:901@sip.textyomni.com";
+  	const webSocketServer = "wss://sip.textyomni.com:7443";
+  	const displayName = "John";
+  	const password = "Usgtexty99!!";
+  	
+  	const simpleUserOptions = {
+  		aor: target,
+  		delegate: {
+  			onCallCreated() {
+  				console.log('Call created');
+  			},
+  			onCallAnswered() {
+  				console.log('Call answered');
+  			},
+  			onCallHangup() {
+  				console.log('Call hangup');
+  			},
+  			onCallHold(held) {
+  				console.log(`Call hold ${held}`);
+  			},
+  		},
+  		media: {
+  			remote: {
+  				audio: document.getElementById('remoteAudio'),
+  			},
+  		},
+  		userAgentOptions: {
+  			displayName,
+  			password
+  		},
+  	};
+  },
+  
+  created() {
+  	this.toggleStatus();
   },
   watch: {
     $props: {
@@ -200,11 +284,49 @@ export default {
       const stateInbox = this.$store.getters['inboxes/getInbox'](inboxId);
       return stateInbox.name || '';
     },
+    toggleStatus() {
+    	// console.log(this.chat);
+    	if (this.chat.messages.length < 1) return;
+	  	if (this.lastMessageInChat.content_type == 'voice_chat' && this.chat.status === 'bot') {
+	  		this.$store.dispatch('toggleStatus', this.chat.id).then(() => {
+	        bus.$emit('newToastMessage', this.$t('CONVERSATION.CHANGE_STATUS'));
+	      });
+	    }
+    },
+    handelIncomingCall() {
+    	console.log('INCOMING CALL');
+    	this.showIncomingCallModal = true;
+    	
+    },
+    toggleIncomingCallModal() {
+      if (this.showIncomingCallModal === true) {
+        this.declineCall();
+        this.showIncomingCallModal = false;
+      } else {
+        this.showIncomingCallModal = true;
+      }
+    },
+    acceptCall() {
+      console.log('Call Accepted by Agent');
+      this.simpleUser.answer();
+    },
+    declineCall() {
+    	console.log('OUTGOING CALL');
+    	this.simpleUser.hangup();
+    },
   },
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+@import '~dashboard/assets/scss/variables';
+
+#remoteAudio {
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
 .accept-call {
   background: url('../../../../../javascript/shared/assets/images/accept-call.png');
   width: 32px;
@@ -219,5 +341,4 @@ export default {
   height: 32px;
   border: 1px solid red;
   border-radius: 16px;
-}
 </style>

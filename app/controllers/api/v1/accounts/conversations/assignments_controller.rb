@@ -11,6 +11,9 @@ class Api::V1::Accounts::Conversations::AssignmentsController < Api::V1::Account
       @index = @agents.pluck(:id).index(assignee["id"])
       Rails.logger.info "Assignment Offset: #{@index}"
       
+      assignee_availability = assignee['availability']
+      Rails.logger.info "ASSIGNEE(USER) STATUS: #{assignee_availability}"
+      
       # Check if assignment of agent is valid
       assignment_maximum = 0
       assignment_maximum = assignee.account_users.first["limits"] unless assignee.account_users.first["limits"] == nil
@@ -19,7 +22,8 @@ class Api::V1::Accounts::Conversations::AssignmentsController < Api::V1::Account
       conversation_count = ::Conversation.where(assignee_id: params[:assignee_id]).length
       Rails.logger.info "Assignment Conversation Count: #{conversation_count}"
       
-      unless assignment_maximum > conversation_count
+      # unless assignment_maximum > conversation_count
+      if assignment_maximum <= conversation_count || assignee_availability == "offline"
         Rails.logger.info "Assignment ID: #{assignee['id']}"
         Rails.logger.info "NEXT AGENT ASSIGNMENT"
         assignee = assignee_next(assignment_maximum: assignment_maximum, conversation_count: conversation_count, assignee: assignee, index: @index)
@@ -38,20 +42,26 @@ class Api::V1::Accounts::Conversations::AssignmentsController < Api::V1::Account
       next_index = index + 1
     end
     
+    Rails.logger.info "NEXT AGENT OFFSET #{next_index}"
+    
     # Return nil when @agents are cycled fully
-    if index == @index - 1 || index == -1
+    if index == @index - 1 || index == 0
       Rails.logger.info "Conversation limits overflow, index: #{index}"
       return nil
     end
     
     next_assignee = @agents.offset(next_index).first
-    Rails.logger.info "NEXT ASSIGNMENT ID: #{next_assignee["id"]}"
-    next_assignment_maximum = next_assignee.account_users.first["limits"]
-    Rails.logger.info "Next Assignment Limits: #{next_assignment_maximum}"
-    next_conversation_count = ::Conversation.where(assignee_id: next_assignee["id"]).length
-    Rails.logger.info "Next Conversation Count: #{next_conversation_count}"
-    
-    return next_assignee if next_assignment_maximum > next_conversation_count
+    next_assignee_availability = next_assignee["availability"]
+    Rails.logger.info "NEXT AGENT AVAILABILITY #{next_assignee_availability}"
+   	unless next_assignee["availability"] == "offline"
+	    Rails.logger.info "NEXT ASSIGNMENT ID: #{next_assignee["id"]}"
+	    next_assignment_maximum = next_assignee.account_users.first["limits"]
+	    Rails.logger.info "Next Assignment Limits: #{next_assignment_maximum}"
+	    next_conversation_count = ::Conversation.where(assignee_id: next_assignee["id"]).length
+	    Rails.logger.info "Next Conversation Count: #{next_conversation_count}"
+	    
+	    return next_assignee if next_assignment_maximum > next_conversation_count
+	  end
     assignee_next(assignment_maximum: next_assignment_maximum, conversation_count: next_conversation_count, assignee: next_assignee, index: next_index) unless assignment_maximum > conversation_count
   end
   

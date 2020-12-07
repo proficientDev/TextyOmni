@@ -193,6 +193,11 @@ export default {
     top: -130px;
   }
 
+  .status-items {
+    display: flex;
+    align-items: baseline;
+  }
+
   & &--change-button {
     color: $color-gray;
     font-size: $font-size-small;
@@ -210,6 +215,24 @@ export default {
     padding: $space-small $space-one;
     text-align: left;
     width: 100%;
+  }
+}
+
+.status-badge {
+  width: $space-one;
+  height: $space-one;
+  border-radius: 50%;
+
+  &__online {
+    background: $success-color;
+  }
+
+  &__offline {
+    background: $color-gray;
+  }
+
+  &__busy {
+    background: $warning-color;
   }
 }
 </style>

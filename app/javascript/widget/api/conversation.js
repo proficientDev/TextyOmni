@@ -37,6 +37,11 @@ const setUserLastSeenAt = async ({ lastSeen }) => {
   );
 };
 
+const callRequest = async () => {
+	const urlData = await endPoints.sendMessage();
+  return API.post(`/api/v1/widget/conversations/call_request${window.location.search}`, urlData.params);
+};
+
 export {
   sendMessageAPI,
   getConversationAPI,
@@ -44,4 +49,5 @@ export {
   sendAttachmentAPI,
   toggleTyping,
   setUserLastSeenAt,
+  callRequest,
 };
