@@ -1,5 +1,15 @@
 <template>
   <div class="column content-box">
+    <div class="search">
+      <i class="icon ion-ios-search-strong"  style="padding-right: 10px;" />
+      <input 
+        class="input" 
+        type="text" 
+        :placeholder="$t('CANNED_MGMT.SEARCH')"
+        v-model.trim="searchKeyCanned"
+        style="border-color: #e0e6ed;"
+      >
+    </div>
     <button
       class="button nice icon success button--fixed-right-top"
       @click="openAddPopup()"
@@ -120,11 +130,12 @@ export default {
       cannedResponseAPI: {
         message: '',
       },
+      searchKeyCanned: '',
     };
   },
   computed: {
     ...mapGetters({
-      records: 'getCannedResponses',
+      recordsAll: 'getCannedResponses',
       uiFlags: 'getUIFlags',
     }),
     // Delete Modal
@@ -142,6 +153,14 @@ export default {
       return `${this.$t('CANNED_MGMT.DELETE.CONFIRM.MESSAGE')} ${
         this.selectedResponse.short_code
       } ?`;
+    },
+    records() {
+      if (this.searchKeyCanned == '') {
+        return this.recordsAll;
+      } else {
+        const cannedResponses = this.recordsAll.filter( cannedItem => cannedItem.short_code.includes(this.searchKeyCanned) || cannedItem.content.includes(this.searchKeyCanned) );
+        return cannedResponses;
+      }
     },
   },
   mounted() {
