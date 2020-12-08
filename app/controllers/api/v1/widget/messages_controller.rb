@@ -65,7 +65,6 @@ class Api::V1::Widget::MessagesController < Api::V1::Widget::BaseController
       content: permitted_params[:message][:content],
       inbox_id: conversation.inbox_id,
       echo_id: permitted_params[:message][:echo_id],
-      message_type: :incoming
       message_type: :incoming,
       content_type: permitted_params[:message][:content_type]
     }

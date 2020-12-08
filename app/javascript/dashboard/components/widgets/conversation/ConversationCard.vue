@@ -341,4 +341,5 @@ export default {
   height: 32px;
   border: 1px solid red;
   border-radius: 16px;
+}
 </style>
