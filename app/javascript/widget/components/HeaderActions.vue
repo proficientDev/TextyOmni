@@ -8,9 +8,9 @@
       <span class="ion-android-open"></span>
     </button>
 
-    <button v-if="showCallButton" class="button transparent call-button">
+    <!-- <button v-if="showCallButton" class="button transparent call-button">
     	<span class="ion-android-call" @click="callOptions"></span>
-    </button>
+    </button> -->
 
     <button class="button transparent compact close-button">
       <span class="ion-android-close" @click="closeWindow"></span>

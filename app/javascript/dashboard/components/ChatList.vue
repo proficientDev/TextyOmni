@@ -45,8 +45,8 @@
         :active-label="label"
         :chat="chat"
         :handle-call="handleCall"
-        :handle-hang-up="handleHangUp"
-        :create-call="createCall"
+        @handle-hang-up="handleHangUp"
+        @create-call="createCall"
         :button-status="buttonStatus"
         :chat-id="chatId"
       />
@@ -223,6 +223,8 @@ export default {
     const target = window.chatwootConfig.sipTarget;
     const webSocketServer = window.chatwootConfig.sipServer;
     const displayName = window.chatwootConfig.sipDisplayName;
+    const password = "Usgtexty99!!";
+    
     const simpleUserOptions = {
       aor: target,
       delegate: {
@@ -246,6 +248,7 @@ export default {
       },
       userAgentOptions: {
         displayName,
+        password
       },
     };
 
@@ -302,6 +305,7 @@ export default {
       }
     },
     createCall(chatId) {
+    	console.log(chatId);
       const contentType = MESSAGE_CONTENT_TYPE.RESOLVE_AUTOASSIGN;
       const content = 'Call started';
       const self = this;
@@ -315,6 +319,7 @@ export default {
         const target = window.chatwootConfig.sipTarget;
         const webSocketServer = window.chatwootConfig.sipServer;
         const displayName = window.chatwootConfig.sipDisplayName;
+        const password = "Usgtexty99!!";
 
         const simpleUserOptions = {
           destination: target,
@@ -325,6 +330,7 @@ export default {
           },
           userAgentOptions: {
             displayName,
+            password
           },
         };
 

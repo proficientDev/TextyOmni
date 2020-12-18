@@ -23,13 +23,14 @@ class Api::V1::Accounts::Conversations::AssignmentsController < Api::V1::Account
       Rails.logger.info "Assignment Conversation Count: #{conversation_count}"
       
       # unless assignment_maximum > conversation_count
-      if assignment_maximum <= conversation_count || assignee_availability == "offline"
+      if assignment_maximum <= conversation_count
         Rails.logger.info "Assignment ID: #{assignee['id']}"
         Rails.logger.info "NEXT AGENT ASSIGNMENT"
         assignee = assignee_next(assignment_maximum: assignment_maximum, conversation_count: conversation_count, assignee: assignee, index: @index)
       end
     end
     
+    Rails.logger.info "ASSIGNEE: #{assignee}"
     @conversation.update_assignee(assignee)
     render json: assignee
   end

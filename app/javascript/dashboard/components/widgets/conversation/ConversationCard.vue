@@ -24,11 +24,14 @@
           {{ inboxName(chat.inbox_id) }}
         </span>
       </h4>
-      <button class="conversation--call">
+      <div class="conversation--call" style="display: contents;">
       	<!--<span class="ion-android-call"></span>-->
-      	<b-icon icon="telephone-inbound-fill" v-if="isInbounding" animation="throb" font-scale="0.8" @click="toggleIncomingCallModal"></b-icon>
-      	<b-icon icon="telephone-fill" v-else></b-icon>
-      </button>
+      	<b-icon icon="telephone-inbound-fill" v-if="isInbounding && buttonStatus === 'inComingCall'" animation="throb" font-scale="0.8" @click="toggleIncomingCallModal"></b-icon>
+      	<b-icon icon="telephone-outbound-fill" v-else @click="handleOutgoingCall(chat.id)"></b-icon>
+      	
+      	<!-- if agent is calling, show x button to end call -->
+      	<b-icon icon="telephone-x-fill" v-if="outGoingCall" @click="handleHangupCall"></b-icon>
+      </div>
       <audio id="remoteAudio" controls>
         <p>Your browser doesn't support HTML5 audio.</p>
       </audio>
@@ -49,7 +52,7 @@
         </span>
         <span class="unread">{{ getUnreadCount }}</span>
       </div>
-      <button
+      <!-- <button
         v-if="buttonStatus === 'makeCall'"
         class="accept-call"
         @click="createCall(chat.id)"
@@ -68,14 +71,14 @@
         "
         class="decline-call"
         @click="handleHangUp()"
-      ></button>
+      ></button> -->
     </div>
     <woot-modal :show.sync="showIncomingCallModal" :on-close="toggleIncomingCallModal">
-      <woot-modal-header :header-tile="'Would you like to call with customer in voice?'"></woot-modal-header>
+      <woot-modal-header :header-tile="$t('CHAT_LIST.CALL.INCOMING.CONFIRM_TITLE')"></woot-modal-header>
       <div class="medium-12 modal-footer">
         <div class="medium-6 columns">
-          <button class="button clear" @click.prevent="acceptCall">Accept</button>
-          <button class="button clear" @click.prevent="toggleIncomingCallModal">Cancel</button>
+          <button class="button clear" @click.prevent="handleCall()">Accept</button>
+          <button class="button clear" @click.prevent="toggleIncomingCallModal">Decline</button>
         </div>
       </div>
     </woot-modal>
@@ -91,7 +94,7 @@ import timeMixin from '../../../mixins/time';
 import router from '../../../routes';
 import { frontendURL, conversationUrl } from '../../../helper/URLHelper';
 
-import { BIcon, BootstrapVue, BIconTelephoneFill, BIconTelephoneInboundFill } from 'bootstrap-vue';
+import { BIcon, BootstrapVue, BIconTelephoneFill,BIconTelephoneOutboundFill, BIconTelephoneInboundFill, BIconTelephoneXFill } from 'bootstrap-vue';
 import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css';
 
 export default {
@@ -101,6 +104,8 @@ export default {
     BootstrapVue,
     BIconTelephoneFill,
     BIconTelephoneInboundFill,
+    BIconTelephoneOutboundFill,
+    BIconTelephoneXFill
   },
   mixins: [timeMixin, conversationMixin],
   props: {
@@ -145,12 +150,8 @@ export default {
     return {
       call: true,
       callBtnToggle: false,
-    };
-  },
-  
-  data() {
-    return {
-      showIncomingCallModal: false
+      showIncomingCallModal: false,
+      outGoingCall: false,
     };
   },
 
@@ -216,7 +217,7 @@ export default {
     			contentType = lastMessage.content_type;
     		}
     	}
-    	console.log(lastMessage);
+    	// console.log(lastMessage);
     	return contentType === 'voice_chat';
     },
   },
@@ -293,14 +294,18 @@ export default {
 	      });
 	    }
     },
-    handelIncomingCall() {
-    	console.log('INCOMING CALL');
-    	this.showIncomingCallModal = true;
-    	
+    handleOutgoingCall(chatId) {
+    	this.outGoingCall = true;
+    	this.$emit("create-call", chatId);
+    	// this.createCall(chatId);
+    },
+    handleHangupCall() {
+    	this.$emit("handle-hang-up");
+    	this.outGoingCall = false;
     },
     toggleIncomingCallModal() {
       if (this.showIncomingCallModal === true) {
-        this.declineCall();
+        this.handleHangupCall();
         this.showIncomingCallModal = false;
       } else {
         this.showIncomingCallModal = true;

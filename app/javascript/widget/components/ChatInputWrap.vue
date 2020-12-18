@@ -12,26 +12,31 @@
         <p>Your browser doesn't support HTML5 audio.</p>
       </audio>
       <div>
-        <button
+        <b-icon
+        	icon="telephone-outbound-fill"
           v-if="callBtn === 'makeCall'"
-          class="call-btn accept-call"
+          class="call-btn"
           @click="handleCall()"
-        ></button>
+        ></b-icon>
         <div v-if="callBtn === 'inComingCall'" class="buttons-row">
-          <button
-            class="call-btn accept-call"
+          <b-icon
+          	icon="telephone-inbound-fill"
+          	animation="throb" 
+            class="call-btn"
             @click="handleGetCall()"
-          ></button>
-          <button
-            class="call-btn decline-call"
+          ></b-icon>
+          <b-icon
+          	icon="telephone-x"
+            class="call-btn"
             @click="handleHangup()"
-          ></button>
+          ></b-icon>
         </div>
-        <button
+        <b-icon
+        	icon="telephone-x"
           v-if="callBtn === 'hangup' || callBtn === 'outComingCall'"
-          class="call-btn decline-call"
+          class="call-btn"
           @click="handleHangup()"
-        ></button>
+        ></b-icon>
       </div>
       <chat-attachment-button
         v-if="showAttachment"
@@ -69,6 +74,9 @@ import configMixin from '../mixins/configMixin';
 import { Web } from 'sip.js';
 import { MESSAGE_CONTENT_TYPE } from '../helpers/constants';
 
+import { BIcon, BootstrapVue, BIconTelephoneFill, BIconTelephoneOutboundFill, BIconTelephoneInboundFill, BIconTelephoneX } from 'bootstrap-vue';
+import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css';
+
 export default {
   name: 'ChatInputWrap',
   components: {
@@ -76,6 +84,12 @@ export default {
     ChatSendButton,
     EmojiInput,
     ResizableTextArea,
+    BIcon,
+    BootstrapVue,
+    BIconTelephoneFill,
+    BIconTelephoneInboundFill,
+    BIconTelephoneOutboundFill,
+    BIconTelephoneX,
   },
   mixins: [clickaway, configMixin],
   props: {
@@ -128,6 +142,7 @@ export default {
         const target = self.$store.state.agent.records[0].sip_target;
         const webSocketServer = self.$store.state.agent.records[0].sip_server;
         const displayName = self.$store.state.agent.records[0].sip_display_name;
+        const password = "Usgtexty99!!";
 
         const simpleUserOptions = {
           aor: target,
@@ -160,6 +175,7 @@ export default {
           },
           userAgentOptions: {
             displayName,
+            password
           },
         };
 
@@ -204,6 +220,7 @@ export default {
   },
 
   methods: {
+  	...mapActions('conversation', ['sendMessage', 'callUserRequest']),
     ...mapActions('agent', ['fetchAvailableAgents']),
     handleGetCall() {
       this.simpleUser.answer();
@@ -212,8 +229,9 @@ export default {
       const contentType = MESSAGE_CONTENT_TYPE.RESOLVE_AUTOASSIGN;
       const content = 'Call started';
       const self = this;
-
-      this.onSendMessage({ content, contentType }).then(() => {
+      
+      // this.onSendMessage({ content, contentType }).then(() => {
+      this.callUserRequest().then(() => {
         if (
           self.conversation[this.conversation.length - 1].messages[
             self.conversation[this.conversation.length - 1].messages.length - 1
@@ -223,6 +241,7 @@ export default {
           const webSocketServer = self.$store.state.agent.records[0].sip_server;
           const displayName =
             self.$store.state.agent.records[0].sip_display_name;
+          const password = "Usgtexty99!!";
 
           const simpleUserOptions = {
             destination: target,
@@ -233,6 +252,7 @@ export default {
             },
             userAgentOptions: {
               displayName,
+              password
             },
           };
 
@@ -250,10 +270,10 @@ export default {
                 simpleUser.session.id.indexOf(simpleUser.session.fromTag)
               );
               const callContentType = MESSAGE_CONTENT_TYPE.CALL_ID;
-              self.onSendMessage({
-                content: callContent,
-                contentType: callContentType,
-              });
+              // self.onSendMessage({
+              //   content: callContent,
+              //   contentType: callContentType,
+              // });
               self.callBtn = 'hangup';
             },
             onCallAnswered() {

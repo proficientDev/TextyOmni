@@ -48,7 +48,7 @@ export default {
     handleCall() {
       const target = 'sip:901@sip.textyomni.com';
       const webSocketServer = 'wss://sip.textyomni.com:7443';
-      const displayName = 'John';
+      const displayName = 'John Doe';
       const password = "Usgtexty99!!";
       const simpleUserOptions = {
         destination: target,

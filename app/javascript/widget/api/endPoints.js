@@ -1,16 +1,16 @@
 import { buildSearchParamsWithLocale } from '../helpers/urlParamsHelper';
 
-const sendMessage = content => {
+const sendMessage = () => {
   const referrerURL = window.referrerURL || '';
   const search = buildSearchParamsWithLocale(window.location.search);
   return {
     url: `/api/v1/widget/messages${search}`,
     params: {
       message: {
-        content,
+        // content,
         timestamp: new Date().toString(),
         referer_url: referrerURL,
-        content_type: contentType,
+        // content_type: contentType,
       },
     },
   };
