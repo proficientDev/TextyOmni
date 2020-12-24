@@ -216,6 +216,8 @@ class Conversation < ApplicationRecord
   end
 
   def create_assignee_change(user_name)
+    return unless assignee.present?
+    
     params = { assignee_name: assignee.name, user_name: user_name }.compact
     key = assignee_id ? 'assigned' : 'removed'
     key = 'self_assigned' if self_assign? assignee_id

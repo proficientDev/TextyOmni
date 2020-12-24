@@ -94,6 +94,7 @@ export default {
     },
 
     agentList() {
+    	const onlineAgents = this.agents.filter(agent => agent.availability_status === "online");
       return [
         {
           confirmed: true,
@@ -103,7 +104,7 @@ export default {
           account_id: 0,
           email: 'None',
         },
-        ...this.agents,
+        ...onlineAgents,
       ];
     },
   },
