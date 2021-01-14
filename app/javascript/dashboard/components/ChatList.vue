@@ -247,12 +247,12 @@ export default {
         },
       },
       userAgentOptions: {
-        displayName,
-        password
+      	password,
+        displayName
       },
     };
 
-    this.simpleUser = new Web.SimpleUser(webSocketServer, simpleUserOptions);
+    // this.simpleUser = new Web.SimpleUser(webSocketServer, simpleUserOptions);
 
     this.simpleUser
       .connect()
@@ -263,6 +263,7 @@ export default {
       })
       .then(() => {
         this.simpleUser.register().then(() => {
+        	console.log(this.simpleUser);
           this.simpleUser.delegate = {
             onCallReceived() {
               const callId = self.simpleUser.session.id;

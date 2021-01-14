@@ -113,6 +113,7 @@ export default {
       showEmojiPicker: false,
       callBtn: 'makeCall',
       simpleUserObject: null,
+      simpleUser: null,
       calls: {},
       call: true,
     };
@@ -143,7 +144,7 @@ export default {
         const webSocketServer = self.$store.state.agent.records[0].sip_server;
         const displayName = self.$store.state.agent.records[0].sip_display_name;
         const password = "Usgtexty99!!";
-
+        
         const simpleUserOptions = {
           aor: target,
           delegate: {
@@ -174,26 +175,27 @@ export default {
             },
           },
           userAgentOptions: {
-            displayName,
-            password
+          	authorizationPassword: password,
+            authorizationUsername: displayName
           },
         };
 
-        this.simpleUser = new Web.SimpleUser(
+        self.simpleUser = new Web.SimpleUser(
           webSocketServer,
           simpleUserOptions
         );
 
-        this.simpleUser
+        self.simpleUser
           .connect()
           .catch(error => {
-            console.error(`[${this.simpleUser.id}] failed to connect`);
+            console.error(`[${self.simpleUser.id}] failed to connect`);
             console.error(error);
             alert('Failed to connect.\n' + error);
           })
           .then(() => {
-            this.simpleUser.register().then(() => {
-              this.simpleUser.delegate = {
+          	console.log(self.simpleUser);
+            self.simpleUser.register().then(() => {
+              self.simpleUser.delegate = {
                 onCallReceived() {
                   const callId = self.simpleUser.session.id;
                   self.conversation.map(c => {
@@ -213,6 +215,9 @@ export default {
                   self.callBtn = 'makeCall';
                 },
               };
+            })
+            .catch((e) => {
+            	console.warn(`[${self.simpleUser.id}] failed to register`);
             });
           });
       }
@@ -251,8 +256,8 @@ export default {
               },
             },
             userAgentOptions: {
-              displayName,
-              password
+            	password,
+              displayName
             },
           };
 
@@ -270,10 +275,10 @@ export default {
                 simpleUser.session.id.indexOf(simpleUser.session.fromTag)
               );
               const callContentType = MESSAGE_CONTENT_TYPE.CALL_ID;
-              // self.onSendMessage({
-              //   content: callContent,
-              //   contentType: callContentType,
-              // });
+              self.onSendMessage({
+                content: callContent,
+                contentType: callContentType,
+              });
               self.callBtn = 'hangup';
             },
             onCallAnswered() {
